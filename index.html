@@ -9,11 +9,16 @@
     * { box-sizing:border-box; }
     body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; }
     header { background:var(--accent); color:#f8fafc; padding:2.2rem 1.5rem; text-align:center; }
-    header h1 { margin:0; font-size:1.9rem; }
-    header p { max-width:780px; margin:0.6rem auto 1.2rem; color:#cbd5e1; }
-    .cta { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; margin:0.25rem; }
+    header h1 { margin:0; font-size:1.95rem; }
+    header p { max-width:820px; margin:0.65rem auto 1.25rem; color:#cbd5e1; }
+    .cta-row { display:flex; flex-wrap:wrap; justify-content:center; gap:0.55rem; }
+    .cta { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; padding:0.7rem 1.25rem; border-radius:8px; font-weight:600; font-size:0.93rem; }
     .cta.sec { background:#334155; }
+    .cta.outline { background:transparent; border:1.5px solid #5eead4; color:#ccfbf1; }
+    .cta:hover { opacity:0.92; }
     main { max-width:1120px; margin:2rem auto; padding:0 1.25rem 3.5rem; }
+    .pitch { background:#f0fdfa; border:1px solid #99f6e4; border-left:4px solid var(--primary); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.65rem; font-size:0.94rem; color:#134e4a; }
+    .pitch strong { color:#0f172a; }
     .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.15rem; }
     .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.35rem; display:flex; flex-direction:column; justify-content:space-between; }
     .tag { display:inline-block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--primary); background:#f0fdfa; border:1px solid #99f6e4; padding:0.18rem 0.55rem; border-radius:999px; margin-bottom:0.5rem; }
@@ -22,6 +27,10 @@
     .links a { display:inline-block; margin-right:0.75rem; margin-top:0.3rem; color:var(--primary); font-weight:600; text-decoration:none; font-size:0.88rem; }
     .links a:hover { text-decoration:underline; }
     .section-title { margin:2.5rem 0 1rem; font-size:1.35rem; border-bottom:2px solid var(--border); padding-bottom:0.45rem; }
+    .gov-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:0.95rem; }
+    .gov-item { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--accent); border-radius:9px; padding:0.95rem 1.1rem; font-size:0.88rem; color:var(--muted); }
+    .gov-item h3 { margin:0 0 0.35rem; font-size:0.96rem; color:var(--ink); display:flex; align-items:center; gap:0.45rem; }
+    .gov-num { display:inline-flex; align-items:center; justify-content:center; width:1.35rem; height:1.35rem; border-radius:50%; background:var(--primary); color:#fff; font-size:0.76rem; font-weight:700; flex-shrink:0; }
     .prompt-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(440px,1fr)); gap:1.15rem; }
     .prompt-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; min-width:0; display:flex; flex-direction:column; }
     .prompt-card h3 { margin:0 0 0.6rem; font-size:0.98rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; }
@@ -35,12 +44,19 @@
 <body>
   <header>
     <h1>Das KI-Cockpit — Begleit-Monorepo</h1>
-    <p>Prozesse, Zahlen und Abhängigkeiten im Blick: Souveräne Dashboards bauen mit lokaler KI — ohne Vorkenntnisse und Lizenzkosten. Alle 5 Ausbaustufen, Beispieldaten (Werkbau Nord GmbH &amp; LID) und Offline-Vorlagen an einem Ort.</p>
-    <a class="cta" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io/archive/refs/heads/main.zip">Komplett-Paket als ZIP herunterladen</a>
-    <a class="cta sec" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io">GitHub Repository öffnen</a>
+    <p>Prozesse, Zahlen und Abhängigkeiten im Blick: Souveräne KI-Quick-Wins bauen mit lokaler KI – ohne Vorkenntnisse, ohne Cloud-Zwang und für 0 Euro Lizenzkosten. Alle 5 Ausbaustufen, Beispieldaten (Werkbau Nord GmbH &amp; LID) und Governance-Vorlagen an einem Ort.</p>
+    <div class="cta-row">
+      <a class="cta" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io/archive/refs/heads/main.zip">Komplett-Paket als ZIP herunterladen</a>
+      <a class="cta outline" href="KI-Cockpit_Spickzettel_A4.pdf">A4-Spickzettel zum Ausdrucken (PDF)</a>
+      <a class="cta sec" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io">GitHub Repository öffnen</a>
+    </div>
   </header>
 
   <main>
+    <div class="pitch">
+      <strong>KI-Quick-Wins statt jahrelanger IT-Projekte – sicher und governance-konform statt Schatten-IT:</strong> Große Lösungen in Unternehmen und Behörden dauern oft Jahre und verschlingen hohe Budgets. Hier finden Sie alle einsatzfertigen Vorlagen aus dem Buch, um Fachabteilungen kontrolliert, lokal und prüfsicher zu befähigen.
+    </div>
+
     <div class="grid">
       <div class="card">
         <div>
@@ -70,7 +86,7 @@
         <div>
           <span class="tag">Stufe 3 · Kapitel 4</span>
           <h2>Dropzone &amp; Lokaler Prozess-Editor</h2>
-          <p>Tankdeckel-Prinzip: DATEV-/Excel-Exporte (.csv/.xlsx) per Drag-and-Drop einlesen — plus der eigenständige BPMN-Editor für Behörden.</p>
+          <p>Tankdeckel-Prinzip: DATEV-/Excel-Exporte (.csv/.xlsx) per Drag-and-Drop einlesen – plus der eigenständige BPMN-Editor für Behörden.</p>
         </div>
         <div class="links">
           <a href="stufe3-dropzone/cockpit.html">Dropzone-Cockpit →</a>
@@ -96,7 +112,7 @@
         <div>
           <span class="tag">Stufe 5 · Kapitel 6</span>
           <h2>Das mitdenkende Smart-Master-Cockpit</h2>
-          <p>Kellner-Prinzip via <code>fetch</code>-API &amp; lokalem Ollama: PDF-Rechnungs-Extraktor (<code>pdf.js</code>), Posteingangs-Triage, Firmen-Orakel &amp; LID-Gremienabfrage.</p>
+          <p>Kellner-Prinzip via <code>fetch</code>-API &amp; lokalem Ollama/<code>llama-server</code>: PDF-Rechnungs-Extraktor (<code>pdf.js</code>), Posteingangs-Triage, Firmen-Orakel &amp; LID-Gremienabfrage.</p>
         </div>
         <div class="links">
           <a href="stufe5-smart-cockpit/cockpit.html">Smart-Cockpit öffnen →</a>
@@ -117,6 +133,34 @@
           <a href="betrieb-uebergabe/LIESMICH_TEAM.md">Team-Kurzanleitung</a>
           <a href="betrieb-uebergabe/start_cockpit_sicher.bat">Sicherer Start (.bat)</a>
         </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Governance statt Schatten-IT: Die 6 Leitplanken (Kapitel 8.5)</h2>
+    <div class="gov-grid">
+      <div class="gov-item">
+        <h3><span class="gov-num">1</span>Datenhaltung (Tankdeckel-Prinzip)</h3>
+        Die HTML-Datei bleibt vollständig datenfrei. Exporte werden ausschließlich lokal im Browser-Arbeitsspeicher verarbeitet und beim Schließen verworfen.
+      </div>
+      <div class="gov-item">
+        <h3><span class="gov-num">2</span>100 % Offline über /libs</h3>
+        Alle Bibliotheken liegen lokal im Unterordner <code>/libs/</code>. Im Flugzeugmodus zeigt der Browser-Netzwerkmonitor (<code>F12</code>) exakt 0 ausgehende Verbindungen.
+      </div>
+      <div class="gov-item">
+        <h3><span class="gov-num">3</span>Sichere lokale KI-Schnittstelle</h3>
+        Gezielte Freigabe auf <code>127.0.0.1</code> statt Wildcard (<code>*</code>) für Ollama oder <code>llama-server</code>, kombiniert mit der Zündschlüssel-Regel.
+      </div>
+      <div class="gov-item">
+        <h3><span class="gov-num">4</span>Rollen &amp; Versionierung</h3>
+        Klare ISO-Namenskonvention (<code>JJJJ-MM-TT_cockpit_v1.2_stabil.html</code>), sofortiges Rollback über <code>/archiv/</code> und zwei benannte Pflege-Verantwortliche.
+      </div>
+      <div class="gov-item">
+        <h3><span class="gov-num">5</span>Lizenz- &amp; Prüfsicherheit</h3>
+        Dokumentierte Bibliotheksliste (SBOM: MIT, Apache-2.0, <code>bpmn.io</code>-Lizenz) und 1-seitige C4-Architekturskizze für die IT-Prüfung.
+      </div>
+      <div class="gov-item">
+        <h3><span class="gov-num">6</span>Mitbestimmung &amp; Kontrolle</h3>
+        Kein Login, kein Nutzer-Tracking, keine Leistungs- oder Verhaltenskontrolle. KI liefert Entwürfe – der Mensch prüft und entscheidet.
       </div>
     </div>
 
@@ -149,7 +193,7 @@ python -m http.server 8000 --bind 127.0.0.1</pre>
   </main>
 
   <footer>
-    Michael Estel — „Das KI-Cockpit“ (2026) · Kontakt: michael@estel.email · Organisation: github.com/On-Premise-AI-Cockpit
+    Michael Estel — „Das KI-Cockpit“ (2026) · Kontakt: michael@estel.email · Organisation: github.com/On-Premise-AI-Cockpit · <a href="KI-Cockpit_Spickzettel_A4.pdf" style="color:var(--primary);font-weight:600;text-decoration:none;">A4-Spickzettel (PDF)</a>
   </footer>
 
   <script>
