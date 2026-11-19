@@ -1,0 +1,22 @@
+﻿Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar
+2026-01;KS-100;Fix;Personal & Hallenmiete;175000;175000;Plangemaess
+2026-01;KS-100;Variabel;Material & Fertigung;118000;115200;Geringerer Stahlabruf
+2026-01;KS-100;Variabel;Fremdmontage & Subunternehmer;52000;50800;Planmaessige Montage
+2026-01;KS-200;Fix;Vertrieb Grundkosten;34000;34000;Plangemaess
+2026-01;KS-200;Variabel;Provisionen & Reisekosten;58000;58400;Messebesuch Nord
+2026-01;KS-300;Fix;ERP-Lizenzen, Netz & Wartung;48000;48000;Jahresvertrag stabil
+2026-01;KS-400;Fix;Verwaltung & Zentrale;85000;85000;Plangemaess
+2026-02;KS-100;Fix;Personal & Hallenmiete;175000;175000;Plangemaess
+2026-02;KS-100;Variabel;Material & Fertigung;118000;119800;Leichter Preisanstieg Bleche
+2026-02;KS-100;Variabel;Fremdmontage & Subunternehmer;52000;55000;Erste Ueberstunden Projekt Halle 4
+2026-02;KS-200;Fix;Vertrieb Grundkosten;34000;34000;Plangemaess
+2026-02;KS-200;Variabel;Provisionen & Reisekosten;58000;56900;Weniger Aussendienst
+2026-02;KS-300;Fix;ERP-Lizenzen, Netz & Wartung;48000;48500;Kleinere Hardware-Ersatzteile
+2026-02;KS-400;Fix;Verwaltung & Zentrale;85000;85000;Plangemaess
+2026-03;KS-100;Fix;Personal & Hallenmiete;175000;175000;Plangemaess
+2026-03;KS-100;Variabel;Material & Fertigung;118000;118000;Im Plan
+2026-03;KS-100;Variabel;Fremdmontage & Subunternehmer;52000;90400;ALARM: Nachtraege & Ueberstunden NordMontage Partner GmbH
+2026-03;KS-200;Fix;Vertrieb Grundkosten;34000;34000;Plangemaess
+2026-03;KS-200;Variabel;Provisionen & Reisekosten;58000;57600;Im Plan
+2026-03;KS-300;Fix;ERP-Lizenzen, Netz & Wartung;48000;57200;ALARM: Doppelabrechnung Cloud-Backup Dienstleister
+2026-03;KS-400;Fix;Verwaltung & Zentrale;85000;85000;Plangemaess

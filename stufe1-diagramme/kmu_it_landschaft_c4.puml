@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Context>
+
+LAYOUT_WITH_LEGEND()
+title System-Context (C4) — Werkbau Nord GmbH (Controlling & Betriebs-IT)
+
+Person(gf, "Geschaeftsfuehrung", "Steuert Gesamtbetrieb, Liquiditaet und Investitionen.")
+Person(ctrl, "Controlling & Buchhaltung", "Erstellt Monatsabschluesse und prueft Kostenstellen.")
+Person(pl, "Projektleitung Montage", "Plant Baustellen, Material und Fremdmontage.")
+
+System(cockpit, "Lokales KI-Cockpit", "Single-File HTML-Steuerungszentrale im Browser (ohne Cloud-Zwang).")
+
+System_Ext(erp, "ERP / Warenwirtschaft", "Auftraege, Materialverbrauch und Subunternehmer-Abrufe.")
+System_Ext(datev, "DATEV Finanzbuchhaltung", "BWA, Summen- und Saldenlisten, Kostenstellen-Exporte (.csv/.xlsx).")
+System_Ext(zeit, "Zeiterfassung (TimeTrack)", "Projekt- und Montagestunden der 65 Mitarbeitenden.")
+System_Ext(nas, "Netzlaufwerk L:", "Zentrale Ablage fuer Eingangsrechnungen (PDF) und Handbuecher.")
+System_Ext(ollama, "Lokale KI (Ollama)", "Lokales Sprachmodell auf dem Dienstrechner fuer Extraktion & Q&A.")
+
+Rel(gf, cockpit, "Prueft KPIs & Ausreisser", "Browser (Lokal)")
+Rel(ctrl, cockpit, "Laedt Monatsabschluesse per Dropzone", "CSV / XLSX")
+Rel(pl, erp, "Meldet Baufortschritt & Abrufe")
+Rel(pl, zeit, "Erfasst Montagestunden")
+Rel(erp, datev, "Uebergibt Eingangs- & Ausgangsbelege")
+Rel(zeit, datev, "Liefert Lohn- & Projektstunden")
+Rel(datev, cockpit, "Exportiert Kostenstellen-Daten", "CSV / XLSX")
+Rel(nas, cockpit, "Stellt Rechnungs-PDFs & Richtlinien bereit", "Lokal")
+Rel(cockpit, ollama, "Sendet Analyse-Anfragen (ab Stufe 5)", "HTTP localhost")
+@enduml

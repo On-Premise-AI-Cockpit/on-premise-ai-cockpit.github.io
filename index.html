@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Das KI-Cockpit — Begleit-Monorepo (On-Premise AI Cockpit)</title>
+  <style>
+    :root { --bg:#f8fafc; --surface:#ffffff; --ink:#0f172a; --muted:#475569; --primary:#0f766e; --accent:#1e293b; --border:#e2e8f0; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; }
+    header { background:var(--accent); color:#f8fafc; padding:2.2rem 1.5rem; text-align:center; }
+    header h1 { margin:0; font-size:1.9rem; }
+    header p { max-width:780px; margin:0.6rem auto 1.2rem; color:#cbd5e1; }
+    .cta { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; margin:0.25rem; }
+    .cta.sec { background:#334155; }
+    main { max-width:1120px; margin:2rem auto; padding:0 1.25rem 3.5rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.15rem; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.35rem; display:flex; flex-direction:column; justify-content:space-between; }
+    .tag { display:inline-block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--primary); background:#f0fdfa; border:1px solid #99f6e4; padding:0.18rem 0.55rem; border-radius:999px; margin-bottom:0.5rem; }
+    .card h2 { margin:0.2rem 0 0.5rem; font-size:1.12rem; }
+    .card p { margin:0 0 1rem; font-size:0.9rem; color:var(--muted); }
+    .links a { display:inline-block; margin-right:0.75rem; margin-top:0.3rem; color:var(--primary); font-weight:600; text-decoration:none; font-size:0.88rem; }
+    .links a:hover { text-decoration:underline; }
+    .section-title { margin:2.5rem 0 1rem; font-size:1.35rem; border-bottom:2px solid var(--border); padding-bottom:0.45rem; }
+    .prompt-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1rem; }
+    .prompt-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem 1.15rem; }
+    .prompt-card h3 { margin:0 0 0.45rem; font-size:0.98rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; }
+    .prompt-card pre { margin:0; background:#f1f5f9; border:1px solid var(--border); border-radius:7px; padding:0.65rem; font-size:0.8rem; white-space:pre-wrap; font-family:Consolas,monospace; color:#0f172a; }
+    .copy-btn { background:var(--primary); color:#fff; border:none; border-radius:6px; padding:0.28rem 0.65rem; font-size:0.76rem; font-weight:600; cursor:pointer; }
+    .copy-btn:hover { opacity:0.9; }
+    footer { text-align:center; font-size:0.84rem; color:var(--muted); padding:1.5rem; border-top:1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Das KI-Cockpit — Begleit-Monorepo</h1>
+    <p>Prozesse, Zahlen und Abhängigkeiten im Blick: Souveräne Dashboards bauen mit lokaler KI — ohne Vorkenntnisse und Lizenzkosten. Alle 5 Ausbaustufen, Beispieldaten (Werkbau Nord GmbH &amp; LID) und Offline-Vorlagen an einem Ort.</p>
+    <a class="cta" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io/archive/refs/heads/main.zip">Komplett-Paket als ZIP herunterladen</a>
+    <a class="cta sec" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io">GitHub Repository öffnen</a>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <div>
+          <span class="tag">Stufe 1 · Kapitel 2</span>
+          <h2>Diagramme aus Text (Diagram-as-Code)</h2>
+          <p>Mermaid-Kostenfluss &amp; Torte (Werkbau Nord GmbH), Behörden-Prozessaufnahme (Mermaid &amp; BPMN 2.0 XML) sowie C4-IT-Landschaften (PlantUML).</p>
+        </div>
+        <div class="links">
+          <a href="stufe1-diagramme/kmu_kostenstruktur_fluss.mmd">KMU Fluss (.mmd)</a>
+          <a href="stufe1-diagramme/behoerde_beschaffung.bpmn">LID Prozess (.bpmn)</a>
+          <a href="stufe1-diagramme/kmu_it_landschaft_c4.puml">C4 KMU (.puml)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="tag">Stufe 2 · Kapitel 3</span>
+          <h2>Das statische HTML-Cockpit</h2>
+          <p>Erste lokale <code>cockpit.html</code> mit KPI-Kacheln, Chart.js-Verläufen, Reiternavigation, Behörden-Prozessseite und IT-Architektur-Sicht.</p>
+        </div>
+        <div class="links">
+          <a href="stufe2-html-cockpit/cockpit.html">Live-Demo öffnen →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="tag">Stufe 3 · Kapitel 4</span>
+          <h2>Dropzone &amp; Lokaler Prozess-Editor</h2>
+          <p>Tankdeckel-Prinzip: DATEV-/Excel-Exporte (.csv/.xlsx) per Drag-and-Drop einlesen — plus der eigenständige BPMN-Editor für Behörden.</p>
+        </div>
+        <div class="links">
+          <a href="stufe3-dropzone/cockpit.html">Dropzone-Cockpit →</a>
+          <a href="stufe3-dropzone/prozess_editor.html">prozess_editor.html →</a>
+          <a href="daten/kmu_monatsabschluss_2026-03.csv">März-Export (.csv)</a>
+          <a href="daten/kmu_monatsabschluss_2026-03.xlsx">März-Export (.xlsx)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="tag">Stufe 4 · Kapitel 5</span>
+          <h2>SQLite-Datenbank &amp; Wissensgraph</h2>
+          <p><code>sql.js</code> &amp; <code>Vis.js</code>: KMU-Ausreißer-Analyse auf Buchungsebene sowie 500 LID-Ansprechpartner an 12 Standorten mit mehrstufigem Blast Radius.</p>
+        </div>
+        <div class="links">
+          <a href="stufe4-datenbank-graph/cockpit.html">Stufe-4-Cockpit öffnen →</a>
+          <a href="daten/behoerde_kontakte_500.csv">500 Kontakte (.csv)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="tag">Stufe 5 · Kapitel 6</span>
+          <h2>Das mitdenkende Smart-Master-Cockpit</h2>
+          <p>Kellner-Prinzip via <code>fetch</code>-API &amp; lokalem Ollama: PDF-Rechnungs-Extraktor (<code>pdf.js</code>), Posteingangs-Triage, Firmen-Orakel &amp; LID-Gremienabfrage.</p>
+        </div>
+        <div class="links">
+          <a href="stufe5-smart-cockpit/cockpit.html">Smart-Cockpit öffnen →</a>
+          <a href="daten/beispiel_rechnung_nordmontage.pdf">Beispielrechnung (.pdf)</a>
+          <a href="daten/beispiel_handbuch_werkbau_nord.txt">Richtlinie (.txt)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="tag">Teil C · Kapitel 8</span>
+          <h2>Offline-Betrieb (/libs) &amp; IT-Übergabe</h2>
+          <p>100 % Intranet-Fähigkeit ohne CDNs, PowerShell-Downloadskript für alle Bibliotheken sowie das fertige Übergabepaket für IT-Sicherheit &amp; Personalrat.</p>
+        </div>
+        <div class="links">
+          <a href="libs/README_LIBS.md">Offline /libs-Anleitung</a>
+          <a href="betrieb-uebergabe/UEBERGABEPAKET_IT_PERSONALRAT.md">IT-Übergabepaket</a>
+          <a href="betrieb-uebergabe/LIESMICH_TEAM.md">Team-Kurzanleitung</a>
+          <a href="betrieb-uebergabe/start_cockpit_sicher.bat">Sicherer Start (.bat)</a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Online-Spickzettel &amp; Master-Prompts (1-Klick-Kopie)</h2>
+    <div class="prompt-grid">
+      <div class="prompt-card">
+        <h3>1. Meta-Prompting (Einleitung) <button class="copy-btn" data-copy="p1">Kopieren</button></h3>
+        <pre id="p1">Ich möchte [Ziel präzise beschreiben, z. B. ein lokales HTML-Dashboard zur Auswertung von vier Kostenstellen]. Entwerfen Sie mir dafür den professionellen, strukturierten Prompt, den ich einer Programmier-KI übergeben kann, damit sie die Lösung sauber und ohne externe Server-Abhängigkeiten umsetzt.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>2. Lokale Anonymisierung (Kap. 1.4) <button class="copy-btn" data-copy="p2">Kopieren</button></h3>
+        <pre id="p2">Sie sind ein strikter Datenschutz-Assistent. Ersetzen Sie alle Personennamen ([NAME_1]), Firmen ([FIRMA_A]), Orte und Aktenzeichen konsistent. Dieselbe Entität erhält immer denselben Platzhalter. Erhalten Sie Satzbau und Fachkontext vollständig.
+
+---
+[TEXT HIER EINFÜGEN]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>3. JSON-Strukturzwang (Kap. 6.1) <button class="copy-btn" data-copy="p3">Kopieren</button></h3>
+        <pre id="p3">Antworten Sie AUSSCHLIESSLICH mit gültigem JSON ohne Einleitung oder Markdown mit exakt diesen Schlüsseln: {"rechnungsnr":"","lieferant":"","kostenstelle":"","netto_eur":0,"pruefhinweis":""}</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>4. Sichere lokale API-Freigabe (Kap. 6.2) <button class="copy-btn" data-copy="p4">Kopieren</button></h3>
+        <pre id="p4"># Windows PowerShell (Ollama mit konkretem Origin statt *):
+$env:OLLAMA_ORIGINS="http://localhost:8000,http://127.0.0.1:8000"; ollama serve
+
+# Zweites Fenster im Cockpit-Ordner:
+python -m http.server 8000 --bind 127.0.0.1</pre>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Michael Estel — „Das KI-Cockpit“ (2026) · Kontakt: michael@estel.email · Organisation: github.com/On-Premise-AI-Cockpit
+  </footer>
+
+  <script>
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const text = document.getElementById(btn.dataset.copy).textContent;
+        await navigator.clipboard.writeText(text);
+        const orig = btn.textContent;
+        btn.textContent = "Kopiert ✓";
+        setTimeout(() => { btn.textContent = orig; }, 1800);
+      });
+    });
+  </script>
+</body>
+</html>

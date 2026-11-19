@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KI-Cockpit (Stufe 2) — Werkbau Nord GmbH &amp; LID</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --primary: #0f766e;
+      --accent: #1e293b;
+      --warn: #b45309;
+      --ok: #15803d;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--accent);
+      color: #f8fafc;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    header h1 { margin: 0; font-size: 1.35rem; }
+    header p { margin: 0.2rem 0 0; font-size: 0.88rem; color: #cbd5e1; }
+    .badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    nav button.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    main {
+      max-width: 1240px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.15rem 1.25rem;
+    }
+    .kpi .label { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi .value { font-size: 1.65rem; font-weight: 700; margin: 0.35rem 0; }
+    .kpi .sub { font-size: 0.85rem; color: var(--ok); }
+    .kpi .sub.warn { color: var(--warn); }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { text-align: left; padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; background: #f8fafc; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pill {
+      display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .pill.ok { background: #dcfce7; color: #166534; }
+    .pill.warn { background: #fef3c7; color: #92400e; }
+    footer {
+      text-align: center; font-size: 0.82rem; color: var(--muted);
+      padding: 1.5rem; border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>KI-Cockpit — Werkbau Nord GmbH</h1>
+      <p>Stufe 2: Statisches Management-Dashboard &amp; Prozess-Wegweiser (100 % lokal im Browser)</p>
+    </div>
+    <span class="badge">Stand: Februar 2026 (Q1 Plan/Ist)</span>
+  </header>
+
+  <nav role="tablist">
+    <button class="active" data-tab="kmu">KMU-Controlling (Werkbau Nord)</button>
+    <button data-tab="behoerde">Behörde: Prozess &amp; Wegweiser (LID)</button>
+    <button data-tab="architektur">IT-Architektur (C4-Kontext)</button>
+  </nav>
+
+  <main>
+    <!-- TAB 1: KMU-CONTROLLING -->
+    <section id="tab-kmu" class="tab-panel active">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="label">Monats-Plan (Gesamt)</div>
+          <div class="value">570.000 €</div>
+          <div class="sub">4 aktive Kostenstellen (KS-100 bis KS-400)</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Ist-Kosten Februar 2026</div>
+          <div class="value">574.200 €</div>
+          <div class="sub warn">+4.200 € (+0,7 % über Plan)</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Fixkosten-Anteil (Plan)</div>
+          <div class="value">342.000 €</div>
+          <div class="sub">60,0 % fixe Strukturkosten</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Variable Kosten (Plan)</div>
+          <div class="value">228.000 €</div>
+          <div class="sub">40,0 % auftragsabhängig</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2>Kostenstellen-Verteilung (Plan vs. Ist Feb. 2026)</h2>
+          <canvas id="chartKostenstellen" height="220"></canvas>
+        </div>
+        <div class="card">
+          <h2>Kostenverlauf Q1 (Januar &amp; Februar 2026 vs. Plan)</h2>
+          <canvas id="chartVerlauf" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Detailübersicht der vier Kostenstellen (Februar 2026)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Kostenstelle</th>
+              <th>Typ</th>
+              <th class="num">Plan (€)</th>
+              <th class="num">Ist Feb. (€)</th>
+              <th class="num">Abweichung</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>KS-100</strong></td>
+              <td>Produktion &amp; Montage</td>
+              <td>Fix + Variabel</td>
+              <td class="num">345.000 €</td>
+              <td class="num">349.800 €</td>
+              <td class="num">+4.800 €</td>
+              <td><span class="pill warn">Beobachten</span></td>
+            </tr>
+            <tr>
+              <td><strong>KS-200</strong></td>
+              <td>Vertrieb &amp; Projekte</td>
+              <td>Gemischt</td>
+              <td class="num">92.000 €</td>
+              <td class="num">90.900 €</td>
+              <td class="num">-1.100 €</td>
+              <td><span class="pill ok">Im Plan</span></td>
+            </tr>
+            <tr>
+              <td><strong>KS-300</strong></td>
+              <td>IT &amp; Infrastruktur</td>
+              <td>Fix</td>
+              <td class="num">48.000 €</td>
+              <td class="num">48.500 €</td>
+              <td class="num">+500 €</td>
+              <td><span class="pill ok">Im Plan</span></td>
+            </tr>
+            <tr>
+              <td><strong>KS-400</strong></td>
+              <td>Verwaltung &amp; Zentrale</td>
+              <td>Fix</td>
+              <td class="num">85.000 €</td>
+              <td class="num">85.000 €</td>
+              <td class="num">0 €</td>
+              <td><span class="pill ok">Im Plan</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: BEHOERDE PROZESSSEITE -->
+    <section id="tab-behoerde" class="tab-panel">
+      <div class="card">
+        <h2>LID — Prozesswegweiser: IT-Beschaffungsantrag (&gt; 5.000 EUR netto)</h2>
+        <p>Direkt im selben Cockpit eingebettet: Der verbindliche Ablauf aus Stufe 1 — jederzeit aktuell statt veralteter Word-Dienstvorschriften.</p>
+        <div class="mermaid">
+flowchart TD
+    A(["Start: Bedarf im Fachreferat erkannt"]) --> B["Beschaffungsantrag & Leistungsbeschreibung erfassen"]
+    B --> C{"Wert ueber 5.000 EUR netto?"}
+    C -- "Nein (Direktauftrag)" --> D["Referat 21: Mittelverfuegbarkeit pruefen"]
+    C -- "Ja (Vergabeverfahren)" --> E["Referat 32: IT-Sicherheit & Architektur pruefen"]
+    E --> F{"IT-Freigabe erteilt?"}
+    F -- "Nein (Nachbesserung)" --> B
+    F -- "Ja" --> G["Referat 21: Vergaberecht & Haushaltsmittel pruefen"]
+    D --> H["Abteilungsleitung: Zeichnung & Freigabe"]
+    G --> H
+    H --> I(["Bestellung ausloesen & Akte archivieren"])
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Feste Ansprechpartner &amp; Zuständigkeiten im Prozess (Auszug LID)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Referat</th>
+              <th>Aufgabe im Ablauf</th>
+              <th>Ansprechpartner (Beispieldaten)</th>
+              <th>Standort</th>
+              <th>Durchlaufzeit (Ziel)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Referat 32</strong></td>
+              <td>IT-Sicherheit, Architektur &amp; ISB-Prüfung</td>
+              <td>K. Lindner (IT-Architektur)</td>
+              <td>Zentrale Nord</td>
+              <td>max. 5 Werktage</td>
+            </tr>
+            <tr>
+              <td><strong>Referat 21</strong></td>
+              <td>Haushaltsmittel &amp; Vergaberecht</td>
+              <td>S. Hartmann (Vergabestelle)</td>
+              <td>Zentrale Nord</td>
+              <td>max. 7 Werktage</td>
+            </tr>
+            <tr>
+              <td><strong>Abteilungsleitung</strong></td>
+              <td>Schlusszeichnung &amp; Bestellfreigabe</td>
+              <td>Dr. M. Vogt (Abt. Zentrale Dienste)</td>
+              <td>Zentrale Nord</td>
+              <td>max. 3 Werktage</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: IT-ARCHITEKTUR -->
+    <section id="tab-architektur" class="tab-panel">
+      <div class="card">
+        <h2>IT-Systemkontext: Werkbau Nord GmbH</h2>
+        <p>Übersicht aller Datenquellen, die in den Stufen 3 bis 5 an das lokale KI-Cockpit angebunden werden.</p>
+        <div class="mermaid">
+flowchart LR
+    ERP["ERP / Warenwirtschaft"] --> DATEV["DATEV Finanzbuchhaltung"]
+    ZEIT["Zeiterfassung TimeTrack"] --> DATEV
+    DATEV -->|"CSV / XLSX Export"| COCKPIT["Lokales KI-Cockpit (Browser)"]
+    NAS["Netzlaufwerk L: (PDF & Handbuecher)"] --> COCKPIT
+    COCKPIT <-->|"HTTP localhost (Stufe 5)"| OLLAMA["Lokale KI (Ollama)"]
+    GF["Geschaeftsfuehrung & Controlling"] --> COCKPIT
+    style COCKPIT fill:#0f766e,color:#ffffff,stroke:#115e59,stroke-width:2px
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Das KI-Cockpit — Begleit-Monorepo: github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io (Stufe 2: Statisches HTML)
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+
+    // Reiternavigation (Tab-Steuerung)
+    const buttons = document.querySelectorAll("nav button");
+    const panels = document.querySelectorAll(".tab-panel");
+
+    async function renderMermaidInPanel(panel) {
+      const blocks = panel.querySelectorAll(".mermaid:not([data-processed])");
+      if (blocks.length > 0) {
+        await mermaid.run({ nodes: blocks });
+      }
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        buttons.forEach((b) => b.classList.remove("active"));
+        panels.forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        const target = document.getElementById("tab-" + btn.dataset.tab);
+        target.classList.add("active");
+        await renderMermaidInPanel(target);
+      });
+    });
+
+    // Chart 1: Balkendiagramm Plan vs. Ist nach Kostenstelle
+    new Chart(document.getElementById("chartKostenstellen"), {
+      type: "bar",
+      data: {
+        labels: ["KS-100 Produktion", "KS-200 Vertrieb", "KS-300 IT", "KS-400 Verwaltung"],
+        datasets: [
+          { label: "Plan (€)", data: [345000, 92000, 48000, 85000], backgroundColor: "#94a3b8" },
+          { label: "Ist Feb. (€)", data: [349800, 90900, 48500, 85000], backgroundColor: "#0f766e" }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: "bottom" } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Chart 2: Linienverlauf Q1
+    new Chart(document.getElementById("chartVerlauf"), {
+      type: "line",
+      data: {
+        labels: ["Januar 2026", "Februar 2026", "März 2026 (offen)"],
+        datasets: [
+          { label: "Plan-Linie (€)", data: [570000, 570000, 570000], borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+          { label: "Ist-Kosten (€)", data: [566400, 574200, null], borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.25 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: "bottom" } },
+        scales: { y: { suggestedMin: 540000, suggestedMax: 600000 } }
+      }
+    });
+  </script>
+</body>
+</html>

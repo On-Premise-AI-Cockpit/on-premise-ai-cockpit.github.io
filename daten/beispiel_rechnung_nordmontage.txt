@@ -1,0 +1,13 @@
+RECHNUNG Nr. NM-2026-0418
+Aussteller: NordMontage Partner GmbH, Industriestrasse 14, 28197 Bremen
+Empfaenger: Werkbau Nord GmbH, Buchhaltung / Kostenstelle KS-100
+Rechnungsdatum: 21.03.2026 | Zahlungsziel: 14 Tage netto (04.04.2026)
+Projektbezug: Projekt Halle 4 (Montageabschnitt B)
+
+Position 1: Fremdmontage Stahltrager (Regelstunden, 240 Std. x 85,00 EUR) = 20.400,00 EUR
+Position 2: Nachtrag Wochenend- und Ueberstundenzuschlag (160 Std. x 110,00 EUR) = 17.600,00 EUR
+Nettobetrag gesamt: 38.000,00 EUR
+Umsatzsteuer 19 %: 7.220,00 EUR
+Bruttobetrag: 45.220,00 EUR
+
+Hinweis: Nachtrag aufgrund verspaeteter Baufeldfreigabe am 12.03.2026 (Freigabe Bauleitung steht noch aus).

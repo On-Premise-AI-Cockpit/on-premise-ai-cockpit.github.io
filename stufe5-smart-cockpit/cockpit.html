@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KI-Cockpit (Stufe 5: Smart-Master-Cockpit) — Werkbau Nord GmbH &amp; LID</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9; --surface: #ffffff; --ink: #0f172a; --muted: #475569;
+      --primary: #0f766e; --accent: #1e293b; --danger: #b91c1c; --warn: #b45309; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+    header { background: var(--accent); color: #f8fafc; padding: 1.15rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    header h1 { margin: 0; font-size: 1.3rem; }
+    header p { margin: 0.2rem 0 0; font-size: 0.86rem; color: #cbd5e1; }
+    .conn-bar {
+      background: #0f172a; color: #e2e8f0; padding: 0.65rem 2rem; display: flex; flex-wrap: wrap;
+      gap: 0.75rem; align-items: center; font-size: 0.84rem; border-top: 1px solid #334155;
+    }
+    .conn-bar input { background: #1e293b; color: #f8fafc; border: 1px solid #475569; border-radius: 6px; padding: 0.35rem 0.6rem; font-size: 0.84rem; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    nav button { background: none; border: none; border-bottom: 3px solid transparent; padding: 0.85rem 1.1rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    nav button.active { color: var(--primary); border-bottom-color: var(--primary); }
+    main { max-width: 1260px; margin: 1.25rem auto; padding: 0 1.5rem 3rem; }
+    .tab-panel { display: none; } .tab-panel.active { display: block; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.45rem; margin-bottom: 1.25rem; }
+    .card h2 { margin-top: 0; font-size: 1.08rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    textarea, input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem; font-family: inherit; font-size: 0.9rem; }
+    button.btn { background: var(--primary); color: #fff; border: none; border-radius: 7px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; margin-top: 0.6rem; }
+    button.btn.sec { background: #334155; }
+    .out-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-top: 0.85rem; white-space: pre-wrap; font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.75rem; }
+    th, td { text-align: left; padding: 0.55rem 0.65rem; border-bottom: 1px solid var(--border); }
+    th { background: #f8fafc; color: var(--muted); }
+    .toast {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; background: #0f172a; color: #f8fafc;
+      padding: 0.75rem 1.15rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: none; font-size: 0.88rem; z-index: 999;
+    }
+    .pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.76rem; font-weight: 600; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .pill.warn { background: #fef3c7; color: #92400e; }
+    .pill.ok { background: #dcfce7; color: #166534; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Smart-Master-Cockpit (Stufe 5) — Lokale KI per Schnittstelle</h1>
+      <p>Kellner-Prinzip (fetch-API &amp; JSON-Strukturzwang): 100 % lokal über Ollama auf Ihrem Dienstrechner</p>
+    </div>
+    <button class="btn" id="btnExportJson" style="margin-top:0;">Ergebnisse als JSON exportieren</button>
+  </header>
+
+  <div class="conn-bar">
+    <strong>Ollama-Schnittstelle:</strong>
+    <label>Endpunkt: <input id="apiUrl" value="http://localhost:11434/api/chat" size="30" /></label>
+    <label>Modell: <input id="modelName" value="qwen3.5:4b" size="14" /></label>
+    <button class="btn" id="btnTestConn" style="margin:0;padding:0.35rem 0.75rem;">Verbindung prüfen</button>
+    <span id="connStatus" style="margin-left:auto;color:#94a3b8;">Bereit (starten Sie Ollama mit OLLAMA_ORIGINS="http://localhost:8000")</span>
+  </div>
+
+  <nav>
+    <button class="active" data-tab="extraktor">1. Daten-Extraktor (PDF/Rechnung)</button>
+    <button data-tab="triage">2. Posteingangs-Triage</button>
+    <button data-tab="orakel">3. Firmen-Orakel (Handbuch Q&amp;A)</button>
+    <button data-tab="gremien">4. Behörde (LID): Fragen an das Gremiennetz</button>
+  </nav>
+
+  <main>
+    <!-- TAB 1: DATEN-EXTRAKTOR -->
+    <section id="tab-extraktor" class="tab-panel active">
+      <div class="card">
+        <h2>Blaupause 1 — KMU Daten-Extraktor (pdf.js + JSON-Strukturzwang)</h2>
+        <p>Laden Sie eine PDF-Rechnung hoch (lokal über <code>pdf.js</code> ausgelesen) oder prüfen Sie die hinterlegte Beispielrechnung der <strong>NordMontage Partner GmbH</strong>.</p>
+        <input type="file" id="pdfInput" accept=".pdf,.txt" style="margin-bottom:0.65rem;" />
+        <textarea id="invoiceText" rows="7">RECHNUNG Nr. NM-2026-0418
+Aussteller: NordMontage Partner GmbH, Bremen
+Empfaenger: Werkbau Nord GmbH, Kostenstelle KS-100
+Rechnungsdatum: 21.03.2026 | Zahlungsziel: 04.04.2026 | Projekt: Projekt Halle 4
+Position 1: Fremdmontage Regelstunden = 20.400,00 EUR
+Position 2: Nachtrag Wochenend- und Ueberstundenzuschlag = 17.600,00 EUR
+Nettobetrag gesamt: 38.000,00 EUR | Brutto: 45.220,00 EUR
+Hinweis: Freigabe Bauleitung steht noch aus.</textarea>
+        <button class="btn" id="btnExtract">Rechnung lokal per KI extrahieren &amp; ins Journal übernehmen</button>
+        <div class="out-box" id="extractRaw">Noch keine Extraktion gestartet.</div>
+        <table>
+          <thead><tr><th>Rechnungsnr.</th><th>Lieferant</th><th>Kostenstelle</th><th>Netto (€)</th><th>Prüfhinweis</th></tr></thead>
+          <tbody id="extractTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: TRIAGE -->
+    <section id="tab-triage" class="tab-panel">
+      <div class="card">
+        <h2>Blaupause 2 — Posteingangs-Triage (Klassifizierung nach Dringlichkeit &amp; Fachbereich)</h2>
+        <textarea id="triageInput" rows="5">Betreff: 2. Mahnung Rechnung SC-2026-0319 (SafeCloud Backup GmbH)
+Sehr geehrte Damen und Herren, fuer unseren Backup-Vertrag im Maerz 2026 sind noch 9.200 EUR offen. Bitte begleichen Sie den Betrag bis Freitag, sonst erfolgt eine automatische Kontosperrung der Sicherungsserver.</textarea>
+        <button class="btn" id="btnTriage">Nachricht lokal klassifizieren</button>
+        <div class="out-box" id="triageResult">Ergebnis erscheint hier im strukturierten Format (Dringlichkeit, Fachbereich, empfohlene Sofortmaßnahme).</div>
+      </div>
+    </section>
+
+    <!-- TAB 3: FIRMEN-ORAKEL -->
+    <section id="tab-orakel" class="tab-panel">
+      <div class="card">
+        <h2>Blaupause 3 — Das Firmen-Orakel (Q&amp;A auf internem Handbuch)</h2>
+        <p><strong>Hinterlegte Wissensbasis (Einkaufs- &amp; Freigaberichtlinie Werkbau Nord GmbH):</strong></p>
+        <textarea id="handbookText" rows="5">1. Schwellenwerte: Bis 2.500 EUR Projektleitung; 2.501–15.000 EUR Zweitzeichnung Controlling; über 15.000 EUR schriftliche Vorab-Freigabe Geschäftsführung.
+2. Sonderregel Fremdmontage (KS-100): Nachträge und Überstundenzuschläge von Subunternehmern dürfen nur nach unterzeichnetem Baustellen-Abnahmeprotokoll ausgezahlt werden. Abweichungen > 10 % binnen 48 Stunden an Geschäftsführung melden.
+3. IT-Verträge (KS-300): Doppelte Einzelrechnungen im selben Monat sofort sperren und an IT-Leitung melden.</textarea>
+        <input type="text" id="oracleQuestion" style="margin-top:0.7rem;" value="Darf die Rechnung über 38.000 EUR von NordMontage ohne Abnahmeprotokoll bezahlt werden und wer muss freigeben?" />
+        <button class="btn" id="btnOracle">Firmen-Orakel lokal befragen</button>
+        <div class="out-box" id="oracleAnswer">Antwort erscheint hier — strikt auf Basis des oben stehenden Handbuchs.</div>
+      </div>
+    </section>
+
+    <!-- TAB 4: BEHOERDE GREMIENNETZ -->
+    <section id="tab-gremien" class="tab-panel">
+      <div class="card">
+        <h2>Behörde (LID) — Natürlichsprachige Fragen an das Gremiennetz</h2>
+        <p>Aktiver Datenauszug aus der lokalen LID-Datenbank (offene Beschlüsse &amp; Zuständigkeiten):</p>
+        <textarea id="lidContext" rows="5">Gremium: DigitalPakt-Netzausbau | Standort: Regionalstelle Sued (Goettingen) | Zustaendig: Anja Krueger (Ref. 51) | Thema: Glasfaser-Anbindung Berufsschulen Los 3 | Offen seit: 19.01.2026 | Status: Ueberfaellig
+Gremium: IT-Lenkungsausschuss | Standort: Zentrale Nord (Hannover) | Zustaendig: Dr. Sabine Weber (Ref. 32) | Thema: Freigabe lokales KI-Cockpit (/libs) | Offen seit: 28.02.2026 | Status: In Pruefung
+Gremium: Vergabekammer Nord | Standort: Zentrale Nord (Hannover) | Zustaendig: Stefan Hartmann (Ref. 21) | Thema: Rahmenvertrag eVergabe-Schnittstelle | Offen seit: 12.01.2026 | Status: Ueberfaellig</textarea>
+        <input type="text" id="lidQuestion" style="margin-top:0.7rem;" value="Wer ist für den DigitalPakt-Netzausbau am Standort Süd zuständig und welche Beschlüsse sind insgesamt seit Januar 2026 offen?" />
+        <button class="btn" id="btnLidAsk">Gremiennetz lokal abfragen</button>
+        <div class="out-box" id="lidAnswer">Antwort erscheint hier.</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    }
+
+    const extractedRecords = [];
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 3500);
+    }
+
+    document.querySelectorAll("nav button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach((x) => x.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+        b.classList.add("active");
+        document.getElementById("tab-" + b.dataset.tab).classList.add("active");
+      });
+    });
+
+    async function askOllama(systemPrompt, userPrompt, expectJson = false) {
+      const url = document.getElementById("apiUrl").value.trim();
+      const model = document.getElementById("modelName").value.trim();
+      const isOpenAICompat = url.includes("/v1/chat/completions");
+
+      const messages = [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ];
+
+      // Unterstuetzt sowohl Ollama-nativ (/api/chat) als auch OpenAI-kompatibel (/v1/chat/completions fuer llama-server & Ollama)
+      const payload = isOpenAICompat
+        ? {
+            model,
+            stream: false,
+            temperature: 0.1,
+            messages,
+            ...(expectJson ? { response_format: { type: "json_object" } } : {})
+          }
+        : {
+            model,
+            stream: false,
+            options: { temperature: 0.1 },
+            messages,
+            ...(expectJson ? { format: "json" } : {})
+          };
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status} — prüfen Sie Endpunkt, Modellname und OLLAMA_ORIGINS.`);
+      const data = await res.json();
+      return isOpenAICompat
+        ? (data.choices?.[0]?.message?.content || "")
+        : (data.message?.content || "");
+    }
+
+    // Verbindungstest (erkennt automatisch Ollama /api/tags oder llama-server /v1/models)
+    document.getElementById("btnTestConn").addEventListener("click", async () => {
+      const status = document.getElementById("connStatus");
+      const rawUrl = document.getElementById("apiUrl").value.trim();
+      const isOpenAICompat = rawUrl.includes("/v1/");
+      try {
+        const base = rawUrl.replace(/\/(api|v1)\/.*$/, "");
+        const res = await fetch(isOpenAICompat ? `${base}/v1/models` : `${base}/api/tags`);
+        if (!res.ok) throw new Error("Keine Antwort");
+        const data = await res.json();
+        const list = isOpenAICompat ? (data.data || []).map((m) => m.id) : (data.models || []).map((m) => m.name);
+        status.textContent = `Verbunden! Geladene Modelle: ${list.slice(0, 4).join(", ") || "aktiv"}`;
+        status.style.color = "#4ade80";
+        showToast("Verbindung zur lokalen KI-Schnittstelle erfolgreich!");
+      } catch (e) {
+        status.textContent = "Verbindung blockiert (CORS / lokaler KI-Server läuft nicht). Siehe Kapitel 6.2 & 6.5.";
+        status.style.color = "#f87171";
+        showToast("Lokale KI nicht erreichbar — bitte Endpunkt & Freigabe prüfen.");
+      }
+    });
+
+    // PDF oder TXT lokal über pdf.js einlesen
+    document.getElementById("pdfInput").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.name.toLowerCase().endsWith(".txt")) {
+        document.getElementById("invoiceText").value = await file.text();
+        showToast(`Textdatei ${file.name} geladen.`);
+        return;
+      }
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      let text = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map((it) => it.str).join(" ") + "\n";
+      }
+      document.getElementById("invoiceText").value = text.trim();
+      showToast(`PDF (${pdf.numPages} Seiten) lokal über pdf.js ausgelesen.`);
+    });
+
+    // Blaupause 1: Daten-Extraktor mit JSON-Strukturzwang
+    document.getElementById("btnExtract").addEventListener("click", async () => {
+      const out = document.getElementById("extractRaw");
+      out.textContent = "Lokale KI extrahiert Rechnungsfelder im JSON-Format...";
+      try {
+        const raw = await askOllama(
+          'Sie sind ein Buchhaltungs-Extraktor. Antworten Sie AUSSCHLIESSLICH mit gültigem JSON ohne Markdown oder Einleitung mit exakt diesen Schlüsseln: {"rechnungsnr":"","lieferant":"","kostenstelle":"","netto_eur":0,"pruefhinweis":""}',
+          document.getElementById("invoiceText").value,
+          true
+        );
+        const cleaned = raw.replace(/```json|```/g, "").trim();
+        const obj = JSON.parse(cleaned);
+        extractedRecords.push(obj);
+        out.textContent = JSON.stringify(obj, null, 2);
+        document.getElementById("extractTable").innerHTML = extractedRecords.map((r) => `
+          <tr>
+            <td><strong>${r.rechnungsnr || "-"}</strong></td>
+            <td>${r.lieferant || "-"}</td>
+            <td>${r.kostenstelle || "-"}</td>
+            <td>${r.netto_eur ?? "-"} €</td>
+            <td><span class="pill warn">${r.pruefhinweis || "OK"}</span></td>
+          </tr>`).join("");
+        showToast("Rechnung erfolgreich extrahiert & ins Journal übernommen!");
+      } catch (err) {
+        out.textContent = "Fehler bei Extraktion: " + err.message;
+      }
+    });
+
+    // Blaupause 2: Triage
+    document.getElementById("btnTriage").addEventListener("click", async () => {
+      const out = document.getElementById("triageResult");
+      out.textContent = "Klassifiziere Posteingang lokal...";
+      try {
+        const raw = await askOllama(
+          'Klassifizieren Sie die Nachricht als JSON mit den Feldern {"dringlichkeit":"HOCH|MITTEL|NIEDRIG","fachbereich":"","kurzzusammenfassung":"","sofortmassnahme":""}. Keine Einleitung.',
+          document.getElementById("triageInput").value,
+          true
+        );
+        out.textContent = raw;
+        showToast("Posteingangs-Triage abgeschlossen.");
+      } catch (err) { out.textContent = "Fehler: " + err.message; }
+    });
+
+    // Blaupause 3: Firmen-Orakel
+    document.getElementById("btnOracle").addEventListener("click", async () => {
+      const out = document.getElementById("oracleAnswer");
+      out.textContent = "Prüfe internes Handbuch lokal...";
+      try {
+        const ans = await askOllama(
+          "Beantworten Sie die Frage sachlich auf Deutsch und AUSSCHLIESSLICH auf Basis der mitgelieferten Richtlinie. Zitieren Sie die maßgebliche Regel.",
+          `RICHTLINIE:\n${document.getElementById("handbookText").value}\n\nFRAGE:\n${document.getElementById("oracleQuestion").value}`,
+          false
+        );
+        out.textContent = ans;
+        showToast("Firmen-Orakel hat geantwortet.");
+      } catch (err) { out.textContent = "Fehler: " + err.message; }
+    });
+
+    // Tab 4: Behoerde Gremiennetz
+    document.getElementById("btnLidAsk").addEventListener("click", async () => {
+      const out = document.getElementById("lidAnswer");
+      out.textContent = "Analysiere lokale LID-Gremiendaten...";
+      try {
+        const ans = await askOllama(
+          "Sie sind ein Verwaltungs-Assistent für das Landesamt (LID). Beantworten Sie die Frage präzise, stichpunktartig und ausschließlich anhand des gelieferten Datenauszugs.",
+          `GREMIENDATEN:\n${document.getElementById("lidContext").value}\n\nFRAGE:\n${document.getElementById("lidQuestion").value}`,
+          false
+        );
+        out.textContent = ans;
+        showToast("Gremienabfrage abgeschlossen.");
+      } catch (err) { out.textContent = "Fehler: " + err.message; }
+    });
+
+    // Export-Funktion
+    document.getElementById("btnExportJson").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(extractedRecords, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "ki_cockpit_extrakte.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast("JSON-Export heruntergeladen.");
+    });
+  </script>
+</body>
+</html>

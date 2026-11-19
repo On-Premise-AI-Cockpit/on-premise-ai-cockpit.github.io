@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KI-Cockpit (v1.0 Stabil — 100 % Offline / Intranet) — Werkbau Nord GmbH</title>
+  <script src="../libs/chart.umd.min.js"></script>
+  <script src="../libs/papaparse.min.js"></script>
+  <script src="../libs/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9; --surface: #ffffff; --ink: #0f172a; --muted: #475569;
+      --primary: #0f766e; --accent: #1e293b; --warn: #b45309; --danger: #b91c1c;
+      --ok: #15803d; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+    header { background: var(--accent); color: #f8fafc; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    header h1 { margin: 0; font-size: 1.35rem; }
+    header p { margin: 0.2rem 0 0; font-size: 0.88rem; color: #cbd5e1; }
+    main { max-width: 1240px; margin: 1.5rem auto; padding: 0 1.5rem 3rem; }
+    .dropzone {
+      background: var(--surface); border: 2px dashed #0f766e; border-radius: 12px;
+      padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    .dropzone.dragover { background: #ccfbf1; transform: scale(1.005); }
+    .dropzone strong { color: var(--primary); font-size: 1.05rem; }
+    .dropzone p { margin: 0.35rem 0 0; font-size: 0.88rem; color: var(--muted); }
+    .controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    select, button.btn {
+      padding: 0.5rem 0.9rem; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); font-size: 0.9rem; cursor: pointer;
+    }
+    button.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.15rem 1.25rem; }
+    .kpi .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi .value { font-size: 1.65rem; font-weight: 700; margin: 0.3rem 0; }
+    .kpi .sub { font-size: 0.85rem; }
+    .ok-txt { color: var(--ok); } .warn-txt { color: var(--warn); } .danger-txt { color: var(--danger); font-weight: 600; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+    .card h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.55rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); background: #f8fafc; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+    .pill.ok { background: #dcfce7; color: #166534; }
+    .pill.warn { background: #fef3c7; color: #92400e; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    #statusBar { font-size: 0.85rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>KI-Cockpit — Werkbau Nord GmbH (v1.0 Stabil — 100 % Offline / Intranet)</h1>
+      <p>Tankdeckel-Prinzip: Programm und Daten sind getrennt — ziehen Sie neue .csv- oder .xlsx-Exporte direkt herein.</p>
+    </div>
+    <div id="badgeStand" style="background:rgba(255,255,255,0.14);padding:0.35rem 0.85rem;border-radius:999px;font-size:0.84rem;">
+      Standarddaten geladen (Februar 2026)
+    </div>
+  </header>
+
+  <main>
+    <div class="dropzone" id="dropzone">
+      <strong>DATEV- / Excel-Monatsabschluss (.csv oder .xlsx) hier ablegen — oder klicken</strong>
+      <p>Erwartete Spalten: <code>Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar</code> (Verarbeitung 100 % lokal im Browser)</p>
+      <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" />
+    </div>
+
+    <div class="controls">
+      <div>
+        <label for="monthFilter"><strong>Aktiver Berichtsmonat:</strong></label>
+        <select id="monthFilter"></select>
+      </div>
+      <div id="statusBar">Tipp: Ziehen Sie <code>daten/kmu_monatsabschluss_2026-03.csv</code> in die Dropzone.</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Plan-Kosten (Monat)</div><div class="value" id="kpiPlan">–</div><div class="sub" id="kpiPlanSub"></div></div>
+      <div class="kpi"><div class="label">Ist-Kosten (Monat)</div><div class="value" id="kpiIst">–</div><div class="sub" id="kpiDiff"></div></div>
+      <div class="kpi"><div class="label">Fixkosten (Ist)</div><div class="value" id="kpiFix">–</div><div class="sub" id="kpiFixSub"></div></div>
+      <div class="kpi"><div class="label">Kritische Kostenstellen (&gt; 5 %)</div><div class="value" id="kpiAlerts">–</div><div class="sub" id="kpiAlertsSub"></div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><h2>Kostenstellen: Plan vs. Ist</h2><canvas id="chartBar" height="220"></canvas></div>
+      <div class="card"><h2>Monatsverlauf (alle geladenen Monate)</h2><canvas id="chartLine" height="220"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2>Detailpositionen im ausgewählten Monat</h2>
+      <table>
+        <thead>
+          <tr><th>Kostenstelle</th><th>Kategorie</th><th>Kostenart</th><th class="num">Plan (€)</th><th class="num">Ist (€)</th><th class="num">Abweichung</th><th>Ampel &amp; Kommentar</th></tr>
+        </thead>
+        <tbody id="detailBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // Initialdaten (Januar & Februar 2026 als Demo-Basis vor dem ersten Drag-and-Drop)
+    let allRows = [
+      { Monat:"2026-01", Kostenstelle:"KS-100", Kategorie:"Fix", Kostenart:"Personal & Hallenmiete", Plan_EUR:175000, Ist_EUR:175000, Kommentar:"Plangemaess" },
+      { Monat:"2026-01", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Material & Fertigung", Plan_EUR:118000, Ist_EUR:115200, Kommentar:"Geringerer Stahlabruf" },
+      { Monat:"2026-01", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Fremdmontage & Subunternehmer", Plan_EUR:52000, Ist_EUR:50800, Kommentar:"Planmaessig" },
+      { Monat:"2026-01", Kostenstelle:"KS-200", Kategorie:"Fix", Kostenart:"Vertrieb Grundkosten", Plan_EUR:34000, Ist_EUR:34000, Kommentar:"Plangemaess" },
+      { Monat:"2026-01", Kostenstelle:"KS-200", Kategorie:"Variabel", Kostenart:"Provisionen & Reisekosten", Plan_EUR:58000, Ist_EUR:58400, Kommentar:"Messebesuch Nord" },
+      { Monat:"2026-01", Kostenstelle:"KS-300", Kategorie:"Fix", Kostenart:"ERP-Lizenzen, Netz & Wartung", Plan_EUR:48000, Ist_EUR:48000, Kommentar:"Stabil" },
+      { Monat:"2026-01", Kostenstelle:"KS-400", Kategorie:"Fix", Kostenart:"Verwaltung & Zentrale", Plan_EUR:85000, Ist_EUR:85000, Kommentar:"Plangemaess" },
+      { Monat:"2026-02", Kostenstelle:"KS-100", Kategorie:"Fix", Kostenart:"Personal & Hallenmiete", Plan_EUR:175000, Ist_EUR:175000, Kommentar:"Plangemaess" },
+      { Monat:"2026-02", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Material & Fertigung", Plan_EUR:118000, Ist_EUR:119800, Kommentar:"Blechpreise +1,5 %" },
+      { Monat:"2026-02", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Fremdmontage & Subunternehmer", Plan_EUR:52000, Ist_EUR:55000, Kommentar:"Erste Ueberstunden Halle 4" },
+      { Monat:"2026-02", Kostenstelle:"KS-200", Kategorie:"Fix", Kostenart:"Vertrieb Grundkosten", Plan_EUR:34000, Ist_EUR:34000, Kommentar:"Plangemaess" },
+      { Monat:"2026-02", Kostenstelle:"KS-200", Kategorie:"Variabel", Kostenart:"Provisionen & Reisekosten", Plan_EUR:58000, Ist_EUR:56900, Kommentar:"Weniger Reisekosten" },
+      { Monat:"2026-02", Kostenstelle:"KS-300", Kategorie:"Fix", Kostenart:"ERP-Lizenzen, Netz & Wartung", Plan_EUR:48000, Ist_EUR:48500, Kommentar:"Ersatzteile" },
+      { Monat:"2026-02", Kostenstelle:"KS-400", Kategorie:"Fix", Kostenart:"Verwaltung & Zentrale", Plan_EUR:85000, Ist_EUR:85000, Kommentar:"Plangemaess" }
+    ];
+
+    let barChart = null, lineChart = null;
+    const fmt = (n) => new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 }).format(n);
+
+    // Robuste Zahlenkonvertierung fuer deutsches Komma-Format ("38.400,50" -> 38400.5)
+    function parseEuro(val) {
+      if (typeof val === "number") return val;
+      if (!val) return 0;
+      const cleaned = String(val).replace(/[€\s]/g, "").replace(/\.(?=\d{3})/g, "").replace(",", ".");
+      return parseFloat(cleaned) || 0;
+    }
+
+    function normalizeRows(raw) {
+      return raw
+        .filter((r) => r && (r.Kostenstelle || r.kostenstelle))
+        .map((r) => ({
+          Monat: String(r.Monat || r.monat || "Unbekannt").trim(),
+          Kostenstelle: String(r.Kostenstelle || r.kostenstelle).trim(),
+          Kategorie: String(r.Kategorie || r.kategorie || "Fix").trim(),
+          Kostenart: String(r.Kostenart || r.kostenart || "-").trim(),
+          Plan_EUR: parseEuro(r.Plan_EUR ?? r.Plan ?? 0),
+          Ist_EUR: parseEuro(r.Ist_EUR ?? r.Ist ?? 0),
+          Kommentar: String(r.Kommentar || r.kommentar || "").trim()
+        }));
+    }
+
+    function populateMonths() {
+      const months = [...new Set(allRows.map((r) => r.Monat))].sort();
+      const sel = document.getElementById("monthFilter");
+      sel.innerHTML = months.map((m) => `<option value="${m}">${m}</option>`).join("");
+      sel.value = months[months.length - 1];
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const activeMonth = document.getElementById("monthFilter").value;
+      const rows = allRows.filter((r) => r.Monat === activeMonth);
+
+      const sumPlan = rows.reduce((s, r) => s + r.Plan_EUR, 0);
+      const sumIst = rows.reduce((s, r) => s + r.Ist_EUR, 0);
+      const diff = sumIst - sumPlan;
+      const pct = sumPlan ? (diff / sumPlan) * 100 : 0;
+      const sumFix = rows.filter((r) => r.Kategorie.toLowerCase().startsWith("fix")).reduce((s, r) => s + r.Ist_EUR, 0);
+
+      // Gruppierung nach Kostenstelle
+      const ksMap = {};
+      rows.forEach((r) => {
+        if (!ksMap[r.Kostenstelle]) ksMap[r.Kostenstelle] = { plan: 0, ist: 0 };
+        ksMap[r.Kostenstelle].plan += r.Plan_EUR;
+        ksMap[r.Kostenstelle].ist += r.Ist_EUR;
+      });
+      const ksKeys = Object.keys(ksMap).sort();
+      const alerts = ksKeys.filter((k) => ksMap[k].plan > 0 && ((ksMap[k].ist - ksMap[k].plan) / ksMap[k].plan) > 0.05);
+
+      document.getElementById("kpiPlan").textContent = fmt(sumPlan);
+      document.getElementById("kpiPlanSub").textContent = `${ksKeys.length} Kostenstellen in ${activeMonth}`;
+      document.getElementById("kpiIst").textContent = fmt(sumIst);
+      const diffEl = document.getElementById("kpiDiff");
+      diffEl.textContent = `${diff >= 0 ? "+" : ""}${fmt(diff)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)} %)`;
+      diffEl.className = "sub " + (pct > 5 ? "danger-txt" : (pct > 0.5 ? "warn-txt" : "ok-txt"));
+
+      document.getElementById("kpiFix").textContent = fmt(sumFix);
+      document.getElementById("kpiFixSub").textContent = `${sumIst ? ((sumFix / sumIst) * 100).toFixed(1) : 0} % der Ist-Kosten`;
+
+      document.getElementById("kpiAlerts").textContent = alerts.length;
+      const alEl = document.getElementById("kpiAlertsSub");
+      alEl.textContent = alerts.length ? `ALARM: ${alerts.join(", ")}` : "Alle Kostenstellen im Korridor";
+      alEl.className = "sub " + (alerts.length ? "danger-txt" : "ok-txt");
+
+      // Balkendiagramm aktualisieren
+      if (barChart) barChart.destroy();
+      barChart = new Chart(document.getElementById("chartBar"), {
+        type: "bar",
+        data: {
+          labels: ksKeys,
+          datasets: [
+            { label: "Plan (€)", data: ksKeys.map((k) => ksMap[k].plan), backgroundColor: "#94a3b8" },
+            {
+              label: "Ist (€)",
+              data: ksKeys.map((k) => ksMap[k].ist),
+              backgroundColor: ksKeys.map((k) => ((ksMap[k].ist - ksMap[k].plan) / (ksMap[k].plan || 1) > 0.05) ? "#b91c1c" : "#0f766e")
+            }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
+      });
+
+      // Linienverlauf ueber alle Monate
+      const months = [...new Set(allRows.map((r) => r.Monat))].sort();
+      const mPlan = months.map((m) => allRows.filter((r) => r.Monat === m).reduce((s, r) => s + r.Plan_EUR, 0));
+      const mIst = months.map((m) => allRows.filter((r) => r.Monat === m).reduce((s, r) => s + r.Ist_EUR, 0));
+      if (lineChart) lineChart.destroy();
+      lineChart = new Chart(document.getElementById("chartLine"), {
+        type: "line",
+        data: {
+          labels: months,
+          datasets: [
+            { label: "Plan (€)", data: mPlan, borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+            { label: "Ist (€)", data: mIst, borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.2 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+      });
+
+      // Tabelle fuellen
+      document.getElementById("detailBody").innerHTML = rows.map((r) => {
+        const d = r.Ist_EUR - r.Plan_EUR;
+        const p = r.Plan_EUR ? (d / r.Plan_EUR) * 100 : 0;
+        const badge = p > 5 ? `<span class="pill danger">ALARM (+${p.toFixed(1)} %)</span>` :
+                      p > 1 ? `<span class="pill warn">Beobachten</span>` : `<span class="pill ok">OK</span>`;
+        return `<tr>
+          <td><strong>${r.Kostenstelle}</strong></td>
+          <td>${r.Kategorie}</td>
+          <td>${r.Kostenart}</td>
+          <td class="num">${fmt(r.Plan_EUR)}</td>
+          <td class="num">${fmt(r.Ist_EUR)}</td>
+          <td class="num">${d >= 0 ? "+" : ""}${fmt(d)}</td>
+          <td>${badge} ${r.Kommentar}</td>
+        </tr>`;
+      }).join("");
+    }
+
+    function handleFile(file) {
+      if (!file) return;
+      const ext = file.name.split(".").pop().toLowerCase();
+      if (ext === "csv") {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (res) => {
+            allRows = normalizeRows(res.data);
+            document.getElementById("badgeStand").textContent = `Datei aktiv: ${file.name} (${allRows.length} Zeilen)`;
+            document.getElementById("statusBar").textContent = `Erfolgreich lokal eingelesen: ${file.name}`;
+            populateMonths();
+          }
+        });
+      } else if (ext === "xlsx" || ext === "xls") {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const wb = XLSX.read(new Uint8Array(e.target.result), { type: "array" });
+          const sheet = wb.Sheets[wb.SheetNames[0]];
+          allRows = normalizeRows(XLSX.utils.sheet_to_json(sheet));
+          document.getElementById("badgeStand").textContent = `Excel aktiv: ${file.name} (${allRows.length} Zeilen)`;
+          document.getElementById("statusBar").textContent = `Erfolgreich lokal eingelesen: ${file.name}`;
+          populateMonths();
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    }
+
+    const dz = document.getElementById("dropzone");
+    const fi = document.getElementById("fileInput");
+    dz.addEventListener("click", () => fi.click());
+    fi.addEventListener("change", (e) => handleFile(e.target.files[0]));
+    dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+    dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+    dz.addEventListener("drop", (e) => { e.preventDefault(); dz.classList.remove("dragover"); handleFile(e.dataTransfer.files[0]); });
+    document.getElementById("monthFilter").addEventListener("change", renderDashboard);
+
+    populateMonths();
+  </script>
+</body>
+</html>

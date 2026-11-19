@@ -1,0 +1,8 @@
+﻿Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar
+2026-03;KS-100;Fix;Personal & Hallenmiete;175000;175000;Plangemaess
+2026-03;KS-100;Variabel;Material & Fertigung;118000;118000;Im Plan
+2026-03;KS-100;Variabel;Fremdmontage & Subunternehmer;52000;90400;ALARM: Nachtraege & Ueberstunden NordMontage Partner GmbH
+2026-03;KS-200;Fix;Vertrieb Grundkosten;34000;34000;Plangemaess
+2026-03;KS-200;Variabel;Provisionen & Reisekosten;58000;57600;Im Plan
+2026-03;KS-300;Fix;ERP-Lizenzen, Netz & Wartung;48000;57200;ALARM: Doppelabrechnung Cloud-Backup Dienstleister
+2026-03;KS-400;Fix;Verwaltung & Zentrale;85000;85000;Plangemaess

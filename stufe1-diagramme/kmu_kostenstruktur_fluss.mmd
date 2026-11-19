@@ -1,0 +1,16 @@
+flowchart LR
+    GK["Gesamtkosten Monat (Plan)<br/>570.000 EUR"] --> FK["Fixkosten (60 %)<br/>342.000 EUR"]
+    GK --> VK["Variable Kosten (40 %)<br/>228.000 EUR"]
+
+    FK --> FK_P["KS-100 Personal & Hallenmiete<br/>175.000 EUR"]
+    FK --> FK_V["KS-400 Verwaltung & Zentrale<br/>85.000 EUR"]
+    FK --> FK_IT["KS-300 IT & Infrastruktur<br/>48.000 EUR"]
+    FK --> FK_VT["KS-200 Vertrieb Grundkosten<br/>34.000 EUR"]
+
+    VK --> VK_M["KS-100 Material & Fertigung<br/>118.000 EUR"]
+    VK --> VK_F["KS-100 Fremdmontage & Subunternehmer<br/>52.000 EUR"]
+    VK --> VK_VT["KS-200 Provisionen & Reisekosten<br/>58.000 EUR"]
+
+    style GK fill:#1e293b,stroke:#0f172a,color:#ffffff,stroke-width:2px
+    style FK fill:#0f766e,stroke:#115e59,color:#ffffff,stroke-width:2px
+    style VK fill:#b45309,stroke:#92400e,color:#ffffff,stroke-width:2px

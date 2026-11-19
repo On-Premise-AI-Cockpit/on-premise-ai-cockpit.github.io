@@ -1,0 +1,501 @@
+﻿ID;Name;Rolle;Referat;Standort;Gremien;Fachverfahren;Email;Kritikalitaet
+1;Dr. Sabine Weber;Referatsleitung;Ref. 32 IT-Betrieb & Sicherheit;Zentrale Nord (Hannover);"IT-Lenkungsausschuss;ISB-Sicherheitskreis;Architektur-Board;Krisenstab IT";"eVergabe-Portal;eAkte / DMS;HKR";weber.s@lid.example.de;95
+2;Kerstin Lindner;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Zentrale Nord (Hannover);"Architektur-Board;KI-Pilotgruppe;eAkte-Steuerkreis";"eAkte / DMS;Verzeichnisdienst";lindner.k@lid.example.de;80
+3;Stefan Hartmann;Teamleitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);"Vergabekammer Nord;Haushaltsausschuss;eVergabe-Fachgruppe";"eVergabe-Portal;HKR";hartmann.s@lid.example.de;85
+4;Dr. Martin Vogt;Abteilungsleitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);"IT-Lenkungsausschuss;Haushaltsausschuss;Standortleiter-Runde;DigitalPakt-Netzausbau";"HKR;eVergabe-Portal";vogt.m@lid.example.de;90
+5;Anja Krueger;Koordination;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);"DigitalPakt-Netzausbau;Standortleiter-Runde;Qualitaetszirkel Prozesse";"eAkte / DMS;Foerderportal";krueger.a@lid.example.de;75
+6;Thomas Weber;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Sued (Goettingen);ISB-Sicherheitskreis;Foerderportal;kontakt.006@lid.example.de;23
+7;Martin Weber;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Ems (Meppen);Qualitaetszirkel Prozesse;Foerderportal;kontakt.007@lid.example.de;23
+8;Michael Albrecht;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);"Datenschutz-Arbeitskreis;Liegenschafts-Konferenz";eVergabe-Portal;kontakt.008@lid.example.de;34
+9;Katrin Vogt;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Elbe (Lueneburg);"Liegenschafts-Konferenz;Vergabekammer Nord";"Foerderportal;eAkte / DMS";kontakt.009@lid.example.de;22
+10;Kerstin Horn;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Harz (Goslar);Architektur-Board;eVergabe-Portal;kontakt.010@lid.example.de;34
+11;Jens Hartmann;Referatsleitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Heide (Celle);Krisenstab IT;HKR;kontakt.011@lid.example.de;65
+12;Markus Scholz;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Harz (Goslar);Qualitaetszirkel Prozesse;eVergabe-Portal;kontakt.012@lid.example.de;24
+13;Heike Neumann;Stellvertretung;Ref. 31 Fachverfahren;Aussenstelle Stade;Vergabekammer Nord;eAkte / DMS;kontakt.013@lid.example.de;35
+14;Katrin Berger;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);"Datenschutz-Arbeitskreis;DigitalPakt-Netzausbau";"Verzeichnisdienst;Foerderportal";kontakt.014@lid.example.de;14
+15;Claudia Keller;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;eVergabe-Fachgruppe;"eVergabe-Portal;Foerderportal";kontakt.015@lid.example.de;26
+16;Frank Hartmann;Teamleitung;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);Barrierefreiheit-Beirat;Verzeichnisdienst;kontakt.016@lid.example.de;45
+17;Heike Pfeiffer;Stellvertretung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Ems (Meppen);"IT-Lenkungsausschuss;ISB-Sicherheitskreis";"HKR;eAkte / DMS";kontakt.017@lid.example.de;19
+18;Andreas Brandt;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Ems (Meppen);"Fortbildungs-Gremium;ISB-Sicherheitskreis";"Foerderportal;eVergabe-Portal";kontakt.018@lid.example.de;14
+19;Markus Sauer;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);IT-Lenkungsausschuss;HKR;kontakt.019@lid.example.de;35
+20;Jens Krueger;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Ost (Braunschweig);"Architektur-Board;Personalrat-Digitalisierung";Verzeichnisdienst;kontakt.020@lid.example.de;27
+21;Stefan Neumann;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Sued (Goettingen);"DigitalPakt-Netzausbau;Standortleiter-Runde";"HKR;Verzeichnisdienst";kontakt.021@lid.example.de;26
+22;Birgit Vogt;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Elbe (Lueneburg);Qualitaetszirkel Prozesse;Foerderportal;kontakt.022@lid.example.de;17
+23;Sabine Hartmann;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);Vergabekammer Nord;"eAkte / DMS;eVergabe-Portal";kontakt.023@lid.example.de;18
+24;Frank Scholz;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);"Barrierefreiheit-Beirat;DigitalPakt-Netzausbau";eAkte / DMS;kontakt.024@lid.example.de;31
+25;Andreas Seidel;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Wilhelmshaven;ISB-Sicherheitskreis;Verzeichnisdienst;kontakt.025@lid.example.de;33
+26;Katrin Vogt;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Ems (Meppen);Barrierefreiheit-Beirat;HKR;kontakt.026@lid.example.de;24
+27;Michael Hartmann;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);"Qualitaetszirkel Prozesse;IT-Lenkungsausschuss";eVergabe-Portal;kontakt.027@lid.example.de;15
+28;Andreas Schuster;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Zentrale Nord (Hannover);IT-Lenkungsausschuss;"HKR;Verzeichnisdienst";kontakt.028@lid.example.de;19
+29;Andreas Winkler;Stellvertretung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle West (Osnabrueck);DigitalPakt-Netzausbau;Foerderportal;kontakt.029@lid.example.de;33
+30;Oliver Lindner;Fachreferent/in;Ref. 11 Personal & Organisation;Zentrale Nord (Hannover);Fortbildungs-Gremium;eAkte / DMS;kontakt.030@lid.example.de;26
+31;Kerstin Brandt;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Stade;"eVergabe-Fachgruppe;ISB-Sicherheitskreis";Foerderportal;kontakt.031@lid.example.de;29
+32;Martin Pfeiffer;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Kueste (Oldenburg);Datenschutz-Arbeitskreis;HKR;kontakt.032@lid.example.de;22
+33;Anja Lorentz;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Elbe (Lueneburg);"Architektur-Board;IT-Lenkungsausschuss";"Foerderportal;eAkte / DMS";kontakt.033@lid.example.de;12
+34;Oliver Scholz;Fachreferent/in;Ref. 22 Recht & Pruefung;Regionalstelle Elbe (Lueneburg);"eAkte-Steuerkreis;Krisenstab IT";"eVergabe-Portal;Verzeichnisdienst";kontakt.034@lid.example.de;27
+35;Jens Pfeiffer;Stellvertretung;Ref. 11 Personal & Organisation;Aussenstelle Stade;"Standortleiter-Runde;ISB-Sicherheitskreis";HKR;kontakt.035@lid.example.de;13
+36;Thomas Dietrich;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Kueste (Oldenburg);Datenschutz-Arbeitskreis;HKR;kontakt.036@lid.example.de;26
+37;Frank Neumann;Koordination;Ref. 11 Personal & Organisation;Regionalstelle Ost (Braunschweig);Liegenschafts-Konferenz;eAkte / DMS;kontakt.037@lid.example.de;20
+38;Anja Kuhn;Stellvertretung;Ref. 22 Recht & Pruefung;Aussenstelle Wilhelmshaven;Barrierefreiheit-Beirat;eAkte / DMS;kontakt.038@lid.example.de;12
+39;Anja Horn;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Harz (Goslar);Barrierefreiheit-Beirat;eAkte / DMS;kontakt.039@lid.example.de;19
+40;Markus Lindner;Referatsleitung;Ref. 31 Fachverfahren;Aussenstelle Stade;ISB-Sicherheitskreis;"Foerderportal;Verzeichnisdienst";kontakt.040@lid.example.de;65
+41;Holger Dietrich;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle West (Osnabrueck);"Haushaltsausschuss;Barrierefreiheit-Beirat;IT-Lenkungsausschuss";HKR;kontakt.041@lid.example.de;35
+42;Andreas Lorentz;Referatsleitung;Ref. 31 Fachverfahren;Regionalstelle Kueste (Oldenburg);ISB-Sicherheitskreis;"eAkte / DMS;Verzeichnisdienst";kontakt.042@lid.example.de;65
+43;Michael Scholz;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Elbe (Lueneburg);eAkte-Steuerkreis;eAkte / DMS;kontakt.043@lid.example.de;45
+44;Petra Berger;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Kueste (Oldenburg);Fortbildungs-Gremium;"Foerderportal;HKR";kontakt.044@lid.example.de;10
+45;Thomas Neumann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Zentrale Nord (Hannover);Barrierefreiheit-Beirat;"HKR;Verzeichnisdienst";kontakt.045@lid.example.de;29
+46;Susanne Vogt;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Kueste (Oldenburg);Barrierefreiheit-Beirat;Foerderportal;kontakt.046@lid.example.de;35
+47;Oliver Lorentz;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Elbe (Lueneburg);Datenschutz-Arbeitskreis;"eAkte / DMS;HKR";kontakt.047@lid.example.de;26
+48;Jens Lorentz;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Wilhelmshaven;Personalrat-Digitalisierung;Verzeichnisdienst;kontakt.048@lid.example.de;31
+49;Heike Lorentz;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Harz (Goslar);eVergabe-Fachgruppe;HKR;kontakt.049@lid.example.de;19
+50;Petra Franke;Teamleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Weser (Nienburg);DigitalPakt-Netzausbau;"eVergabe-Portal;eAkte / DMS";kontakt.050@lid.example.de;45
+51;Jens Busch;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);"eAkte-Steuerkreis;Standortleiter-Runde";eVergabe-Portal;kontakt.051@lid.example.de;14
+52;Sabine Lindner;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Harz (Goslar);"Architektur-Board;KI-Pilotgruppe";"Foerderportal;eVergabe-Portal";kontakt.052@lid.example.de;32
+53;Heike Schuster;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Stade;"ISB-Sicherheitskreis;Barrierefreiheit-Beirat";eVergabe-Portal;kontakt.053@lid.example.de;35
+54;Susanne Albrecht;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);KI-Pilotgruppe;"Verzeichnisdienst;Foerderportal";kontakt.054@lid.example.de;27
+55;Birgit Brandt;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Weser (Nienburg);eAkte-Steuerkreis;"Foerderportal;Verzeichnisdienst";kontakt.055@lid.example.de;30
+56;Michael Neumann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Sued (Goettingen);Datenschutz-Arbeitskreis;eVergabe-Portal;kontakt.056@lid.example.de;14
+57;Michael Berger;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);Datenschutz-Arbeitskreis;"Verzeichnisdienst;eAkte / DMS";kontakt.057@lid.example.de;16
+58;Andreas Berger;Koordination;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);IT-Lenkungsausschuss;"HKR;Verzeichnisdienst";kontakt.058@lid.example.de;23
+59;Oliver Dietrich;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);Barrierefreiheit-Beirat;"eAkte / DMS;Verzeichnisdienst";kontakt.059@lid.example.de;20
+60;Heike Dietrich;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle West (Osnabrueck);"Qualitaetszirkel Prozesse;IT-Lenkungsausschuss;eVergabe-Fachgruppe";eAkte / DMS;kontakt.060@lid.example.de;30
+61;Andreas Keller;Referatsleitung;Ref. 22 Recht & Pruefung;Zentrale Nord (Hannover);Datenschutz-Arbeitskreis;Verzeichnisdienst;kontakt.061@lid.example.de;65
+62;Katrin Richter;Teamleitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Kueste (Oldenburg);"Barrierefreiheit-Beirat;Liegenschafts-Konferenz";Verzeichnisdienst;kontakt.062@lid.example.de;45
+63;Sabine Dietrich;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Sued (Goettingen);"Vergabekammer Nord;IT-Lenkungsausschuss";eVergabe-Portal;kontakt.063@lid.example.de;10
+64;Holger Keller;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Stade;DigitalPakt-Netzausbau;"HKR;Foerderportal";kontakt.064@lid.example.de;15
+65;Holger Pfeiffer;Stellvertretung;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);"ISB-Sicherheitskreis;IT-Lenkungsausschuss;Standortleiter-Runde";"Verzeichnisdienst;eVergabe-Portal";kontakt.065@lid.example.de;12
+66;Tanja Winkler;Teamleitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);"Standortleiter-Runde;ISB-Sicherheitskreis";HKR;kontakt.066@lid.example.de;45
+67;Oliver Franke;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Ems (Meppen);IT-Lenkungsausschuss;"Verzeichnisdienst;eAkte / DMS";kontakt.067@lid.example.de;23
+68;Markus Kuhn;Referatsleitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Wilhelmshaven;Haushaltsausschuss;"Foerderportal;Verzeichnisdienst";kontakt.068@lid.example.de;65
+69;Birgit Franke;Teamleitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);"Architektur-Board;Liegenschafts-Konferenz";"eVergabe-Portal;Verzeichnisdienst";kontakt.069@lid.example.de;45
+70;Tanja Pfeiffer;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Zentrale Nord (Hannover);Datenschutz-Arbeitskreis;Verzeichnisdienst;kontakt.070@lid.example.de;16
+71;Markus Neumann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Ems (Meppen);DigitalPakt-Netzausbau;eVergabe-Portal;kontakt.071@lid.example.de;33
+72;Andreas Schuster;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Wilhelmshaven;Cloud-Pruefgruppe;"eAkte / DMS;Foerderportal";kontakt.072@lid.example.de;19
+73;Michael Berger;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Stade;Cloud-Pruefgruppe;"Verzeichnisdienst;HKR";kontakt.073@lid.example.de;21
+74;Birgit Neumann;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);"Datenschutz-Arbeitskreis;ISB-Sicherheitskreis";eVergabe-Portal;kontakt.074@lid.example.de;16
+75;Frank Neumann;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);"Standortleiter-Runde;eAkte-Steuerkreis";"eVergabe-Portal;HKR";kontakt.075@lid.example.de;10
+76;Oliver Keller;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Ems (Meppen);Personalrat-Digitalisierung;"eAkte / DMS;Foerderportal";kontakt.076@lid.example.de;28
+77;Jens Schuster;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle West (Osnabrueck);"Liegenschafts-Konferenz;Cloud-Pruefgruppe;ISB-Sicherheitskreis";Verzeichnisdienst;kontakt.077@lid.example.de;25
+78;Kerstin Beyer;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);Standortleiter-Runde;eVergabe-Portal;kontakt.078@lid.example.de;13
+79;Oliver Sauer;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Ems (Meppen);KI-Pilotgruppe;"Foerderportal;Verzeichnisdienst";kontakt.079@lid.example.de;19
+80;Tanja Pfeiffer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Sued (Goettingen);Liegenschafts-Konferenz;eVergabe-Portal;kontakt.080@lid.example.de;17
+81;Stefan Horn;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Heide (Celle);Cloud-Pruefgruppe;"eAkte / DMS;eVergabe-Portal";kontakt.081@lid.example.de;19
+82;Jens Winkler;Referatsleitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Stade;Liegenschafts-Konferenz;Verzeichnisdienst;kontakt.082@lid.example.de;65
+83;Thomas Horn;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle Kueste (Oldenburg);"Architektur-Board;Vergabekammer Nord";HKR;kontakt.083@lid.example.de;29
+84;Tanja Baumann;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Wilhelmshaven;eVergabe-Fachgruppe;"Foerderportal;Verzeichnisdienst";kontakt.084@lid.example.de;24
+85;Kerstin Pfeiffer;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Wilhelmshaven;Liegenschafts-Konferenz;eAkte / DMS;kontakt.085@lid.example.de;17
+86;Tanja Beyer;Stellvertretung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Harz (Goslar);Haushaltsausschuss;"Foerderportal;Verzeichnisdienst";kontakt.086@lid.example.de;18
+87;Stefan Beyer;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Ost (Braunschweig);Barrierefreiheit-Beirat;"HKR;eAkte / DMS";kontakt.087@lid.example.de;15
+88;Katrin Franke;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Stade;"Qualitaetszirkel Prozesse;Vergabekammer Nord;KI-Pilotgruppe";HKR;kontakt.088@lid.example.de;18
+89;Katrin Vogt;Stellvertretung;Ref. 42 Infrastruktur & Netze;Aussenstelle Ems (Meppen);"IT-Lenkungsausschuss;KI-Pilotgruppe";"eAkte / DMS;eVergabe-Portal";kontakt.089@lid.example.de;26
+90;Markus Pfeiffer;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Zentrale Nord (Hannover);Qualitaetszirkel Prozesse;HKR;kontakt.090@lid.example.de;45
+91;Birgit Winkler;Fachreferent/in;Ref. 11 Personal & Organisation;Aussenstelle Stade;eAkte-Steuerkreis;HKR;kontakt.091@lid.example.de;27
+92;Sabine Horn;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);ISB-Sicherheitskreis;Verzeichnisdienst;kontakt.092@lid.example.de;32
+93;Jens Busch;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Weser (Nienburg);"eAkte-Steuerkreis;KI-Pilotgruppe;Personalrat-Digitalisierung";"eVergabe-Portal;Foerderportal";kontakt.093@lid.example.de;12
+94;Claudia Sauer;Teamleitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);"Fortbildungs-Gremium;Liegenschafts-Konferenz;IT-Lenkungsausschuss";"HKR;Verzeichnisdienst";kontakt.094@lid.example.de;45
+95;Anja Albrecht;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Elbe (Lueneburg);Qualitaetszirkel Prozesse;"Verzeichnisdienst;HKR";kontakt.095@lid.example.de;16
+96;Michael Beyer;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Zentrale Nord (Hannover);Cloud-Pruefgruppe;"Verzeichnisdienst;eVergabe-Portal";kontakt.096@lid.example.de;25
+97;Martin Keller;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);"KI-Pilotgruppe;ISB-Sicherheitskreis";"eAkte / DMS;eVergabe-Portal";kontakt.097@lid.example.de;23
+98;Anja Hartmann;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);eVergabe-Fachgruppe;HKR;kontakt.098@lid.example.de;31
+99;Oliver Berger;Stellvertretung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);Architektur-Board;HKR;kontakt.099@lid.example.de;17
+100;Kerstin Franke;Stellvertretung;Ref. 21 Vergabe & Haushalt;Aussenstelle Weser (Nienburg);Standortleiter-Runde;eAkte / DMS;kontakt.100@lid.example.de;20
+101;Martin Baumann;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);Barrierefreiheit-Beirat;eVergabe-Portal;kontakt.101@lid.example.de;15
+102;Kerstin Pfeiffer;Referatsleitung;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);"Personalrat-Digitalisierung;eAkte-Steuerkreis";"HKR;Verzeichnisdienst";kontakt.102@lid.example.de;65
+103;Claudia Lorentz;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Kueste (Oldenburg);"Haushaltsausschuss;Architektur-Board";"HKR;Foerderportal";kontakt.103@lid.example.de;30
+104;Andreas Winkler;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Sued (Goettingen);"Cloud-Pruefgruppe;ISB-Sicherheitskreis;eAkte-Steuerkreis";"Foerderportal;HKR";kontakt.104@lid.example.de;28
+105;Jens Winkler;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Kueste (Oldenburg);Vergabekammer Nord;"HKR;eVergabe-Portal";kontakt.105@lid.example.de;29
+106;Markus Krueger;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Stade;"Personalrat-Digitalisierung;ISB-Sicherheitskreis";HKR;kontakt.106@lid.example.de;35
+107;Birgit Lindner;Fachreferent/in;Ref. 22 Recht & Pruefung;Regionalstelle Ost (Braunschweig);"Datenschutz-Arbeitskreis;Barrierefreiheit-Beirat";eVergabe-Portal;kontakt.107@lid.example.de;14
+108;Oliver Seidel;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle West (Osnabrueck);Cloud-Pruefgruppe;"HKR;eAkte / DMS";kontakt.108@lid.example.de;24
+109;Kerstin Keller;Teamleitung;Ref. 31 Fachverfahren;Aussenstelle Stade;"eVergabe-Fachgruppe;Krisenstab IT";Verzeichnisdienst;kontakt.109@lid.example.de;45
+110;Sabine Neumann;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Elbe (Lueneburg);"Liegenschafts-Konferenz;eVergabe-Fachgruppe";"eAkte / DMS;eVergabe-Portal";kontakt.110@lid.example.de;25
+111;Sabine Pfeiffer;Referatsleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Harz (Goslar);Architektur-Board;"HKR;Verzeichnisdienst";kontakt.111@lid.example.de;65
+112;Thomas Keller;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Kueste (Oldenburg);"ISB-Sicherheitskreis;Qualitaetszirkel Prozesse;eAkte-Steuerkreis";Verzeichnisdienst;kontakt.112@lid.example.de;24
+113;Markus Lorentz;Koordination;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);"Personalrat-Digitalisierung;Barrierefreiheit-Beirat";Verzeichnisdienst;kontakt.113@lid.example.de;29
+114;Andreas Neumann;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Sued (Goettingen);eAkte-Steuerkreis;"eAkte / DMS;HKR";kontakt.114@lid.example.de;27
+115;Markus Lindner;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);"KI-Pilotgruppe;Architektur-Board;DigitalPakt-Netzausbau";eAkte / DMS;kontakt.115@lid.example.de;35
+116;Katrin Krueger;Stellvertretung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);"Qualitaetszirkel Prozesse;DigitalPakt-Netzausbau";eVergabe-Portal;kontakt.116@lid.example.de;20
+117;Anja Pfeiffer;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle West (Osnabrueck);Haushaltsausschuss;eAkte / DMS;kontakt.117@lid.example.de;14
+118;Sabine Seidel;Teamleitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);Haushaltsausschuss;"eAkte / DMS;eVergabe-Portal";kontakt.118@lid.example.de;45
+119;Andreas Busch;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Weser (Nienburg);Krisenstab IT;Verzeichnisdienst;kontakt.119@lid.example.de;26
+120;Michael Pfeiffer;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);IT-Lenkungsausschuss;Verzeichnisdienst;kontakt.120@lid.example.de;22
+121;Andreas Lorentz;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Ost (Braunschweig);"Datenschutz-Arbeitskreis;Personalrat-Digitalisierung";eVergabe-Portal;kontakt.121@lid.example.de;18
+122;Holger Kuhn;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);"Fortbildungs-Gremium;Standortleiter-Runde;KI-Pilotgruppe";"eAkte / DMS;Foerderportal";kontakt.122@lid.example.de;30
+123;Oliver Dietrich;Referatsleitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Weser (Nienburg);"Barrierefreiheit-Beirat;Datenschutz-Arbeitskreis";"Verzeichnisdienst;Foerderportal";kontakt.123@lid.example.de;65
+124;Thomas Richter;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);"Cloud-Pruefgruppe;Architektur-Board;Fortbildungs-Gremium";eAkte / DMS;kontakt.124@lid.example.de;23
+125;Thomas Dietrich;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);Qualitaetszirkel Prozesse;"eAkte / DMS;Verzeichnisdienst";kontakt.125@lid.example.de;21
+126;Andreas Dietrich;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Harz (Goslar);ISB-Sicherheitskreis;eVergabe-Portal;kontakt.126@lid.example.de;31
+127;Frank Krueger;Teamleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);Liegenschafts-Konferenz;Verzeichnisdienst;kontakt.127@lid.example.de;45
+128;Oliver Sauer;Teamleitung;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);"Liegenschafts-Konferenz;IT-Lenkungsausschuss";HKR;kontakt.128@lid.example.de;45
+129;Jens Richter;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle West (Osnabrueck);eVergabe-Fachgruppe;eVergabe-Portal;kontakt.129@lid.example.de;33
+130;Sabine Hartmann;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Heide (Celle);Datenschutz-Arbeitskreis;HKR;kontakt.130@lid.example.de;19
+131;Katrin Sauer;Koordination;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);Vergabekammer Nord;HKR;kontakt.131@lid.example.de;24
+132;Andreas Schuster;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Kueste (Oldenburg);Fortbildungs-Gremium;HKR;kontakt.132@lid.example.de;23
+133;Thomas Baumann;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);"Vergabekammer Nord;eAkte-Steuerkreis";"Foerderportal;eAkte / DMS";kontakt.133@lid.example.de;10
+134;Petra Baumann;Koordination;Ref. 22 Recht & Pruefung;Regionalstelle Kueste (Oldenburg);ISB-Sicherheitskreis;Verzeichnisdienst;kontakt.134@lid.example.de;33
+135;Andreas Brandt;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Ems (Meppen);Krisenstab IT;Verzeichnisdienst;kontakt.135@lid.example.de;33
+136;Martin Franke;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Elbe (Lueneburg);eVergabe-Fachgruppe;"HKR;eAkte / DMS";kontakt.136@lid.example.de;22
+137;Sabine Richter;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Wilhelmshaven;"Architektur-Board;Barrierefreiheit-Beirat";eVergabe-Portal;kontakt.137@lid.example.de;23
+138;Tanja Berger;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Kueste (Oldenburg);"eAkte-Steuerkreis;Datenschutz-Arbeitskreis";eAkte / DMS;kontakt.138@lid.example.de;26
+139;Thomas Busch;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Elbe (Lueneburg);"Personalrat-Digitalisierung;eAkte-Steuerkreis";eVergabe-Portal;kontakt.139@lid.example.de;18
+140;Petra Brandt;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);"Cloud-Pruefgruppe;KI-Pilotgruppe;Fortbildungs-Gremium";"HKR;eVergabe-Portal";kontakt.140@lid.example.de;24
+141;Kerstin Schuster;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Kueste (Oldenburg);Krisenstab IT;HKR;kontakt.141@lid.example.de;24
+142;Birgit Lindner;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);Architektur-Board;"Verzeichnisdienst;eAkte / DMS";kontakt.142@lid.example.de;24
+143;Tanja Kuhn;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);Vergabekammer Nord;"eAkte / DMS;HKR";kontakt.143@lid.example.de;32
+144;Kerstin Busch;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);"KI-Pilotgruppe;Fortbildungs-Gremium";HKR;kontakt.144@lid.example.de;21
+145;Jens Berger;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Stade;Datenschutz-Arbeitskreis;HKR;kontakt.145@lid.example.de;13
+146;Oliver Lorentz;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;"Personalrat-Digitalisierung;Datenschutz-Arbeitskreis";Foerderportal;kontakt.146@lid.example.de;31
+147;Anja Seidel;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);Architektur-Board;"Foerderportal;Verzeichnisdienst";kontakt.147@lid.example.de;30
+148;Katrin Keller;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Stade;"Fortbildungs-Gremium;Krisenstab IT";HKR;kontakt.148@lid.example.de;19
+149;Stefan Scholz;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);Personalrat-Digitalisierung;eAkte / DMS;kontakt.149@lid.example.de;19
+150;Thomas Busch;Teamleitung;Ref. 11 Personal & Organisation;Aussenstelle Stade;Personalrat-Digitalisierung;"eVergabe-Portal;Foerderportal";kontakt.150@lid.example.de;45
+151;Stefan Winkler;Teamleitung;Ref. 22 Recht & Pruefung;Aussenstelle Wilhelmshaven;Barrierefreiheit-Beirat;"eVergabe-Portal;Verzeichnisdienst";kontakt.151@lid.example.de;45
+152;Holger Baumann;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);Standortleiter-Runde;"eVergabe-Portal;HKR";kontakt.152@lid.example.de;45
+153;Tanja Albrecht;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Heide (Celle);Barrierefreiheit-Beirat;eVergabe-Portal;kontakt.153@lid.example.de;35
+154;Holger Keller;Referatsleitung;Ref. 11 Personal & Organisation;Aussenstelle Stade;Krisenstab IT;Foerderportal;kontakt.154@lid.example.de;65
+155;Thomas Baumann;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle Kueste (Oldenburg);Fortbildungs-Gremium;Verzeichnisdienst;kontakt.155@lid.example.de;12
+156;Michael Albrecht;Referatsleitung;Ref. 11 Personal & Organisation;Aussenstelle Heide (Celle);Fortbildungs-Gremium;"eVergabe-Portal;Verzeichnisdienst";kontakt.156@lid.example.de;65
+157;Kerstin Seidel;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);"Datenschutz-Arbeitskreis;Personalrat-Digitalisierung";eAkte / DMS;kontakt.157@lid.example.de;19
+158;Frank Winkler;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Weser (Nienburg);Architektur-Board;HKR;kontakt.158@lid.example.de;45
+159;Petra Keller;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Ost (Braunschweig);"eAkte-Steuerkreis;Standortleiter-Runde";eAkte / DMS;kontakt.159@lid.example.de;17
+160;Andreas Kuhn;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Ost (Braunschweig);Cloud-Pruefgruppe;Foerderportal;kontakt.160@lid.example.de;45
+161;Tanja Krueger;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Heide (Celle);Krisenstab IT;Foerderportal;kontakt.161@lid.example.de;23
+162;Stefan Lorentz;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);"Qualitaetszirkel Prozesse;Fortbildungs-Gremium;IT-Lenkungsausschuss";"Verzeichnisdienst;eAkte / DMS";kontakt.162@lid.example.de;30
+163;Heike Seidel;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);"Krisenstab IT;eAkte-Steuerkreis";Foerderportal;kontakt.163@lid.example.de;33
+164;Katrin Keller;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Stade;KI-Pilotgruppe;"eVergabe-Portal;Foerderportal";kontakt.164@lid.example.de;12
+165;Birgit Lindner;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);"Datenschutz-Arbeitskreis;Standortleiter-Runde";"Foerderportal;Verzeichnisdienst";kontakt.165@lid.example.de;18
+166;Martin Sauer;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);"Vergabekammer Nord;Datenschutz-Arbeitskreis";"eAkte / DMS;HKR";kontakt.166@lid.example.de;23
+167;Heike Dietrich;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);"Cloud-Pruefgruppe;Qualitaetszirkel Prozesse;Krisenstab IT";"eAkte / DMS;Verzeichnisdienst";kontakt.167@lid.example.de;12
+168;Andreas Pfeiffer;Stellvertretung;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);ISB-Sicherheitskreis;HKR;kontakt.168@lid.example.de;31
+169;Jens Baumann;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);"Krisenstab IT;KI-Pilotgruppe";HKR;kontakt.169@lid.example.de;29
+170;Andreas Neumann;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle Ost (Braunschweig);"eVergabe-Fachgruppe;Krisenstab IT";eAkte / DMS;kontakt.170@lid.example.de;14
+171;Holger Lorentz;Teamleitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);Krisenstab IT;"Verzeichnisdienst;eAkte / DMS";kontakt.171@lid.example.de;45
+172;Holger Keller;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Elbe (Lueneburg);Architektur-Board;Foerderportal;kontakt.172@lid.example.de;21
+173;Heike Richter;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);Haushaltsausschuss;"Foerderportal;Verzeichnisdienst";kontakt.173@lid.example.de;27
+174;Thomas Neumann;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);"Standortleiter-Runde;Cloud-Pruefgruppe;DigitalPakt-Netzausbau";eVergabe-Portal;kontakt.174@lid.example.de;45
+175;Kerstin Albrecht;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Ost (Braunschweig);"Datenschutz-Arbeitskreis;Krisenstab IT";Foerderportal;kontakt.175@lid.example.de;27
+176;Jens Baumann;Referatsleitung;Ref. 22 Recht & Pruefung;Regionalstelle Elbe (Lueneburg);ISB-Sicherheitskreis;eVergabe-Portal;kontakt.176@lid.example.de;65
+177;Michael Schuster;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Weser (Nienburg);"Qualitaetszirkel Prozesse;Personalrat-Digitalisierung";eAkte / DMS;kontakt.177@lid.example.de;19
+178;Heike Winkler;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Heide (Celle);"Architektur-Board;Personalrat-Digitalisierung";"eAkte / DMS;Verzeichnisdienst";kontakt.178@lid.example.de;24
+179;Susanne Seidel;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle West (Osnabrueck);Vergabekammer Nord;Foerderportal;kontakt.179@lid.example.de;14
+180;Jens Brandt;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Elbe (Lueneburg);"Fortbildungs-Gremium;Standortleiter-Runde;Architektur-Board";"eVergabe-Portal;HKR";kontakt.180@lid.example.de;14
+181;Jens Pfeiffer;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Harz (Goslar);"Personalrat-Digitalisierung;Haushaltsausschuss;Datenschutz-Arbeitskreis";eAkte / DMS;kontakt.181@lid.example.de;12
+182;Martin Kuhn;Teamleitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Stade;Barrierefreiheit-Beirat;Verzeichnisdienst;kontakt.182@lid.example.de;45
+183;Oliver Baumann;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);eVergabe-Fachgruppe;"Verzeichnisdienst;eAkte / DMS";kontakt.183@lid.example.de;32
+184;Martin Brandt;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Weser (Nienburg);Personalrat-Digitalisierung;"HKR;Foerderportal";kontakt.184@lid.example.de;22
+185;Anja Sauer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Elbe (Lueneburg);ISB-Sicherheitskreis;"Verzeichnisdienst;eVergabe-Portal";kontakt.185@lid.example.de;14
+186;Thomas Lindner;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);Haushaltsausschuss;"Foerderportal;HKR";kontakt.186@lid.example.de;16
+187;Stefan Schuster;Stellvertretung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Weser (Nienburg);"Cloud-Pruefgruppe;IT-Lenkungsausschuss";Verzeichnisdienst;kontakt.187@lid.example.de;26
+188;Birgit Krueger;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Zentrale Nord (Hannover);Cloud-Pruefgruppe;"HKR;eAkte / DMS";kontakt.188@lid.example.de;13
+189;Andreas Keller;Referatsleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);eVergabe-Fachgruppe;Foerderportal;kontakt.189@lid.example.de;65
+190;Oliver Scholz;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);KI-Pilotgruppe;"Foerderportal;eAkte / DMS";kontakt.190@lid.example.de;14
+191;Thomas Berger;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);"Personalrat-Digitalisierung;DigitalPakt-Netzausbau;eVergabe-Fachgruppe";eAkte / DMS;kontakt.191@lid.example.de;11
+192;Anja Winkler;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);Fortbildungs-Gremium;HKR;kontakt.192@lid.example.de;29
+193;Katrin Brandt;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Harz (Goslar);Fortbildungs-Gremium;"Foerderportal;HKR";kontakt.193@lid.example.de;25
+194;Sabine Seidel;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Heide (Celle);IT-Lenkungsausschuss;"HKR;eVergabe-Portal";kontakt.194@lid.example.de;33
+195;Martin Beyer;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);"eAkte-Steuerkreis;Vergabekammer Nord";eVergabe-Portal;kontakt.195@lid.example.de;10
+196;Birgit Richter;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Wilhelmshaven;Fortbildungs-Gremium;"eAkte / DMS;eVergabe-Portal";kontakt.196@lid.example.de;26
+197;Petra Horn;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);Haushaltsausschuss;"Foerderportal;HKR";kontakt.197@lid.example.de;27
+198;Markus Lorentz;Teamleitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Harz (Goslar);eAkte-Steuerkreis;"Foerderportal;HKR";kontakt.198@lid.example.de;45
+199;Michael Baumann;Teamleitung;Ref. 31 Fachverfahren;Aussenstelle Wilhelmshaven;"Datenschutz-Arbeitskreis;Cloud-Pruefgruppe";"Foerderportal;HKR";kontakt.199@lid.example.de;45
+200;Jens Vogt;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Heide (Celle);"Personalrat-Digitalisierung;Standortleiter-Runde";HKR;kontakt.200@lid.example.de;32
+201;Kerstin Seidel;Koordination;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;DigitalPakt-Netzausbau;"Foerderportal;HKR";kontakt.201@lid.example.de;14
+202;Thomas Pfeiffer;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Sued (Goettingen);Fortbildungs-Gremium;eVergabe-Portal;kontakt.202@lid.example.de;11
+203;Thomas Franke;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Ost (Braunschweig);"Personalrat-Digitalisierung;IT-Lenkungsausschuss";Verzeichnisdienst;kontakt.203@lid.example.de;30
+204;Frank Schuster;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);Vergabekammer Nord;Foerderportal;kontakt.204@lid.example.de;17
+205;Oliver Dietrich;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);Haushaltsausschuss;Verzeichnisdienst;kontakt.205@lid.example.de;35
+206;Frank Brandt;Koordination;Ref. 32 IT-Betrieb & Sicherheit;Zentrale Nord (Hannover);ISB-Sicherheitskreis;"HKR;Verzeichnisdienst";kontakt.206@lid.example.de;30
+207;Oliver Busch;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);DigitalPakt-Netzausbau;HKR;kontakt.207@lid.example.de;15
+208;Birgit Kuhn;Sachbearbeitung;Ref. 22 Recht & Pruefung;Zentrale Nord (Hannover);"Standortleiter-Runde;DigitalPakt-Netzausbau";Foerderportal;kontakt.208@lid.example.de;30
+209;Heike Franke;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Heide (Celle);"Haushaltsausschuss;Personalrat-Digitalisierung";"HKR;eVergabe-Portal";kontakt.209@lid.example.de;10
+210;Claudia Berger;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);IT-Lenkungsausschuss;"HKR;eVergabe-Portal";kontakt.210@lid.example.de;11
+211;Thomas Albrecht;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;Standortleiter-Runde;HKR;kontakt.211@lid.example.de;21
+212;Holger Krueger;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);Krisenstab IT;"Foerderportal;Verzeichnisdienst";kontakt.212@lid.example.de;34
+213;Oliver Lorentz;Teamleitung;Ref. 31 Fachverfahren;Aussenstelle Stade;"Architektur-Board;Fortbildungs-Gremium";"Foerderportal;HKR";kontakt.213@lid.example.de;45
+214;Kerstin Beyer;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);Haushaltsausschuss;"Foerderportal;Verzeichnisdienst";kontakt.214@lid.example.de;13
+215;Petra Winkler;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Ems (Meppen);Vergabekammer Nord;"eVergabe-Portal;Verzeichnisdienst";kontakt.215@lid.example.de;24
+216;Tanja Lindner;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;Liegenschafts-Konferenz;eVergabe-Portal;kontakt.216@lid.example.de;28
+217;Kerstin Lindner;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Ems (Meppen);"Architektur-Board;Cloud-Pruefgruppe;Vergabekammer Nord";"Verzeichnisdienst;eVergabe-Portal";kontakt.217@lid.example.de;34
+218;Anja Sauer;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);"eVergabe-Fachgruppe;KI-Pilotgruppe;Qualitaetszirkel Prozesse";"eAkte / DMS;eVergabe-Portal";kontakt.218@lid.example.de;30
+219;Markus Vogt;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Ems (Meppen);eAkte-Steuerkreis;eAkte / DMS;kontakt.219@lid.example.de;19
+220;Birgit Lorentz;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Ems (Meppen);eAkte-Steuerkreis;Verzeichnisdienst;kontakt.220@lid.example.de;21
+221;Anja Neumann;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);"Barrierefreiheit-Beirat;IT-Lenkungsausschuss";eVergabe-Portal;kontakt.221@lid.example.de;12
+222;Thomas Pfeiffer;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);"eVergabe-Fachgruppe;KI-Pilotgruppe";Foerderportal;kontakt.222@lid.example.de;16
+223;Martin Keller;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Sued (Goettingen);"Datenschutz-Arbeitskreis;Qualitaetszirkel Prozesse";HKR;kontakt.223@lid.example.de;14
+224;Susanne Krueger;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Zentrale Nord (Hannover);Haushaltsausschuss;"Foerderportal;Verzeichnisdienst";kontakt.224@lid.example.de;11
+225;Markus Kuhn;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Wilhelmshaven;Personalrat-Digitalisierung;"Verzeichnisdienst;eVergabe-Portal";kontakt.225@lid.example.de;34
+226;Oliver Schuster;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Kueste (Oldenburg);"Personalrat-Digitalisierung;KI-Pilotgruppe";Foerderportal;kontakt.226@lid.example.de;23
+227;Andreas Horn;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Sued (Goettingen);Datenschutz-Arbeitskreis;Verzeichnisdienst;kontakt.227@lid.example.de;21
+228;Kerstin Horn;Fachreferent/in;Ref. 31 Fachverfahren;Zentrale Nord (Hannover);Vergabekammer Nord;eVergabe-Portal;kontakt.228@lid.example.de;35
+229;Tanja Dietrich;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);Datenschutz-Arbeitskreis;"eAkte / DMS;eVergabe-Portal";kontakt.229@lid.example.de;16
+230;Thomas Dietrich;Stellvertretung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);"DigitalPakt-Netzausbau;eVergabe-Fachgruppe";Foerderportal;kontakt.230@lid.example.de;20
+231;Jens Berger;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Kueste (Oldenburg);Fortbildungs-Gremium;"Verzeichnisdienst;eAkte / DMS";kontakt.231@lid.example.de;35
+232;Frank Sauer;Teamleitung;Ref. 31 Fachverfahren;Regionalstelle Elbe (Lueneburg);Vergabekammer Nord;eVergabe-Portal;kontakt.232@lid.example.de;45
+233;Sabine Neumann;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Kueste (Oldenburg);Datenschutz-Arbeitskreis;Verzeichnisdienst;kontakt.233@lid.example.de;28
+234;Michael Schuster;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Kueste (Oldenburg);"Cloud-Pruefgruppe;Qualitaetszirkel Prozesse";"eVergabe-Portal;HKR";kontakt.234@lid.example.de;15
+235;Anja Dietrich;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);"Vergabekammer Nord;Fortbildungs-Gremium;Qualitaetszirkel Prozesse";eAkte / DMS;kontakt.235@lid.example.de;34
+236;Sabine Franke;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);"IT-Lenkungsausschuss;DigitalPakt-Netzausbau";"HKR;eAkte / DMS";kontakt.236@lid.example.de;29
+237;Holger Schuster;Fachreferent/in;Ref. 11 Personal & Organisation;Zentrale Nord (Hannover);Barrierefreiheit-Beirat;eAkte / DMS;kontakt.237@lid.example.de;26
+238;Claudia Horn;Stellvertretung;Ref. 11 Personal & Organisation;Aussenstelle Ems (Meppen);"Barrierefreiheit-Beirat;Haushaltsausschuss";eAkte / DMS;kontakt.238@lid.example.de;26
+239;Anja Krueger;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);eVergabe-Fachgruppe;HKR;kontakt.239@lid.example.de;22
+240;Birgit Beyer;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Kueste (Oldenburg);"Architektur-Board;Vergabekammer Nord";Verzeichnisdienst;kontakt.240@lid.example.de;22
+241;Heike Horn;Fachreferent/in;Ref. 11 Personal & Organisation;Aussenstelle Wilhelmshaven;Cloud-Pruefgruppe;"HKR;eAkte / DMS";kontakt.241@lid.example.de;26
+242;Martin Krueger;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Kueste (Oldenburg);Architektur-Board;"Foerderportal;eAkte / DMS";kontakt.242@lid.example.de;15
+243;Katrin Weber;Stellvertretung;Ref. 22 Recht & Pruefung;Aussenstelle Wilhelmshaven;"Architektur-Board;Standortleiter-Runde";Foerderportal;kontakt.243@lid.example.de;17
+244;Tanja Berger;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);"Personalrat-Digitalisierung;Architektur-Board";"eAkte / DMS;Foerderportal";kontakt.244@lid.example.de;23
+245;Michael Hartmann;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);Liegenschafts-Konferenz;"Verzeichnisdienst;eVergabe-Portal";kontakt.245@lid.example.de;21
+246;Oliver Berger;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Ost (Braunschweig);"Standortleiter-Runde;eAkte-Steuerkreis";eAkte / DMS;kontakt.246@lid.example.de;18
+247;Anja Berger;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Wilhelmshaven;Krisenstab IT;eAkte / DMS;kontakt.247@lid.example.de;10
+248;Jens Albrecht;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);Haushaltsausschuss;"Verzeichnisdienst;Foerderportal";kontakt.248@lid.example.de;13
+249;Sabine Hartmann;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Harz (Goslar);Datenschutz-Arbeitskreis;"eAkte / DMS;HKR";kontakt.249@lid.example.de;23
+250;Heike Sauer;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);eVergabe-Fachgruppe;eVergabe-Portal;kontakt.250@lid.example.de;18
+251;Jens Neumann;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);Barrierefreiheit-Beirat;"Verzeichnisdienst;eAkte / DMS";kontakt.251@lid.example.de;21
+252;Claudia Krueger;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Harz (Goslar);KI-Pilotgruppe;eVergabe-Portal;kontakt.252@lid.example.de;19
+253;Sabine Berger;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);Barrierefreiheit-Beirat;HKR;kontakt.253@lid.example.de;20
+254;Holger Winkler;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle West (Osnabrueck);"Datenschutz-Arbeitskreis;Standortleiter-Runde;Cloud-Pruefgruppe";HKR;kontakt.254@lid.example.de;22
+255;Claudia Berger;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);"Haushaltsausschuss;IT-Lenkungsausschuss;KI-Pilotgruppe";Verzeichnisdienst;kontakt.255@lid.example.de;35
+256;Jens Winkler;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;Standortleiter-Runde;HKR;kontakt.256@lid.example.de;31
+257;Anja Winkler;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Ost (Braunschweig);Cloud-Pruefgruppe;"Foerderportal;Verzeichnisdienst";kontakt.257@lid.example.de;27
+258;Martin Seidel;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle Ost (Braunschweig);"Krisenstab IT;Haushaltsausschuss";Foerderportal;kontakt.258@lid.example.de;30
+259;Heike Sauer;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Ost (Braunschweig);Liegenschafts-Konferenz;Foerderportal;kontakt.259@lid.example.de;33
+260;Susanne Horn;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);KI-Pilotgruppe;HKR;kontakt.260@lid.example.de;10
+261;Frank Vogt;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Ost (Braunschweig);"Personalrat-Digitalisierung;Krisenstab IT";"HKR;Verzeichnisdienst";kontakt.261@lid.example.de;35
+262;Petra Busch;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Ost (Braunschweig);KI-Pilotgruppe;"eAkte / DMS;HKR";kontakt.262@lid.example.de;11
+263;Thomas Weber;Teamleitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Stade;"eAkte-Steuerkreis;Fortbildungs-Gremium";Foerderportal;kontakt.263@lid.example.de;45
+264;Stefan Richter;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Sued (Goettingen);"Haushaltsausschuss;Qualitaetszirkel Prozesse";"Verzeichnisdienst;eAkte / DMS";kontakt.264@lid.example.de;33
+265;Holger Scholz;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Heide (Celle);DigitalPakt-Netzausbau;HKR;kontakt.265@lid.example.de;34
+266;Kerstin Beyer;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle Elbe (Lueneburg);KI-Pilotgruppe;HKR;kontakt.266@lid.example.de;31
+267;Frank Busch;Stellvertretung;Ref. 41 Bau & Liegenschaften;Aussenstelle Harz (Goslar);eVergabe-Fachgruppe;HKR;kontakt.267@lid.example.de;21
+268;Birgit Pfeiffer;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Harz (Goslar);Personalrat-Digitalisierung;"eAkte / DMS;eVergabe-Portal";kontakt.268@lid.example.de;19
+269;Thomas Brandt;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);Personalrat-Digitalisierung;"Verzeichnisdienst;eVergabe-Portal";kontakt.269@lid.example.de;25
+270;Oliver Winkler;Koordination;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);Standortleiter-Runde;eVergabe-Portal;kontakt.270@lid.example.de;20
+271;Birgit Pfeiffer;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Zentrale Nord (Hannover);DigitalPakt-Netzausbau;"Foerderportal;Verzeichnisdienst";kontakt.271@lid.example.de;23
+272;Frank Franke;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Weser (Nienburg);IT-Lenkungsausschuss;HKR;kontakt.272@lid.example.de;11
+273;Claudia Krueger;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);Cloud-Pruefgruppe;Foerderportal;kontakt.273@lid.example.de;13
+274;Claudia Sauer;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);"Vergabekammer Nord;KI-Pilotgruppe";Verzeichnisdienst;kontakt.274@lid.example.de;13
+275;Michael Baumann;Referatsleitung;Ref. 11 Personal & Organisation;Aussenstelle Weser (Nienburg);Architektur-Board;"eAkte / DMS;eVergabe-Portal";kontakt.275@lid.example.de;65
+276;Petra Dietrich;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Wilhelmshaven;Barrierefreiheit-Beirat;Foerderportal;kontakt.276@lid.example.de;14
+277;Petra Scholz;Teamleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);Qualitaetszirkel Prozesse;HKR;kontakt.277@lid.example.de;45
+278;Jens Baumann;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);"Barrierefreiheit-Beirat;Vergabekammer Nord;Liegenschafts-Konferenz";eVergabe-Portal;kontakt.278@lid.example.de;17
+279;Anja Winkler;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Stade;Personalrat-Digitalisierung;"Verzeichnisdienst;Foerderportal";kontakt.279@lid.example.de;24
+280;Kerstin Kuhn;Teamleitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Heide (Celle);Liegenschafts-Konferenz;"Verzeichnisdienst;Foerderportal";kontakt.280@lid.example.de;45
+281;Katrin Beyer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Wilhelmshaven;"Krisenstab IT;Architektur-Board;eVergabe-Fachgruppe";Verzeichnisdienst;kontakt.281@lid.example.de;16
+282;Frank Neumann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);Personalrat-Digitalisierung;"HKR;eAkte / DMS";kontakt.282@lid.example.de;11
+283;Thomas Kuhn;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Zentrale Nord (Hannover);Haushaltsausschuss;"Verzeichnisdienst;eAkte / DMS";kontakt.283@lid.example.de;45
+284;Andreas Scholz;Stellvertretung;Ref. 22 Recht & Pruefung;Aussenstelle Stade;Liegenschafts-Konferenz;HKR;kontakt.284@lid.example.de;18
+285;Kerstin Seidel;Fachreferent/in;Ref. 22 Recht & Pruefung;Zentrale Nord (Hannover);Standortleiter-Runde;Verzeichnisdienst;kontakt.285@lid.example.de;30
+286;Kerstin Winkler;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);eAkte-Steuerkreis;"eAkte / DMS;Foerderportal";kontakt.286@lid.example.de;32
+287;Katrin Vogt;Stellvertretung;Ref. 42 Infrastruktur & Netze;Aussenstelle Wilhelmshaven;Architektur-Board;Verzeichnisdienst;kontakt.287@lid.example.de;12
+288;Thomas Vogt;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle West (Osnabrueck);Personalrat-Digitalisierung;eAkte / DMS;kontakt.288@lid.example.de;26
+289;Tanja Weber;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);DigitalPakt-Netzausbau;Verzeichnisdienst;kontakt.289@lid.example.de;29
+290;Birgit Scholz;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);"eVergabe-Fachgruppe;Krisenstab IT";"HKR;eVergabe-Portal";kontakt.290@lid.example.de;17
+291;Claudia Kuhn;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;Standortleiter-Runde;Foerderportal;kontakt.291@lid.example.de;29
+292;Susanne Scholz;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Stade;eAkte-Steuerkreis;"Verzeichnisdienst;eAkte / DMS";kontakt.292@lid.example.de;17
+293;Frank Kuhn;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);"Personalrat-Digitalisierung;eVergabe-Fachgruppe;Barrierefreiheit-Beirat";"Foerderportal;eVergabe-Portal";kontakt.293@lid.example.de;34
+294;Frank Sauer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);Vergabekammer Nord;Verzeichnisdienst;kontakt.294@lid.example.de;26
+295;Jens Kuhn;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Heide (Celle);"Architektur-Board;Personalrat-Digitalisierung";"eAkte / DMS;HKR";kontakt.295@lid.example.de;12
+296;Susanne Scholz;Stellvertretung;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);Architektur-Board;"Verzeichnisdienst;eVergabe-Portal";kontakt.296@lid.example.de;11
+297;Michael Hartmann;Koordination;Ref. 21 Vergabe & Haushalt;Aussenstelle Weser (Nienburg);Vergabekammer Nord;"eVergabe-Portal;eAkte / DMS";kontakt.297@lid.example.de;10
+298;Anja Winkler;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Elbe (Lueneburg);Liegenschafts-Konferenz;HKR;kontakt.298@lid.example.de;14
+299;Claudia Dietrich;Referatsleitung;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);"Liegenschafts-Konferenz;Fortbildungs-Gremium";HKR;kontakt.299@lid.example.de;65
+300;Tanja Kuhn;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);Cloud-Pruefgruppe;HKR;kontakt.300@lid.example.de;15
+301;Claudia Sauer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Sued (Goettingen);"IT-Lenkungsausschuss;Vergabekammer Nord";eVergabe-Portal;kontakt.301@lid.example.de;11
+302;Frank Seidel;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle West (Osnabrueck);"Vergabekammer Nord;Barrierefreiheit-Beirat;eAkte-Steuerkreis";"eVergabe-Portal;Verzeichnisdienst";kontakt.302@lid.example.de;33
+303;Katrin Neumann;Teamleitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);Vergabekammer Nord;eVergabe-Portal;kontakt.303@lid.example.de;45
+304;Susanne Lindner;Stellvertretung;Ref. 21 Vergabe & Haushalt;Aussenstelle Weser (Nienburg);"Standortleiter-Runde;Datenschutz-Arbeitskreis";Foerderportal;kontakt.304@lid.example.de;24
+305;Sabine Seidel;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;KI-Pilotgruppe;"Foerderportal;Verzeichnisdienst";kontakt.305@lid.example.de;34
+306;Petra Dietrich;Koordination;Ref. 31 Fachverfahren;Regionalstelle West (Osnabrueck);Barrierefreiheit-Beirat;eVergabe-Portal;kontakt.306@lid.example.de;27
+307;Markus Kuhn;Teamleitung;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);eVergabe-Fachgruppe;"eAkte / DMS;eVergabe-Portal";kontakt.307@lid.example.de;45
+308;Susanne Krueger;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);"Architektur-Board;Vergabekammer Nord";Foerderportal;kontakt.308@lid.example.de;23
+309;Markus Albrecht;Stellvertretung;Ref. 21 Vergabe & Haushalt;Aussenstelle Harz (Goslar);Personalrat-Digitalisierung;"eAkte / DMS;Foerderportal";kontakt.309@lid.example.de;23
+310;Anja Krueger;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);"Datenschutz-Arbeitskreis;Qualitaetszirkel Prozesse";"HKR;eVergabe-Portal";kontakt.310@lid.example.de;12
+311;Petra Keller;Teamleitung;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);KI-Pilotgruppe;"HKR;Verzeichnisdienst";kontakt.311@lid.example.de;45
+312;Thomas Horn;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);Liegenschafts-Konferenz;eAkte / DMS;kontakt.312@lid.example.de;15
+313;Jens Winkler;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);"Datenschutz-Arbeitskreis;Personalrat-Digitalisierung";eVergabe-Portal;kontakt.313@lid.example.de;21
+314;Heike Busch;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Kueste (Oldenburg);"Haushaltsausschuss;IT-Lenkungsausschuss";"Verzeichnisdienst;eVergabe-Portal";kontakt.314@lid.example.de;13
+315;Birgit Vogt;Teamleitung;Ref. 22 Recht & Pruefung;Regionalstelle Ost (Braunschweig);eAkte-Steuerkreis;eVergabe-Portal;kontakt.315@lid.example.de;45
+316;Heike Seidel;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Harz (Goslar);Architektur-Board;eAkte / DMS;kontakt.316@lid.example.de;16
+317;Birgit Keller;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);KI-Pilotgruppe;eVergabe-Portal;kontakt.317@lid.example.de;28
+318;Andreas Dietrich;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Heide (Celle);"Haushaltsausschuss;Krisenstab IT";eVergabe-Portal;kontakt.318@lid.example.de;18
+319;Claudia Albrecht;Referatsleitung;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);eAkte-Steuerkreis;"Verzeichnisdienst;Foerderportal";kontakt.319@lid.example.de;65
+320;Oliver Schuster;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Heide (Celle);DigitalPakt-Netzausbau;Foerderportal;kontakt.320@lid.example.de;35
+321;Sabine Berger;Teamleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Weser (Nienburg);Cloud-Pruefgruppe;"Foerderportal;HKR";kontakt.321@lid.example.de;45
+322;Heike Neumann;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Harz (Goslar);Liegenschafts-Konferenz;Verzeichnisdienst;kontakt.322@lid.example.de;26
+323;Markus Sauer;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle West (Osnabrueck);eAkte-Steuerkreis;"Foerderportal;eAkte / DMS";kontakt.323@lid.example.de;34
+324;Michael Beyer;Teamleitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);"Haushaltsausschuss;Qualitaetszirkel Prozesse;eAkte-Steuerkreis";"HKR;eAkte / DMS";kontakt.324@lid.example.de;45
+325;Markus Beyer;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);Haushaltsausschuss;"eAkte / DMS;Foerderportal";kontakt.325@lid.example.de;11
+326;Michael Pfeiffer;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Zentrale Nord (Hannover);DigitalPakt-Netzausbau;HKR;kontakt.326@lid.example.de;32
+327;Stefan Richter;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Harz (Goslar);"Personalrat-Digitalisierung;ISB-Sicherheitskreis";"eAkte / DMS;HKR";kontakt.327@lid.example.de;32
+328;Heike Beyer;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);Haushaltsausschuss;"Verzeichnisdienst;HKR";kontakt.328@lid.example.de;15
+329;Oliver Winkler;Referatsleitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Sued (Goettingen);"Haushaltsausschuss;eVergabe-Fachgruppe";"HKR;eVergabe-Portal";kontakt.329@lid.example.de;65
+330;Stefan Dietrich;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);Datenschutz-Arbeitskreis;Foerderportal;kontakt.330@lid.example.de;13
+331;Frank Keller;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Sued (Goettingen);Datenschutz-Arbeitskreis;eAkte / DMS;kontakt.331@lid.example.de;32
+332;Katrin Albrecht;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Sued (Goettingen);"Krisenstab IT;Liegenschafts-Konferenz";eAkte / DMS;kontakt.332@lid.example.de;11
+333;Heike Albrecht;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Heide (Celle);eVergabe-Fachgruppe;"Foerderportal;Verzeichnisdienst";kontakt.333@lid.example.de;13
+334;Frank Beyer;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle West (Osnabrueck);Vergabekammer Nord;"eAkte / DMS;HKR";kontakt.334@lid.example.de;18
+335;Thomas Hartmann;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);"Qualitaetszirkel Prozesse;Architektur-Board";"Foerderportal;Verzeichnisdienst";kontakt.335@lid.example.de;32
+336;Sabine Franke;Koordination;Ref. 22 Recht & Pruefung;Aussenstelle Harz (Goslar);"Haushaltsausschuss;Vergabekammer Nord";HKR;kontakt.336@lid.example.de;16
+337;Petra Franke;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Stade;eAkte-Steuerkreis;eAkte / DMS;kontakt.337@lid.example.de;22
+338;Tanja Horn;Teamleitung;Ref. 22 Recht & Pruefung;Zentrale Nord (Hannover);Barrierefreiheit-Beirat;HKR;kontakt.338@lid.example.de;45
+339;Holger Schuster;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);Standortleiter-Runde;Verzeichnisdienst;kontakt.339@lid.example.de;13
+340;Jens Berger;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);eVergabe-Fachgruppe;HKR;kontakt.340@lid.example.de;22
+341;Markus Brandt;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);eAkte-Steuerkreis;"Foerderportal;eAkte / DMS";kontakt.341@lid.example.de;14
+342;Thomas Hartmann;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);Vergabekammer Nord;"Foerderportal;Verzeichnisdienst";kontakt.342@lid.example.de;27
+343;Frank Beyer;Referatsleitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Kueste (Oldenburg);Vergabekammer Nord;eAkte / DMS;kontakt.343@lid.example.de;65
+344;Birgit Brandt;Koordination;Ref. 22 Recht & Pruefung;Regionalstelle Sued (Goettingen);"Personalrat-Digitalisierung;Vergabekammer Nord";"eAkte / DMS;Verzeichnisdienst";kontakt.344@lid.example.de;16
+345;Anja Pfeiffer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Ost (Braunschweig);eVergabe-Fachgruppe;"HKR;Verzeichnisdienst";kontakt.345@lid.example.de;10
+346;Holger Beyer;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Ost (Braunschweig);Personalrat-Digitalisierung;eAkte / DMS;kontakt.346@lid.example.de;28
+347;Thomas Baumann;Referatsleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);Cloud-Pruefgruppe;"eAkte / DMS;eVergabe-Portal";kontakt.347@lid.example.de;65
+348;Claudia Berger;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Zentrale Nord (Hannover);Datenschutz-Arbeitskreis;eAkte / DMS;kontakt.348@lid.example.de;33
+349;Frank Neumann;Referatsleitung;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);"Standortleiter-Runde;Qualitaetszirkel Prozesse";"Verzeichnisdienst;eAkte / DMS";kontakt.349@lid.example.de;65
+350;Michael Keller;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Elbe (Lueneburg);Barrierefreiheit-Beirat;eVergabe-Portal;kontakt.350@lid.example.de;24
+351;Petra Franke;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Zentrale Nord (Hannover);Haushaltsausschuss;HKR;kontakt.351@lid.example.de;32
+352;Susanne Berger;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);DigitalPakt-Netzausbau;eVergabe-Portal;kontakt.352@lid.example.de;11
+353;Birgit Lindner;Koordination;Ref. 31 Fachverfahren;Regionalstelle Kueste (Oldenburg);KI-Pilotgruppe;"eAkte / DMS;Foerderportal";kontakt.353@lid.example.de;17
+354;Markus Schuster;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);Krisenstab IT;"eVergabe-Portal;HKR";kontakt.354@lid.example.de;33
+355;Kerstin Baumann;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);"DigitalPakt-Netzausbau;eAkte-Steuerkreis";eVergabe-Portal;kontakt.355@lid.example.de;18
+356;Andreas Busch;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Weser (Nienburg);"Haushaltsausschuss;IT-Lenkungsausschuss";HKR;kontakt.356@lid.example.de;29
+357;Jens Winkler;Stellvertretung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Heide (Celle);"Krisenstab IT;KI-Pilotgruppe";"eVergabe-Portal;Verzeichnisdienst";kontakt.357@lid.example.de;19
+358;Susanne Pfeiffer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);Krisenstab IT;"HKR;eAkte / DMS";kontakt.358@lid.example.de;25
+359;Kerstin Richter;Stellvertretung;Ref. 41 Bau & Liegenschaften;Regionalstelle Kueste (Oldenburg);Standortleiter-Runde;eVergabe-Portal;kontakt.359@lid.example.de;26
+360;Michael Lindner;Teamleitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;Personalrat-Digitalisierung;Verzeichnisdienst;kontakt.360@lid.example.de;45
+361;Jens Neumann;Koordination;Ref. 42 Infrastruktur & Netze;Aussenstelle Heide (Celle);"DigitalPakt-Netzausbau;Datenschutz-Arbeitskreis";Foerderportal;kontakt.361@lid.example.de;30
+362;Frank Lorentz;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle West (Osnabrueck);"Qualitaetszirkel Prozesse;Haushaltsausschuss";"eAkte / DMS;Verzeichnisdienst";kontakt.362@lid.example.de;14
+363;Claudia Dietrich;Teamleitung;Ref. 22 Recht & Pruefung;Aussenstelle Stade;"Architektur-Board;eAkte-Steuerkreis";"eVergabe-Portal;HKR";kontakt.363@lid.example.de;45
+364;Andreas Richter;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);"Cloud-Pruefgruppe;Vergabekammer Nord";Verzeichnisdienst;kontakt.364@lid.example.de;16
+365;Susanne Vogt;Referatsleitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Ems (Meppen);Vergabekammer Nord;eVergabe-Portal;kontakt.365@lid.example.de;65
+366;Petra Richter;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle West (Osnabrueck);Haushaltsausschuss;Verzeichnisdienst;kontakt.366@lid.example.de;20
+367;Stefan Richter;Fachreferent/in;Ref. 11 Personal & Organisation;Aussenstelle Weser (Nienburg);Haushaltsausschuss;Verzeichnisdienst;kontakt.367@lid.example.de;35
+368;Kerstin Keller;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Heide (Celle);Cloud-Pruefgruppe;"eAkte / DMS;Foerderportal";kontakt.368@lid.example.de;27
+369;Petra Dietrich;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);"Fortbildungs-Gremium;DigitalPakt-Netzausbau";eAkte / DMS;kontakt.369@lid.example.de;30
+370;Michael Krueger;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Regionalstelle Kueste (Oldenburg);eVergabe-Fachgruppe;"eVergabe-Portal;eAkte / DMS";kontakt.370@lid.example.de;11
+371;Jens Baumann;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);"Personalrat-Digitalisierung;Datenschutz-Arbeitskreis";"HKR;eVergabe-Portal";kontakt.371@lid.example.de;15
+372;Heike Weber;Sachbearbeitung;Ref. 22 Recht & Pruefung;Regionalstelle Sued (Goettingen);"Fortbildungs-Gremium;Haushaltsausschuss";HKR;kontakt.372@lid.example.de;32
+373;Martin Berger;Referatsleitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Ems (Meppen);Vergabekammer Nord;eAkte / DMS;kontakt.373@lid.example.de;65
+374;Martin Winkler;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Heide (Celle);Liegenschafts-Konferenz;"eVergabe-Portal;Foerderportal";kontakt.374@lid.example.de;32
+375;Sabine Baumann;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Stade;Personalrat-Digitalisierung;"eAkte / DMS;Foerderportal";kontakt.375@lid.example.de;19
+376;Thomas Vogt;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Kueste (Oldenburg);"DigitalPakt-Netzausbau;Krisenstab IT";"HKR;eVergabe-Portal";kontakt.376@lid.example.de;11
+377;Oliver Schuster;Koordination;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Elbe (Lueneburg);IT-Lenkungsausschuss;eAkte / DMS;kontakt.377@lid.example.de;28
+378;Frank Keller;Koordination;Ref. 21 Vergabe & Haushalt;Aussenstelle Wilhelmshaven;"Liegenschafts-Konferenz;eAkte-Steuerkreis";"HKR;Foerderportal";kontakt.378@lid.example.de;24
+379;Martin Vogt;Teamleitung;Ref. 11 Personal & Organisation;Regionalstelle Kueste (Oldenburg);Datenschutz-Arbeitskreis;"eAkte / DMS;Foerderportal";kontakt.379@lid.example.de;45
+380;Martin Weber;Referatsleitung;Ref. 22 Recht & Pruefung;Regionalstelle Elbe (Lueneburg);KI-Pilotgruppe;"eAkte / DMS;HKR";kontakt.380@lid.example.de;65
+381;Katrin Brandt;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Weser (Nienburg);eVergabe-Fachgruppe;"Verzeichnisdienst;eVergabe-Portal";kontakt.381@lid.example.de;13
+382;Anja Winkler;Fachreferent/in;Ref. 22 Recht & Pruefung;Regionalstelle Ost (Braunschweig);Cloud-Pruefgruppe;"eVergabe-Portal;Verzeichnisdienst";kontakt.382@lid.example.de;34
+383;Markus Pfeiffer;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);"ISB-Sicherheitskreis;Barrierefreiheit-Beirat";"eAkte / DMS;Foerderportal";kontakt.383@lid.example.de;18
+384;Katrin Weber;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Stade;"Fortbildungs-Gremium;Qualitaetszirkel Prozesse";Verzeichnisdienst;kontakt.384@lid.example.de;31
+385;Michael Schuster;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);"Qualitaetszirkel Prozesse;Vergabekammer Nord";eVergabe-Portal;kontakt.385@lid.example.de;26
+386;Frank Schuster;Referatsleitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Weser (Nienburg);Datenschutz-Arbeitskreis;"eAkte / DMS;eVergabe-Portal";kontakt.386@lid.example.de;65
+387;Oliver Kuhn;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);KI-Pilotgruppe;Verzeichnisdienst;kontakt.387@lid.example.de;24
+388;Katrin Vogt;Stellvertretung;Ref. 11 Personal & Organisation;Regionalstelle Ost (Braunschweig);Vergabekammer Nord;eAkte / DMS;kontakt.388@lid.example.de;35
+389;Holger Pfeiffer;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Stade;"Datenschutz-Arbeitskreis;Krisenstab IT";eVergabe-Portal;kontakt.389@lid.example.de;24
+390;Katrin Horn;Teamleitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Wilhelmshaven;"KI-Pilotgruppe;ISB-Sicherheitskreis";eVergabe-Portal;kontakt.390@lid.example.de;45
+391;Sabine Richter;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Ems (Meppen);ISB-Sicherheitskreis;eVergabe-Portal;kontakt.391@lid.example.de;25
+392;Anja Winkler;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Ost (Braunschweig);DigitalPakt-Netzausbau;eAkte / DMS;kontakt.392@lid.example.de;22
+393;Petra Albrecht;Teamleitung;Ref. 31 Fachverfahren;Aussenstelle Wilhelmshaven;Barrierefreiheit-Beirat;Foerderportal;kontakt.393@lid.example.de;45
+394;Thomas Sauer;Referatsleitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Stade;Fortbildungs-Gremium;Verzeichnisdienst;kontakt.394@lid.example.de;65
+395;Sabine Busch;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);Fortbildungs-Gremium;Foerderportal;kontakt.395@lid.example.de;15
+396;Anja Vogt;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);"Barrierefreiheit-Beirat;eAkte-Steuerkreis";"Verzeichnisdienst;HKR";kontakt.396@lid.example.de;19
+397;Birgit Keller;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;Datenschutz-Arbeitskreis;eVergabe-Portal;kontakt.397@lid.example.de;16
+398;Holger Winkler;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Stade;Haushaltsausschuss;"eAkte / DMS;HKR";kontakt.398@lid.example.de;27
+399;Frank Beyer;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;"Qualitaetszirkel Prozesse;Standortleiter-Runde";"eAkte / DMS;Foerderportal";kontakt.399@lid.example.de;10
+400;Heike Keller;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle Sued (Goettingen);Haushaltsausschuss;"HKR;eVergabe-Portal";kontakt.400@lid.example.de;11
+401;Jens Scholz;Teamleitung;Ref. 11 Personal & Organisation;Regionalstelle Elbe (Lueneburg);"ISB-Sicherheitskreis;eAkte-Steuerkreis";"eVergabe-Portal;HKR";kontakt.401@lid.example.de;45
+402;Martin Berger;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);Liegenschafts-Konferenz;Foerderportal;kontakt.402@lid.example.de;34
+403;Birgit Krueger;Koordination;Ref. 41 Bau & Liegenschaften;Aussenstelle Harz (Goslar);DigitalPakt-Netzausbau;HKR;kontakt.403@lid.example.de;24
+404;Stefan Lorentz;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Wilhelmshaven;eVergabe-Fachgruppe;Verzeichnisdienst;kontakt.404@lid.example.de;18
+405;Oliver Neumann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Zentrale Nord (Hannover);Personalrat-Digitalisierung;eVergabe-Portal;kontakt.405@lid.example.de;20
+406;Holger Lindner;Teamleitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);"Qualitaetszirkel Prozesse;Krisenstab IT";HKR;kontakt.406@lid.example.de;45
+407;Susanne Krueger;Stellvertretung;Ref. 21 Vergabe & Haushalt;Aussenstelle Ems (Meppen);Qualitaetszirkel Prozesse;"eAkte / DMS;HKR";kontakt.407@lid.example.de;17
+408;Petra Lorentz;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Kueste (Oldenburg);Fortbildungs-Gremium;"Foerderportal;eAkte / DMS";kontakt.408@lid.example.de;13
+409;Markus Albrecht;Sachbearbeitung;Ref. 31 Fachverfahren;Zentrale Nord (Hannover);"Datenschutz-Arbeitskreis;eVergabe-Fachgruppe";Verzeichnisdienst;kontakt.409@lid.example.de;18
+410;Oliver Dietrich;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Ems (Meppen);"KI-Pilotgruppe;Cloud-Pruefgruppe";HKR;kontakt.410@lid.example.de;30
+411;Petra Richter;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);"Qualitaetszirkel Prozesse;IT-Lenkungsausschuss;Architektur-Board";eVergabe-Portal;kontakt.411@lid.example.de;31
+412;Andreas Vogt;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;"Architektur-Board;Personalrat-Digitalisierung";Verzeichnisdienst;kontakt.412@lid.example.de;32
+413;Katrin Lindner;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);"Qualitaetszirkel Prozesse;Architektur-Board";HKR;kontakt.413@lid.example.de;23
+414;Heike Albrecht;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);ISB-Sicherheitskreis;Foerderportal;kontakt.414@lid.example.de;12
+415;Tanja Lindner;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle Elbe (Lueneburg);"ISB-Sicherheitskreis;Standortleiter-Runde";"Foerderportal;eAkte / DMS";kontakt.415@lid.example.de;19
+416;Birgit Berger;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Weser (Nienburg);eAkte-Steuerkreis;Verzeichnisdienst;kontakt.416@lid.example.de;35
+417;Oliver Baumann;Stellvertretung;Ref. 22 Recht & Pruefung;Regionalstelle Kueste (Oldenburg);"Krisenstab IT;IT-Lenkungsausschuss";eAkte / DMS;kontakt.417@lid.example.de;11
+418;Sabine Beyer;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle Kueste (Oldenburg);Krisenstab IT;Verzeichnisdienst;kontakt.418@lid.example.de;30
+419;Susanne Keller;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);"DigitalPakt-Netzausbau;ISB-Sicherheitskreis";Foerderportal;kontakt.419@lid.example.de;11
+420;Oliver Albrecht;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle Kueste (Oldenburg);"Liegenschafts-Konferenz;ISB-Sicherheitskreis";Foerderportal;kontakt.420@lid.example.de;25
+421;Katrin Seidel;Sachbearbeitung;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);Architektur-Board;HKR;kontakt.421@lid.example.de;25
+422;Birgit Richter;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Wilhelmshaven;Krisenstab IT;"Verzeichnisdienst;eVergabe-Portal";kontakt.422@lid.example.de;10
+423;Katrin Krueger;Teamleitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Kueste (Oldenburg);"Personalrat-Digitalisierung;Datenschutz-Arbeitskreis";"Verzeichnisdienst;Foerderportal";kontakt.423@lid.example.de;45
+424;Markus Sauer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle West (Osnabrueck);Architektur-Board;"eVergabe-Portal;Foerderportal";kontakt.424@lid.example.de;18
+425;Kerstin Dietrich;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Ems (Meppen);eVergabe-Fachgruppe;eAkte / DMS;kontakt.425@lid.example.de;27
+426;Claudia Horn;Referatsleitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Stade;"Krisenstab IT;eVergabe-Fachgruppe";Foerderportal;kontakt.426@lid.example.de;65
+427;Jens Keller;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Heide (Celle);IT-Lenkungsausschuss;Foerderportal;kontakt.427@lid.example.de;31
+428;Stefan Sauer;Fachreferent/in;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle West (Osnabrueck);Personalrat-Digitalisierung;"HKR;eAkte / DMS";kontakt.428@lid.example.de;17
+429;Frank Krueger;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Sued (Goettingen);DigitalPakt-Netzausbau;"Verzeichnisdienst;Foerderportal";kontakt.429@lid.example.de;24
+430;Martin Lindner;Stellvertretung;Ref. 41 Bau & Liegenschaften;Regionalstelle Ost (Braunschweig);"Fortbildungs-Gremium;Liegenschafts-Konferenz";"Foerderportal;eVergabe-Portal";kontakt.430@lid.example.de;22
+431;Heike Seidel;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Ems (Meppen);eAkte-Steuerkreis;"HKR;Foerderportal";kontakt.431@lid.example.de;25
+432;Frank Pfeiffer;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);Architektur-Board;"eVergabe-Portal;Foerderportal";kontakt.432@lid.example.de;15
+433;Stefan Seidel;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Stade;Datenschutz-Arbeitskreis;Verzeichnisdienst;kontakt.433@lid.example.de;31
+434;Frank Schuster;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Stade;"IT-Lenkungsausschuss;eAkte-Steuerkreis";eVergabe-Portal;kontakt.434@lid.example.de;28
+435;Tanja Brandt;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);Haushaltsausschuss;"eVergabe-Portal;Verzeichnisdienst";kontakt.435@lid.example.de;29
+436;Tanja Kuhn;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);Cloud-Pruefgruppe;"eVergabe-Portal;Foerderportal";kontakt.436@lid.example.de;23
+437;Holger Keller;Teamleitung;Ref. 22 Recht & Pruefung;Aussenstelle Harz (Goslar);"Liegenschafts-Konferenz;Haushaltsausschuss";"Verzeichnisdienst;eAkte / DMS";kontakt.437@lid.example.de;45
+438;Michael Berger;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Zentrale Nord (Hannover);Fortbildungs-Gremium;"eVergabe-Portal;eAkte / DMS";kontakt.438@lid.example.de;15
+439;Frank Pfeiffer;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle Ost (Braunschweig);Personalrat-Digitalisierung;Verzeichnisdienst;kontakt.439@lid.example.de;26
+440;Andreas Seidel;Referatsleitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Sued (Goettingen);"Cloud-Pruefgruppe;eVergabe-Fachgruppe;Krisenstab IT";Verzeichnisdienst;kontakt.440@lid.example.de;65
+441;Anja Neumann;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Ost (Braunschweig);Qualitaetszirkel Prozesse;"HKR;eVergabe-Portal";kontakt.441@lid.example.de;10
+442;Sabine Beyer;Fachreferent/in;Ref. 11 Personal & Organisation;Aussenstelle Heide (Celle);"Datenschutz-Arbeitskreis;Barrierefreiheit-Beirat";"eAkte / DMS;eVergabe-Portal";kontakt.442@lid.example.de;23
+443;Tanja Neumann;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);Liegenschafts-Konferenz;"eVergabe-Portal;Verzeichnisdienst";kontakt.443@lid.example.de;27
+444;Oliver Schuster;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Regionalstelle Kueste (Oldenburg);"Krisenstab IT;eVergabe-Fachgruppe;Personalrat-Digitalisierung";eVergabe-Portal;kontakt.444@lid.example.de;24
+445;Stefan Vogt;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Regionalstelle Elbe (Lueneburg);"Vergabekammer Nord;Haushaltsausschuss";"eAkte / DMS;Foerderportal";kontakt.445@lid.example.de;14
+446;Frank Pfeiffer;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Regionalstelle Kueste (Oldenburg);Architektur-Board;Verzeichnisdienst;kontakt.446@lid.example.de;22
+447;Holger Kuhn;Fachreferent/in;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);KI-Pilotgruppe;eVergabe-Portal;kontakt.447@lid.example.de;31
+448;Susanne Baumann;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);Vergabekammer Nord;"eVergabe-Portal;eAkte / DMS";kontakt.448@lid.example.de;15
+449;Kerstin Neumann;Teamleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Stade;DigitalPakt-Netzausbau;eAkte / DMS;kontakt.449@lid.example.de;45
+450;Kerstin Horn;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Elbe (Lueneburg);"Liegenschafts-Konferenz;eAkte-Steuerkreis;DigitalPakt-Netzausbau";"Verzeichnisdienst;eAkte / DMS";kontakt.450@lid.example.de;18
+451;Stefan Franke;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Aussenstelle Ems (Meppen);ISB-Sicherheitskreis;"Foerderportal;HKR";kontakt.451@lid.example.de;32
+452;Birgit Berger;Fachreferent/in;Ref. 31 Fachverfahren;Regionalstelle Elbe (Lueneburg);"KI-Pilotgruppe;Qualitaetszirkel Prozesse;IT-Lenkungsausschuss";"eAkte / DMS;HKR";kontakt.452@lid.example.de;12
+453;Heike Kuhn;Teamleitung;Ref. 31 Fachverfahren;Aussenstelle Stade;"Datenschutz-Arbeitskreis;Barrierefreiheit-Beirat";"Foerderportal;eAkte / DMS";kontakt.453@lid.example.de;45
+454;Claudia Krueger;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;"Datenschutz-Arbeitskreis;Architektur-Board";Verzeichnisdienst;kontakt.454@lid.example.de;20
+455;Markus Scholz;Referatsleitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle West (Osnabrueck);"DigitalPakt-Netzausbau;Cloud-Pruefgruppe;Qualitaetszirkel Prozesse";eVergabe-Portal;kontakt.455@lid.example.de;65
+456;Claudia Scholz;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Harz (Goslar);ISB-Sicherheitskreis;eAkte / DMS;kontakt.456@lid.example.de;31
+457;Frank Pfeiffer;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Weser (Nienburg);Datenschutz-Arbeitskreis;"Foerderportal;HKR";kontakt.457@lid.example.de;25
+458;Stefan Sauer;Koordination;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Heide (Celle);Personalrat-Digitalisierung;Foerderportal;kontakt.458@lid.example.de;35
+459;Andreas Schuster;Koordination;Ref. 11 Personal & Organisation;Aussenstelle Ems (Meppen);Haushaltsausschuss;"eAkte / DMS;Verzeichnisdienst";kontakt.459@lid.example.de;20
+460;Sabine Weber;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Harz (Goslar);Krisenstab IT;"eVergabe-Portal;HKR";kontakt.460@lid.example.de;17
+461;Claudia Schuster;Stellvertretung;Ref. 41 Bau & Liegenschaften;Regionalstelle Elbe (Lueneburg);Barrierefreiheit-Beirat;Verzeichnisdienst;kontakt.461@lid.example.de;32
+462;Markus Seidel;Referatsleitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);Personalrat-Digitalisierung;eAkte / DMS;kontakt.462@lid.example.de;65
+463;Claudia Krueger;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Regionalstelle Sued (Goettingen);Personalrat-Digitalisierung;"eAkte / DMS;eVergabe-Portal";kontakt.463@lid.example.de;23
+464;Frank Keller;Stellvertretung;Ref. 41 Bau & Liegenschaften;Aussenstelle Weser (Nienburg);Qualitaetszirkel Prozesse;Verzeichnisdienst;kontakt.464@lid.example.de;13
+465;Stefan Lindner;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);"ISB-Sicherheitskreis;KI-Pilotgruppe";"HKR;Foerderportal";kontakt.465@lid.example.de;21
+466;Oliver Horn;Koordination;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Elbe (Lueneburg);ISB-Sicherheitskreis;"Foerderportal;eVergabe-Portal";kontakt.466@lid.example.de;28
+467;Tanja Kuhn;Fachreferent/in;Ref. 22 Recht & Pruefung;Regionalstelle Kueste (Oldenburg);Fortbildungs-Gremium;"Verzeichnisdienst;eAkte / DMS";kontakt.467@lid.example.de;22
+468;Holger Baumann;Fachreferent/in;Ref. 22 Recht & Pruefung;Regionalstelle West (Osnabrueck);Datenschutz-Arbeitskreis;"Foerderportal;Verzeichnisdienst";kontakt.468@lid.example.de;12
+469;Kerstin Brandt;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Regionalstelle Elbe (Lueneburg);"Liegenschafts-Konferenz;eVergabe-Fachgruppe";"Verzeichnisdienst;HKR";kontakt.469@lid.example.de;33
+470;Tanja Busch;Stellvertretung;Ref. 42 Infrastruktur & Netze;Regionalstelle West (Osnabrueck);IT-Lenkungsausschuss;eVergabe-Portal;kontakt.470@lid.example.de;31
+471;Claudia Dietrich;Fachreferent/in;Ref. 21 Vergabe & Haushalt;Regionalstelle Sued (Goettingen);ISB-Sicherheitskreis;eAkte / DMS;kontakt.471@lid.example.de;25
+472;Oliver Lindner;Sachbearbeitung;Ref. 42 Infrastruktur & Netze;Aussenstelle Ems (Meppen);"Architektur-Board;ISB-Sicherheitskreis";"Foerderportal;eVergabe-Portal";kontakt.472@lid.example.de;12
+473;Heike Baumann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Weser (Nienburg);Personalrat-Digitalisierung;eAkte / DMS;kontakt.473@lid.example.de;11
+474;Markus Richter;Referatsleitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Ems (Meppen);"Qualitaetszirkel Prozesse;KI-Pilotgruppe;Personalrat-Digitalisierung";Foerderportal;kontakt.474@lid.example.de;65
+475;Holger Albrecht;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Ems (Meppen);Qualitaetszirkel Prozesse;"HKR;Verzeichnisdienst";kontakt.475@lid.example.de;27
+476;Michael Hartmann;Sachbearbeitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);Standortleiter-Runde;eAkte / DMS;kontakt.476@lid.example.de;26
+477;Anja Seidel;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Wilhelmshaven;"Cloud-Pruefgruppe;Standortleiter-Runde";Verzeichnisdienst;kontakt.477@lid.example.de;35
+478;Jens Pfeiffer;Sachbearbeitung;Ref. 11 Personal & Organisation;Aussenstelle Ems (Meppen);Barrierefreiheit-Beirat;"Verzeichnisdienst;eVergabe-Portal";kontakt.478@lid.example.de;15
+479;Heike Berger;Sachbearbeitung;Ref. 21 Vergabe & Haushalt;Aussenstelle Heide (Celle);Fortbildungs-Gremium;"HKR;Foerderportal";kontakt.479@lid.example.de;23
+480;Petra Hartmann;Sachbearbeitung;Ref. 32 IT-Betrieb & Sicherheit;Regionalstelle Ost (Braunschweig);KI-Pilotgruppe;"Foerderportal;Verzeichnisdienst";kontakt.480@lid.example.de;16
+481;Katrin Weber;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);"Standortleiter-Runde;Liegenschafts-Konferenz;Personalrat-Digitalisierung";"eAkte / DMS;eVergabe-Portal";kontakt.481@lid.example.de;12
+482;Anja Weber;Fachreferent/in;Ref. 41 Bau & Liegenschaften;Aussenstelle Heide (Celle);Cloud-Pruefgruppe;"Verzeichnisdienst;eAkte / DMS";kontakt.482@lid.example.de;20
+483;Kerstin Sauer;Stellvertretung;Ref. 11 Personal & Organisation;Regionalstelle Kueste (Oldenburg);"Architektur-Board;Cloud-Pruefgruppe";eVergabe-Portal;kontakt.483@lid.example.de;18
+484;Heike Weber;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Heide (Celle);"KI-Pilotgruppe;eAkte-Steuerkreis";eVergabe-Portal;kontakt.484@lid.example.de;24
+485;Thomas Busch;Fachreferent/in;Ref. 31 Fachverfahren;Aussenstelle Weser (Nienburg);Standortleiter-Runde;"eVergabe-Portal;eAkte / DMS";kontakt.485@lid.example.de;33
+486;Oliver Busch;Sachbearbeitung;Ref. 51 Foerderprogramme & DigitalPakt;Aussenstelle Stade;Krisenstab IT;eVergabe-Portal;kontakt.486@lid.example.de;13
+487;Michael Kuhn;Sachbearbeitung;Ref. 11 Personal & Organisation;Regionalstelle West (Osnabrueck);"ISB-Sicherheitskreis;eVergabe-Fachgruppe";eAkte / DMS;kontakt.487@lid.example.de;11
+488;Tanja Winkler;Fachreferent/in;Ref. 22 Recht & Pruefung;Regionalstelle Elbe (Lueneburg);"eAkte-Steuerkreis;Haushaltsausschuss";"eAkte / DMS;HKR";kontakt.488@lid.example.de;34
+489;Martin Lindner;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Wilhelmshaven;ISB-Sicherheitskreis;Verzeichnisdienst;kontakt.489@lid.example.de;17
+490;Katrin Horn;Teamleitung;Ref. 41 Bau & Liegenschaften;Aussenstelle Weser (Nienburg);"IT-Lenkungsausschuss;eVergabe-Fachgruppe";"eVergabe-Portal;HKR";kontakt.490@lid.example.de;45
+491;Martin Schuster;Fachreferent/in;Ref. 32 IT-Betrieb & Sicherheit;Aussenstelle Ems (Meppen);"DigitalPakt-Netzausbau;Haushaltsausschuss";"HKR;Verzeichnisdienst";kontakt.491@lid.example.de;18
+492;Holger Horn;Sachbearbeitung;Ref. 22 Recht & Pruefung;Aussenstelle Weser (Nienburg);Liegenschafts-Konferenz;"Verzeichnisdienst;eAkte / DMS";kontakt.492@lid.example.de;34
+493;Susanne Berger;Fachreferent/in;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);"eAkte-Steuerkreis;Datenschutz-Arbeitskreis";Foerderportal;kontakt.493@lid.example.de;22
+494;Petra Busch;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Harz (Goslar);Barrierefreiheit-Beirat;"eAkte / DMS;Foerderportal";kontakt.494@lid.example.de;26
+495;Kerstin Lindner;Teamleitung;Ref. 22 Recht & Pruefung;Regionalstelle West (Osnabrueck);"DigitalPakt-Netzausbau;ISB-Sicherheitskreis";"eVergabe-Portal;eAkte / DMS";kontakt.495@lid.example.de;45
+496;Martin Beyer;Fachreferent/in;Ref. 42 Infrastruktur & Netze;Aussenstelle Stade;Liegenschafts-Konferenz;HKR;kontakt.496@lid.example.de;17
+497;Holger Winkler;Sachbearbeitung;Ref. 31 Fachverfahren;Aussenstelle Stade;Architektur-Board;"eAkte / DMS;HKR";kontakt.497@lid.example.de;27
+498;Andreas Seidel;Teamleitung;Ref. 11 Personal & Organisation;Aussenstelle Harz (Goslar);Vergabekammer Nord;HKR;kontakt.498@lid.example.de;45
+499;Kerstin Scholz;Stellvertretung;Ref. 21 Vergabe & Haushalt;Regionalstelle Ost (Braunschweig);"Qualitaetszirkel Prozesse;eVergabe-Fachgruppe";eVergabe-Portal;kontakt.499@lid.example.de;26
+500;Michael Beyer;Fachreferent/in;Ref. 22 Recht & Pruefung;Aussenstelle Ems (Meppen);"Barrierefreiheit-Beirat;ISB-Sicherheitskreis";"Verzeichnisdienst;Foerderportal";kontakt.500@lid.example.de;13

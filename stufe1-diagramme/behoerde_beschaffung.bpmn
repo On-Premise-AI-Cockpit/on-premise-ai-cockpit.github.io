@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_LID_Beschaffung"
+                  targetNamespace="http://lid.example.de/bpmn">
+  <bpmn:collaboration id="Collab_LID">
+    <bpmn:participant id="Participant_LID" name="LID — IT-Beschaffungsantrag (&gt; 5.000 EUR)" processRef="Process_LID_Beschaffung" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_LID_Beschaffung" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Fachreferat" name="Fachreferat (Bedarfstraeger)">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Antrag</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Ref32" name="Referat 32 (IT-Betrieb &amp; Sicherheit)">
+        <bpmn:flowNodeRef>Task_IT_Pruefung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_IT_OK</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Ref21" name="Referat 21 (Vergabe &amp; Haushalt)">
+        <bpmn:flowNodeRef>Task_Vergabe</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Leitung" name="Abteilungsleitung">
+        <bpmn:flowNodeRef>Task_Freigabe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_1" name="IT-Bedarf erkannt">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Antrag" name="Beschaffungsantrag &amp; Leistungsbeschreibung erstellen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:incoming>Flow_Nachbesserung</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_IT_Pruefung" name="Technische &amp; ISB-Pruefung">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_IT_OK" name="IT-Freigabe erteilt?">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Nachbesserung</bpmn:outgoing>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Vergabe" name="Haushaltsmittel &amp; Vergaberecht pruefen">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Freigabe" name="Schlusszeichnung &amp; Bestellung freigeben">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="EndEvent_1" name="Bestellung ausgeloest">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_Antrag" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Antrag" targetRef="Task_IT_Pruefung" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_IT_Pruefung" targetRef="Gateway_IT_OK" />
+    <bpmn:sequenceFlow id="Flow_Nachbesserung" name="Nein" sourceRef="Gateway_IT_OK" targetRef="Task_Antrag" />
+    <bpmn:sequenceFlow id="Flow_4" name="Ja" sourceRef="Gateway_IT_OK" targetRef="Task_Vergabe" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Vergabe" targetRef="Task_Freigabe" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Freigabe" targetRef="EndEvent_1" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collab_LID">
+      <bpmndi:BPMNShape id="Shape_Participant" bpmnElement="Participant_LID" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="960" height="520" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Fachreferat" bpmnElement="Lane_Fachreferat" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="930" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Ref32" bpmnElement="Lane_Ref32" isHorizontal="true">
+        <dc:Bounds x="190" y="210" width="930" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Ref21" bpmnElement="Lane_Ref21" isHorizontal="true">
+        <dc:Bounds x="190" y="340" width="930" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Leitung" bpmnElement="Lane_Leitung" isHorizontal="true">
+        <dc:Bounds x="190" y="470" width="930" height="130" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Shape_Start" bpmnElement="StartEvent_1">
+        <dc:Bounds x="242" y="127" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Antrag" bpmnElement="Task_Antrag">
+        <dc:Bounds x="330" y="105" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_IT_Pruefung" bpmnElement="Task_IT_Pruefung">
+        <dc:Bounds x="345" y="235" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway" bpmnElement="Gateway_IT_OK" isMarkerVisible="true">
+        <dc:Bounds x="535" y="250" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Vergabe" bpmnElement="Task_Vergabe">
+        <dc:Bounds x="650" y="365" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Freigabe" bpmnElement="Task_Freigabe">
+        <dc:Bounds x="830" y="495" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1032" y="517" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="278" y="145" />
+        <di:waypoint x="330" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="405" y="185" />
+        <di:waypoint x="405" y="235" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_3" bpmnElement="Flow_3">
+        <di:waypoint x="465" y="275" />
+        <di:waypoint x="535" y="275" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Nachbesserung" bpmnElement="Flow_Nachbesserung">
+        <di:waypoint x="560" y="250" />
+        <di:waypoint x="560" y="145" />
+        <di:waypoint x="480" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_4" bpmnElement="Flow_4">
+        <di:waypoint x="560" y="300" />
+        <di:waypoint x="560" y="405" />
+        <di:waypoint x="650" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_5" bpmnElement="Flow_5">
+        <di:waypoint x="720" y="445" />
+        <di:waypoint x="720" y="535" />
+        <di:waypoint x="830" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_6" bpmnElement="Flow_6">
+        <di:waypoint x="970" y="535" />
+        <di:waypoint x="1032" y="535" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

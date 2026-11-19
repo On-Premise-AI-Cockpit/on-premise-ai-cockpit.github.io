@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KI-Cockpit (Stufe 4: Datenbank &amp; Wissensgraph) — KMU &amp; LID</title>
+  <script src="https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-wasm.js"></script>
+  <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9; --surface: #ffffff; --ink: #0f172a; --muted: #475569;
+      --primary: #0f766e; --accent: #1e293b; --danger: #b91c1c; --warn: #b45309; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.45; }
+    header { background: var(--accent); color: #f8fafc; padding: 1.15rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    header h1 { margin: 0; font-size: 1.3rem; }
+    header p { margin: 0.2rem 0 0; font-size: 0.86rem; color: #cbd5e1; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; gap: 0.5rem; }
+    nav button { background: none; border: none; border-bottom: 3px solid transparent; padding: 0.85rem 1.2rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    nav button.active { color: var(--primary); border-bottom-color: var(--primary); }
+    main { max-width: 1320px; margin: 1.25rem auto; padding: 0 1.5rem 3rem; }
+    .tab-panel { display: none; } .tab-panel.active { display: block; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1.25rem; }
+    .card h2 { margin-top: 0; font-size: 1.08rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .drop-mini {
+      background: #f0fdfa; border: 2px dashed var(--primary); border-radius: 10px; padding: 0.9rem 1.2rem;
+      margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1rem; align-items: center; }
+    input, select, button.btn { padding: 0.48rem 0.75rem; border: 1px solid var(--border); border-radius: 7px; font-size: 0.88rem; }
+    button.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; cursor: pointer; }
+    button.btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); font-weight: 600; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    th, td { text-align: left; padding: 0.52rem 0.65rem; border-bottom: 1px solid var(--border); }
+    th { background: #f8fafc; color: var(--muted); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.76rem; font-weight: 600; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .pill.ok { background: #dcfce7; color: #166534; }
+    #networkGraph, #kmuGraph { width: 100%; height: 470px; border: 1px solid var(--border); border-radius: 8px; background: #fafbfc; }
+    .blast-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; font-size: 0.9rem; }
+    .grid-2 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.2rem; }
+    @media (max-width: 960px) { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>KI-Cockpit (Stufe 4) — SQLite-Datenbank &amp; Wissensgraph</h1>
+      <p>KMU-Buchungsanalyse (Werkbau Nord GmbH) &amp; 500-Kontakte-Gremiennetz mit Blast-Radius (LID)</p>
+    </div>
+    <span id="dbStatus" style="background:rgba(255,255,255,0.14);padding:0.35rem 0.8rem;border-radius:999px;font-size:0.82rem;">Initialisiere sql.js ...</span>
+  </header>
+
+  <nav>
+    <button class="active" data-tab="kmu">KMU: Kostenstellen, Buchungen &amp; Ursachen-Graph</button>
+    <button data-tab="lid-db">Behörde (LID): 500 Kontakte &amp; 12 Standorte (SQLite)</button>
+    <button data-tab="lid-graph">Behörde (LID): Gremiennetz &amp; Blast-Radius-Analyse</button>
+  </nav>
+
+  <main>
+    <div class="drop-mini">
+      <div><strong>Tankdeckel für Datenbanken:</strong> Laden Sie <code>daten/cockpit_stufe4.sqlite</code> hinein — oder arbeiten Sie direkt mit dem integrierten Demo-Bestand.</div>
+      <div>
+        <input type="file" id="sqliteInput" accept=".sqlite,.db" />
+      </div>
+    </div>
+
+    <!-- TAB 1: KMU BUCHUNGEN & GRAPH -->
+    <section id="tab-kmu" class="tab-panel active">
+      <div class="card">
+        <h2>Ursachenanalyse: „Welche Kostenstelle läuft im März 2026 aus dem Ruder?“</h2>
+        <div class="toolbar">
+          <select id="kmuKsFilter">
+            <option value="">Alle Kostenstellen</option>
+            <option value="KS-100">KS-100 Produktion &amp; Montage</option>
+            <option value="KS-200">KS-200 Vertrieb &amp; Projekte</option>
+            <option value="KS-300">KS-300 IT &amp; Infrastruktur</option>
+            <option value="KS-400">KS-400 Verwaltung &amp; Zentrale</option>
+          </select>
+          <button class="btn danger" id="btnOnlyOutliers">Nur Ausreißer / Doppelabrechnungen zeigen</button>
+          <button class="btn" id="btnShowAllKmu">Alle Buchungen</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <table>
+              <thead><tr><th>Datum</th><th>KS</th><th>Lieferant / Projekt</th><th class="num">Plan</th><th class="num">Ist</th><th>Status</th></tr></thead>
+              <tbody id="kmuTable"></tbody>
+            </table>
+          </div>
+          <div>
+            <div id="kmuGraph"></div>
+            <p style="font-size:0.82rem;color:#475569;margin-top:0.4rem;">Verknüpfung Kostenstelle → Projekt → Lieferant: Rote Kanten zeigen sofort die zwei Ursachen (<strong>NordMontage Partner GmbH</strong> auf Projekt Halle 4 und <strong>SafeCloud Backup GmbH</strong> Doppelabrechnung).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: LID 500 KONTAKTE SQLITE -->
+    <section id="tab-lid-db" class="tab-panel">
+      <div class="card">
+        <h2>LID Kontakt- &amp; Gremien-Dashboard (SQLite-Abfrage im Browser)</h2>
+        <div class="toolbar">
+          <input type="text" id="lidSearch" placeholder="Suche Name, Gremium, Fachverfahren..." style="min-width:240px" />
+          <select id="lidStandort"><option value="">Alle 12 Standorte</option></select>
+          <select id="lidReferat"><option value="">Alle Referate</option></select>
+          <label style="font-size:0.85rem;"><input type="checkbox" id="lidOnlyKey" /> Nur Schlüsselpersonen (Kritikalität &ge; 70)</label>
+          <span id="lidCount" style="margin-left:auto;font-weight:600;color:#0f766e;"></span>
+        </div>
+        <div style="max-height:460px;overflow:auto;">
+          <table>
+            <thead><tr><th>Name</th><th>Rolle</th><th>Referat</th><th>Standort</th><th>Gremien</th><th>Fachverfahren</th><th class="num">Krit.</th></tr></thead>
+            <tbody id="lidTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: LID BLAST RADIUS GRAPH -->
+    <section id="tab-lid-graph" class="tab-panel">
+      <div class="card">
+        <h2>Mehrstufige Abhängigkeitsanalyse (Blast Radius — Ausfallsimulation)</h2>
+        <div class="toolbar">
+          <label for="blastTarget"><strong>Ausfall simulieren für:</strong></label>
+          <select id="blastTarget">
+            <option value="P:Dr. Sabine Weber">Schlüsselperson: Dr. Sabine Weber (Ref. 32 Leitung)</option>
+            <option value="P:Stefan Hartmann">Schlüsselperson: Stefan Hartmann (Ref. 21 Vergabe)</option>
+            <option value="P:Dr. Martin Vogt">Schlüsselperson: Dr. Martin Vogt (Abteilungsleitung)</option>
+            <option value="V:eVergabe-Portal">Fachverfahren: eVergabe-Portal</option>
+            <option value="V:HKR">Fachverfahren: Haushalts- &amp; Kassenverfahren (HKR)</option>
+          </select>
+          <select id="blastDepth">
+            <option value="1">Tiefe 1 (direkte Abhängigkeiten)</option>
+            <option value="2" selected>Tiefe 2 (Folge-Auswirkungen auf Gremien &amp; Standorte)</option>
+          </select>
+          <button class="btn danger" id="btnSimulateBlast">Blast Radius berechnen</button>
+        </div>
+        <div id="networkGraph"></div>
+        <div class="blast-box" id="blastReport">Wählen Sie oben eine Schlüsselperson oder ein Fachverfahren und klicken Sie auf <strong>Blast Radius berechnen</strong>.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let db = null;
+    let lidNetwork = null;
+    const fmt = (n) => new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 }).format(n);
+
+    // Tab-Wechsel
+    document.querySelectorAll("nav button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach((x) => x.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+        b.classList.add("active");
+        document.getElementById("tab-" + b.dataset.tab).classList.add("active");
+        if (b.dataset.tab === "lid-graph") runBlastSimulation();
+      });
+    });
+
+    function seedFallbackDb(SQL) {
+      const mem = new SQL.Database();
+      mem.run(`CREATE TABLE kmu_buchungen (id INT, datum TEXT, monat TEXT, kostenstelle TEXT, kategorie TEXT, kostenart TEXT, lieferant TEXT, projekt TEXT, plan_eur REAL, ist_eur REAL, status TEXT);`);
+      const kb = [
+        [1,"2026-03-02","2026-03","KS-100","Fix","Personal & Hallenmiete","Werkbau Lohn/Miete","Grundbetrieb",175000,175000,"OK"],
+        [2,"2026-03-05","2026-03","KS-100","Variabel","Material & Fertigung","Stahlhandel Weser AG","Projekt Halle 4",68000,68200,"OK"],
+        [3,"2026-03-11","2026-03","KS-100","Variabel","Material & Fertigung","Hanse Blechtechnik","Projekt Logistikpark",50000,49800,"OK"],
+        [4,"2026-03-14","2026-03","KS-100","Variabel","Fremdmontage","NordMontage Partner GmbH","Projekt Halle 4",28000,52400,"AUSREISSER"],
+        [5,"2026-03-21","2026-03","KS-100","Variabel","Fremdmontage","NordMontage Partner GmbH","Projekt Halle 4",24000,38000,"AUSREISSER"],
+        [6,"2026-03-04","2026-03","KS-200","Fix","Vertrieb Grundkosten","Intern Vertrieb","Grundbetrieb",34000,34000,"OK"],
+        [7,"2026-03-18","2026-03","KS-200","Variabel","Provisionen & Reise","Diverse Reise/Prov.","Akquise Q1",58000,57600,"OK"],
+        [8,"2026-03-03","2026-03","KS-300","Fix","ERP & Netz","ERP-Systemhaus Nord","IT-Basis",38800,38800,"OK"],
+        [9,"2026-03-09","2026-03","KS-300","Fix","Cloud-Backup","SafeCloud Backup GmbH","IT-Sicherheit",9200,9200,"OK"],
+        [10,"2026-03-19","2026-03","KS-300","Fix","Cloud-Backup","SafeCloud Backup GmbH","IT-Sicherheit",0,9200,"DOPPELABRECHNUNG"],
+        [11,"2026-03-01","2026-03","KS-400","Fix","Verwaltung","Werkbau Zentrale","Grundbetrieb",85000,85000,"OK"]
+      ];
+      kb.forEach((r) => mem.run("INSERT INTO kmu_buchungen VALUES (?,?,?,?,?,?,?,?,?,?,?)", r));
+
+      mem.run(`CREATE TABLE lid_kontakte (id INT, name TEXT, rolle TEXT, referat TEXT, standort TEXT, gremien TEXT, fachverfahren TEXT, email TEXT, kritikalitaet INT);`);
+      const standorte = ["Zentrale Nord (Hannover)","Regionalstelle Ost (Braunschweig)","Regionalstelle West (Osnabrueck)","Regionalstelle Sued (Goettingen)","Regionalstelle Kueste (Oldenburg)","Regionalstelle Elbe (Lueneburg)","Aussenstelle Heide (Celle)","Aussenstelle Weser (Nienburg)","Aussenstelle Ems (Meppen)","Aussenstelle Harz (Goslar)","Aussenstelle Stade","Aussenstelle Wilhelmshaven"];
+      const refs = ["Ref. 11 Personal & Organisation","Ref. 21 Vergabe & Haushalt","Ref. 31 Fachverfahren","Ref. 32 IT-Betrieb & Sicherheit","Ref. 41 Bau & Liegenschaften","Ref. 51 Foerderprogramme & DigitalPakt"];
+      const grem = ["IT-Lenkungsausschuss","Vergabekammer Nord","Architektur-Board","ISB-Sicherheitskreis","Haushaltsausschuss","DigitalPakt-Netzausbau","eAkte-Steuerkreis","Standortleiter-Runde","Krisenstab IT","eVergabe-Fachgruppe"];
+      const verfahren = ["eAkte / DMS","eVergabe-Portal","HKR","Verzeichnisdienst","Foerderportal"];
+
+      const keys = [
+        [1,"Dr. Sabine Weber","Referatsleitung","Ref. 32 IT-Betrieb & Sicherheit",standorte[0],"IT-Lenkungsausschuss;ISB-Sicherheitskreis;Architektur-Board;Krisenstab IT","eVergabe-Portal;eAkte / DMS;HKR","weber.s@lid.example.de",95],
+        [2,"Kerstin Lindner","Fachreferent/in","Ref. 32 IT-Betrieb & Sicherheit",standorte[0],"Architektur-Board;eAkte-Steuerkreis","eAkte / DMS;Verzeichnisdienst","lindner.k@lid.example.de",80],
+        [3,"Stefan Hartmann","Teamleitung","Ref. 21 Vergabe & Haushalt",standorte[0],"Vergabekammer Nord;Haushaltsausschuss;eVergabe-Fachgruppe","eVergabe-Portal;HKR","hartmann.s@lid.example.de",85],
+        [4,"Dr. Martin Vogt","Abteilungsleitung","Ref. 21 Vergabe & Haushalt",standorte[0],"IT-Lenkungsausschuss;Haushaltsausschuss;Standortleiter-Runde;DigitalPakt-Netzausbau","HKR;eVergabe-Portal","vogt.m@lid.example.de",90],
+        [5,"Anja Krueger","Koordination","Ref. 51 Foerderprogramme & DigitalPakt",standorte[3],"DigitalPakt-Netzausbau;Standortleiter-Runde","eAkte / DMS;Foerderportal","krueger.a@lid.example.de",75]
+      ];
+      keys.forEach((r) => mem.run("INSERT INTO lid_kontakte VALUES (?,?,?,?,?,?,?,?,?)", r));
+      for (let i = 6; i <= 500; i++) {
+        const st = standorte[i % standorte.length];
+        const rf = refs[i % refs.length];
+        const gr = grem[i % grem.length] + (i % 4 === 0 ? ";" + grem[(i + 3) % grem.length] : "");
+        const vf = verfahren[i % verfahren.length];
+        mem.run("INSERT INTO lid_kontakte VALUES (?,?,?,?,?,?,?,?,?)", [
+          i, `Mitarbeitende/r #${String(i).padStart(3,"0")}`, i % 15 === 0 ? "Teamleitung" : "Fachreferent/in",
+          rf, st, gr, vf, `kontakt.${String(i).padStart(3,"0")}@lid.example.de`, i % 15 === 0 ? 55 : 25
+        ]);
+      }
+      return mem;
+    }
+
+    function queryAll(sql, params = []) {
+      const stmt = db.prepare(sql);
+      stmt.bind(params);
+      const out = [];
+      while (stmt.step()) out.push(stmt.getAsObject());
+      stmt.free();
+      return out;
+    }
+
+    function renderKmu(onlyOutliers = false) {
+      const ks = document.getElementById("kmuKsFilter").value;
+      let sql = "SELECT * FROM kmu_buchungen WHERE 1=1";
+      const params = [];
+      if (ks) { sql += " AND kostenstelle = ?"; params.push(ks); }
+      if (onlyOutliers) { sql += " AND status != 'OK'"; }
+      sql += " ORDER BY (ist_eur - plan_eur) DESC";
+      const rows = queryAll(sql, params);
+
+      document.getElementById("kmuTable").innerHTML = rows.map((r) => `
+        <tr>
+          <td>${r.datum}</td>
+          <td><strong>${r.kostenstelle}</strong></td>
+          <td>${r.lieferant}<br/><small style="color:#64748b">${r.projekt}</small></td>
+          <td class="num">${fmt(r.plan_eur)}</td>
+          <td class="num">${fmt(r.ist_eur)}</td>
+          <td><span class="pill ${r.status === 'OK' ? 'ok' : 'danger'}">${r.status}</span></td>
+        </tr>`).join("");
+
+      // KMU-Ursachen-Graph mit Vis.js
+      const nodesMap = new Map();
+      const edges = [];
+      rows.forEach((r) => {
+        const isAlert = r.status !== "OK";
+        nodesMap.set("KS:" + r.kostenstelle, { id: "KS:" + r.kostenstelle, label: r.kostenstelle, color: "#1e293b", font: { color: "#fff" }, shape: "box" });
+        nodesMap.set("PR:" + r.projekt, { id: "PR:" + r.projekt, label: r.projekt, color: "#e2e8f0", shape: "ellipse" });
+        nodesMap.set("LF:" + r.lieferant, { id: "LF:" + r.lieferant, label: r.lieferant, color: isAlert ? "#fee2e2" : "#dcfce7", shape: "box" });
+        edges.push({ from: "KS:" + r.kostenstelle, to: "PR:" + r.projekt, color: isAlert ? "#b91c1c" : "#94a3b8", width: isAlert ? 3 : 1 });
+        edges.push({ from: "PR:" + r.projekt, to: "LF:" + r.lieferant, label: isAlert ? `+${fmt(r.ist_eur - r.plan_eur)}` : "", color: isAlert ? "#b91c1c" : "#94a3b8", width: isAlert ? 3 : 1 });
+      });
+      new vis.Network(document.getElementById("kmuGraph"), { nodes: [...nodesMap.values()], edges }, {
+        layout: { hierarchical: { enabled: true, direction: "LR", sortMethod: "directed", levelSeparation: 180, nodeSpacing: 110 } },
+        physics: { enabled: false },
+        edges: { smooth: { type: "cubicBezier" }, font: { background: "#ffffff", size: 12 } }
+      });
+    }
+
+    function populateLidFilters() {
+      const standorte = queryAll("SELECT DISTINCT standort FROM lid_kontakte ORDER BY standort");
+      const referate = queryAll("SELECT DISTINCT referat FROM lid_kontakte ORDER BY referat");
+      document.getElementById("lidStandort").innerHTML = '<option value="">Alle 12 Standorte</option>' + standorte.map((s) => `<option>${s.standort}</option>`).join("");
+      document.getElementById("lidReferat").innerHTML = '<option value="">Alle Referate</option>' + referate.map((r) => `<option>${r.referat}</option>`).join("");
+    }
+
+    function renderLidTable() {
+      const q = document.getElementById("lidSearch").value.trim().toLowerCase();
+      const st = document.getElementById("lidStandort").value;
+      const rf = document.getElementById("lidReferat").value;
+      const onlyKey = document.getElementById("lidOnlyKey").checked;
+
+      let sql = "SELECT * FROM lid_kontakte WHERE 1=1";
+      const params = [];
+      if (st) { sql += " AND standort = ?"; params.push(st); }
+      if (rf) { sql += " AND referat = ?"; params.push(rf); }
+      if (onlyKey) { sql += " AND kritikalitaet >= 70"; }
+      if (q) { sql += " AND (LOWER(name) LIKE ? OR LOWER(gremien) LIKE ? OR LOWER(fachverfahren) LIKE ?)"; params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
+      sql += " ORDER BY kritikalitaet DESC, id ASC LIMIT 120";
+
+      const rows = queryAll(sql, params);
+      const total = queryAll("SELECT COUNT(*) AS c FROM lid_kontakte")[0].c;
+      document.getElementById("lidCount").textContent = `${rows.length} angezeigt (Gesamtbestand SQLite: ${total} Kontakte)`;
+      document.getElementById("lidTable").innerHTML = rows.map((r) => `
+        <tr>
+          <td><strong>${r.name}</strong></td>
+          <td>${r.rolle}</td>
+          <td>${r.referat}</td>
+          <td>${r.standort}</td>
+          <td>${r.gremien}</td>
+          <td>${r.fachverfahren}</td>
+          <td class="num"><span class="pill ${r.kritikalitaet >= 70 ? 'danger' : 'ok'}">${r.kritikalitaet}</span></td>
+        </tr>`).join("");
+    }
+
+    function runBlastSimulation() {
+      const startId = document.getElementById("blastTarget").value;
+      const maxDepth = parseInt(document.getElementById("blastDepth").value, 10);
+
+      // Aus den Schluesselpersonen & relevanten Gremien einen sauberen, uebersichtlichen Ebenen-Graphen bauen (kein Spinnennetz!)
+      const keyContacts = queryAll("SELECT * FROM lid_kontakte WHERE kritikalitaet >= 70");
+      const allNodes = new Map();
+      const allEdges = [];
+
+      keyContacts.forEach((p) => {
+        const pid = "P:" + p.name;
+        allNodes.set(pid, { id: pid, label: p.name + "\n(" + p.rolle + ")", group: "person", shape: "dot", size: 20 });
+        p.gremien.split(";").forEach((g) => {
+          const gid = "G:" + g.trim();
+          allNodes.set(gid, { id: gid, label: g.trim(), group: "gremium", shape: "box" });
+          allEdges.push({ from: pid, to: gid, label: "Mitglied" });
+        });
+        p.fachverfahren.split(";").forEach((v) => {
+          const vid = "V:" + v.trim();
+          allNodes.set(vid, { id: vid, label: v.trim(), group: "verfahren", shape: "diamond", size: 18 });
+          allEdges.push({ from: pid, to: vid, label: "betreut" });
+        });
+      });
+
+      // BFS Blast-Radius bis maxDepth
+      const dist = new Map([[startId, 0]]);
+      const queue = [startId];
+      while (queue.length) {
+        const curr = queue.shift();
+        const d = dist.get(curr);
+        if (d >= maxDepth) continue;
+        allEdges.forEach((e) => {
+          const nxt = e.from === curr ? e.to : (e.to === curr ? e.from : null);
+          if (nxt && !dist.has(nxt)) {
+            dist.set(nxt, d + 1);
+            queue.push(nxt);
+          }
+        });
+      }
+
+      const visNodes = [...allNodes.values()].map((n) => {
+        const d = dist.get(n.id);
+        let color = "#cbd5e1";
+        if (d === 0) color = "#991b1b";
+        else if (d === 1) color = "#ef4444";
+        else if (d === 2) color = "#f59e0b";
+        return { ...n, color: { background: color, border: "#0f172a" }, font: { color: d === 0 ? "#ffffff" : "#0f172a" } };
+      });
+      const visEdges = allEdges.map((e) => {
+        const hit = dist.has(e.from) && dist.has(e.to);
+        return { ...e, color: hit ? "#b91c1c" : "#e2e8f0", width: hit ? 2.5 : 1 };
+      });
+
+      lidNetwork = new vis.Network(document.getElementById("networkGraph"), { nodes: visNodes, edges: visEdges }, {
+        physics: { stabilization: true, barnesHut: { springLength: 140 } }
+      });
+
+      const affected = [...dist.entries()].filter(([id, d]) => d > 0);
+      const direct = affected.filter(([, d]) => d === 1).map(([id]) => id.slice(2));
+      const indirect = affected.filter(([, d]) => d === 2).map(([id]) => id.slice(2));
+      document.getElementById("blastReport").innerHTML = `
+        <strong>Blast-Radius-Ergebnis für „${startId.slice(2)}“ (Tiefe ${maxDepth}):</strong><br/>
+        • <strong>Direkt betroffen (Ebene 1, rot — ${direct.length} Elemente):</strong> ${direct.join(", ") || "keine"}<br/>
+        • <strong>Indirekt mitbetroffen (Ebene 2, orange — ${indirect.length} Elemente):</strong> ${indirect.join(", ") || "keine"}
+      `;
+    }
+
+    initSqlJs({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/${f}` }).then((SQL) => {
+      db = seedFallbackDb(SQL);
+      document.getElementById("dbStatus").textContent = "SQLite im Browser aktiv (500 LID-Kontakte + KMU-Buchungen)";
+      populateLidFilters();
+      renderKmu(false);
+      renderLidTable();
+
+      document.getElementById("sqliteInput").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          db = new SQL.Database(new Uint8Array(reader.result));
+          document.getElementById("dbStatus").textContent = `Externe SQLite geladen: ${file.name}`;
+          populateLidFilters();
+          renderKmu(false);
+          renderLidTable();
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    });
+
+    document.getElementById("kmuKsFilter").addEventListener("change", () => renderKmu(false));
+    document.getElementById("btnOnlyOutliers").addEventListener("click", () => renderKmu(true));
+    document.getElementById("btnShowAllKmu").addEventListener("click", () => renderKmu(false));
+    ["lidSearch", "lidStandort", "lidReferat", "lidOnlyKey"].forEach((id) =>
+      document.getElementById(id).addEventListener("input", renderLidTable)
+    );
+    document.getElementById("btnSimulateBlast").addEventListener("click", runBlastSimulation);
+  </script>
+</body>
+</html>

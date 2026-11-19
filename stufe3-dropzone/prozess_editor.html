@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lokaler BPMN-Prozess-Editor (LID) — prozess_editor.html</title>
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.9.1/dist/assets/diagram-js.css" />
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.9.1/dist/assets/bpmn-font/css/bpmn.css" />
+  <script src="https://unpkg.com/bpmn-js@17.9.1/dist/bpmn-modeler.development.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; height: 100%; font-family: "Segoe UI", system-ui, sans-serif; display: flex; flex-direction: column; }
+    header {
+      background: #1e293b; color: #f8fafc; padding: 0.75rem 1.25rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    header h1 { margin: 0; font-size: 1.05rem; }
+    .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    button, label.btn {
+      background: #0f766e; color: #fff; border: none; border-radius: 6px;
+      padding: 0.45rem 0.85rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    button.sec, label.btn.sec { background: #334155; }
+    #canvas { flex: 1; background: #ffffff; }
+    footer { background: #f1f5f9; border-top: 1px solid #cbd5e1; padding: 0.4rem 1.25rem; font-size: 0.8rem; color: #475569; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lokaler BPMN-2.0-Prozess-Editor — Landesamt für Infrastruktur und Digitalisierung (LID)</h1>
+    <div class="toolbar">
+      <button class="sec" id="btnNew">Neues Diagramm</button>
+      <label class="btn sec" for="bpmnUpload">.bpmn öffnen</label>
+      <input type="file" id="bpmnUpload" accept=".bpmn,.xml" style="display:none" />
+      <button id="btnDownloadXml">BPMN (.bpmn) speichern</button>
+      <button id="btnDownloadSvg">Grafik (.svg) speichern</button>
+    </div>
+  </header>
+
+  <div id="canvas"></div>
+
+  <footer>
+    100 % lokale Verarbeitung im Browser (Tankdeckel-Prinzip) — öffnen Sie z. B. <code>stufe1-diagramme/behoerde_beschaffung.bpmn</code> per Klick oder Drag-and-Drop.
+  </footer>
+
+  <script>
+    const starterXml = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  id="Definitions_Empty" targetNamespace="http://lid.example.de/bpmn">
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1" name="Start" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="Shape_Start" bpmnElement="StartEvent_1">
+        <dc:Bounds x="180" y="160" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`;
+
+    const modeler = new BpmnJS({ container: "#canvas" });
+
+    async function loadXml(xml) {
+      try {
+        await modeler.importXML(xml);
+        modeler.get("canvas").zoom("fit-viewport");
+      } catch (err) {
+        alert("Fehler beim Laden der BPMN-Datei: " + err.message);
+      }
+    }
+
+    function triggerDownload(content, filename, mime) {
+      const blob = new Blob([content], { type: mime });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    document.getElementById("btnNew").addEventListener("click", () => loadXml(starterXml));
+
+    document.getElementById("bpmnUpload").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => loadXml(ev.target.result);
+      reader.readAsText(file, "UTF-8");
+    });
+
+    document.getElementById("btnDownloadXml").addEventListener("click", async () => {
+      const { xml } = await modeler.saveXML({ format: true });
+      triggerDownload(xml, "lid_prozess_aktualisiert.bpmn", "application/xml");
+    });
+
+    document.getElementById("btnDownloadSvg").addEventListener("click", async () => {
+      const { svg } = await modeler.saveSVG();
+      triggerDownload(svg, "lid_prozess.svg", "image/svg+xml");
+    });
+
+    // Drag-and-Drop direkt auf die Zeichenflaeche
+    const canvasEl = document.getElementById("canvas");
+    canvasEl.addEventListener("dragover", (e) => e.preventDefault());
+    canvasEl.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => loadXml(ev.target.result);
+      reader.readAsText(file, "UTF-8");
+    });
+
+    loadXml(starterXml);
+  </script>
+</body>
+</html>

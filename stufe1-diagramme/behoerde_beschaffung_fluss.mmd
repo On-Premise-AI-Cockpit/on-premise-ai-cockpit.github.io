@@ -1,0 +1,16 @@
+flowchart TD
+    A(["Start: Bedarf im Fachreferat erkannt"]) --> B["Beschaffungsantrag & Leistungsbeschreibung erfassen"]
+    B --> C{"Wert ueber 5.000 EUR netto?"}
+    C -- "Nein (Direktauftrag)" --> D["Referat 21: Mittelverfuegbarkeit pruefen"]
+    C -- "Ja (Vergabeverfahren)" --> E["Referat 32: IT-Sicherheit & Architektur pruefen"]
+    E --> F{"IT-Freigabe erteilt?"}
+    F -- "Nein (Nachbesserung)" --> B
+    F -- "Ja" --> G["Referat 21: Vergaberecht & Haushaltsmittel pruefen"]
+    D --> H["Abteilungsleitung: Zeichnung & Freigabe"]
+    G --> H
+    H --> I(["Bestellung ausloesen & Akte archivieren"])
+
+    style A fill:#1e293b,color:#ffffff
+    style I fill:#065f46,color:#ffffff
+    style C fill:#fef3c7,stroke:#d97706
+    style F fill:#fef3c7,stroke:#d97706

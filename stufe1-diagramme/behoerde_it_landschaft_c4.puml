@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+
+LAYOUT_WITH_LEGEND()
+title System-Context (C4) — Landesamt fuer Infrastruktur und Digitalisierung (LID)
+
+Person(ref, "Fachreferent (12 Standorte)", "Reicht Beschaffungsantraege ein und pflegt Vorgaenge.")
+Person(ref21, "Referat 21 (Vergabe & Haushalt)", "Prueft Haushaltsmittel und steuert Vergaben.")
+Person(ref32, "Referat 32 (IT-Betrieb & ISB)", "Prueft IT-Sicherheit, Architektur und Schnittstellen.")
+
+System(cockpit_lid, "LID Verwaltungs-Cockpit", "Lokales HTML-Cockpit fuer Prozesse, Kontakte & Gremien.")
+
+System_Ext(eakte, "eAkte / DMS", "Revisionssichere Aktenfuehrung und Vorgangsarchiv.")
+System_Ext(evergabe, "eVergabe-Portal", "Oeffentliche Ausschreibungen und Angebotspruefung.")
+System_Ext(hkr, "Haushalts- & Kassenverfahren (HKR)", "Mittelbewirtschaftung, Titelverwaltung und Freigaben.")
+System_Ext(ad, "Verzeichnisdienst / SharePoint", "Stammdaten der 500 Ansprechpartner an 12 Standorten.")
+
+Rel(ref, cockpit_lid, "Nutzt Prozesswegweiser & Kontaktfilter")
+Rel(ref21, evergabe, "Fuehrt Vergabeverfahren durch")
+Rel(ref21, hkr, "Prueft und sperrt Haushaltsmittel")
+Rel(ref32, cockpit_lid, "Prueft Systemabhaengigkeiten (Blast Radius)")
+Rel(evergabe, eakte, "Archiviert Vergabeakten")
+Rel(hkr, eakte, "Uebergibt Bewilligungsbescheide")
+Rel(ad, cockpit_lid, "Liefert exportierte Kontakt- & Gremienlisten", "CSV / SQLite")
+@enduml
