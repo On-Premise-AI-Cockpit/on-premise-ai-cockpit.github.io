@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KI-Cockpit v1.2 (stabil, 2026-11-18) – Werkbau Nord GmbH & LID</title>
+  <!--
+    Das KI-Cockpit – Betriebsfassung 2026-11-18 v1.2 (stabil) = freigegebener Stand nach Stufe 5.
+    Begleit-Monorepo zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
+    Alle mitgelieferten Beispieldaten sind fiktiv. Ihre echten Daten laden Sie erst zur Laufzeit.
+    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Monorepo oder direkt neben dieser Datei),
+    NIE aus dem Internet (Betriebsfassung). Vor der ersten Nutzung libs/libs_herunterladen.ps1 einmal ausführen.
+  -->
+  <style>
+    :root {
+      --bg: #f1f5f9; --surface: #ffffff; --ink: #0f172a; --muted: #475569;
+      --primary: #0f766e; --accent: #1e293b; --warn: #b45309; --danger: #b91c1c;
+      --ok: #15803d; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+    header { background: var(--accent); color: #f8fafc; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    header h1 { margin: 0; font-size: 1.35rem; }
+    header p { margin: 0.2rem 0 0; font-size: 0.88rem; color: #cbd5e1; }
+    .badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.82rem; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    nav button { background: none; border: none; border-bottom: 3px solid transparent; padding: 0.85rem 1.05rem; font-size: 0.93rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    nav button.active { color: var(--primary); border-bottom-color: var(--primary); }
+    nav button .neu { font-size: 0.68rem; background: #ccfbf1; color: #115e59; border-radius: 999px; padding: 0.05rem 0.4rem; margin-left: 0.3rem; vertical-align: middle; }
+    main { max-width: 1280px; margin: 1.5rem auto; padding: 0 1.5rem 3rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.15rem 1.25rem; }
+    .kpi .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi .value { font-size: 1.65rem; font-weight: 700; margin: 0.3rem 0; }
+    .kpi .sub { font-size: 0.85rem; }
+    .ok-txt { color: var(--ok); } .warn-txt { color: var(--warn); } .danger-txt { color: var(--danger); font-weight: 600; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+    .card h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.55rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; background: #f8fafc; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+    .pill.ok { background: #dcfce7; color: #166534; }
+    .pill.warn { background: #fef3c7; color: #92400e; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .hinweis { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 0.8rem 1rem; margin: 0 0 1rem; font-size: 0.9rem; color: #1e3a8a; }
+    .hinweis.gelb { background: #fffbeb; border-color: #fde68a; border-left-color: #d97706; color: #78350f; }
+    .hinweis code { background: rgba(255,255,255,0.7); padding: 0 0.25rem; border-radius: 4px; }
+    .klein { font-size: 0.82rem; color: var(--muted); }
+    select, input, button.btn, textarea { font-family: inherit; }
+    select, input[type="text"], input[type="password"], button.btn { padding: 0.45rem 0.75rem; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); font-size: 0.88rem; }
+    button.btn { cursor: pointer; }
+    button.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    button.btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); font-weight: 600; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; align-items: center; }
+    footer { text-align: center; font-size: 0.82rem; color: var(--muted); padding: 1.5rem; border-top: 1px solid var(--border); }
+    .dropzone { background: var(--surface); border: 2px dashed var(--primary); border-radius: 12px; padding: 1.4rem; text-align: center; margin-bottom: 1.25rem; cursor: pointer; transition: background 0.15s ease; }
+    .dropzone.dragover { background: #ccfbf1; }
+    .dropzone strong { color: var(--primary); font-size: 1.02rem; }
+    .dropzone p { margin: 0.35rem 0 0; font-size: 0.86rem; color: var(--muted); }
+    .graph-box { width: 100%; height: 460px; border: 1px solid var(--border); border-radius: 8px; background: #fafbfc; }
+    .report-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; font-size: 0.9rem; }
+    .report-box ul { margin: 0.3rem 0 0.2rem 1.1rem; padding: 0; }
+    .scroll { max-height: 440px; overflow: auto; }
+    .conn-bar { background: #0f172a; color: #e2e8f0; padding: 0.7rem 1rem; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; font-size: 0.84rem; margin-bottom: 1rem; }
+    .conn-bar input[type="text"], .conn-bar input[type="password"] { background: #1e293b; color: #f8fafc; border: 1px solid #475569; }
+    .subnav { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .subnav button { border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 0.4rem 0.9rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    .subnav button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .sub-panel { display: none; } .sub-panel.active { display: block; }
+    textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem; font-size: 0.9rem; }
+    input.breit { width: 100%; margin-top: 0.6rem; }
+    .out-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-top: 0.85rem; white-space: pre-wrap; font-size: 0.9rem; }
+    .demo-banner { background: #fef3c7; border: 2px dashed #d97706; color: #78350f; border-radius: 8px; padding: 0.6rem 0.9rem; margin-bottom: 1rem; font-weight: 600; font-size: 0.88rem; display: none; }
+    .demo-marke { display: block; font-weight: 700; color: #92400e; margin-bottom: 0.4rem; }
+    .toast { position: fixed; right: 1.5rem; bottom: 1.5rem; background: #0f172a; color: #f8fafc; padding: 0.75rem 1.15rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: none; font-size: 0.88rem; z-index: 999; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>KI-Cockpit – Werkbau Nord GmbH &amp; LID</h1>
+      <p>Betriebsfassung v1.2 (stabil) – freigegebener Stand nach Stufe 5, lädt Bibliotheken nur aus libs/</p>
+    </div>
+    <span class="badge">v1.2 stabil · 2026-11-18</span>
+  </header>
+
+  <nav role="tablist">
+    <button class="active" data-tab="kmu">KMU-Controlling</button>
+    <button data-tab="monat">Monatsabschluss (Dropzone)</button>
+    <button data-tab="behoerde">Behörde: Prozess &amp; Wegweiser</button>
+    <button data-tab="architektur">IT-Architektur</button>
+    <button data-tab="datenbank">Datenbank (SQLite)</button>
+    <button data-tab="graph">Wissensgraph</button>
+    <button data-tab="ki">KI-Assistent (lokal)</button>
+  </nav>
+
+  <main>
+    <div id="libHinweis" class="hinweis gelb" style="display:none"></div>
+
+    <!-- ===== REITER: KMU-CONTROLLING (seit Stufe 2, statische Übersicht Februar 2026) ===== -->
+    <section id="tab-kmu" class="tab-panel active">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">Monats-Plan (gesamt)</div><div class="value">570.000 €</div><div class="sub ok-txt">4 Kostenstellen (KS-100 bis KS-400)</div></div>
+        <div class="kpi"><div class="label">Ist-Kosten Februar 2026</div><div class="value">574.200 €</div><div class="sub warn-txt">+4.200 € (+0,7 % über Plan)</div></div>
+        <div class="kpi"><div class="label">Fixkosten (Plan)</div><div class="value">342.000 €</div><div class="sub ok-txt">60,0 % fixe Strukturkosten</div></div>
+        <div class="kpi"><div class="label">Variable Kosten (Plan)</div><div class="value">228.000 €</div><div class="sub ok-txt">40,0 % auftragsabhängig</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h2>Kostenstellen: Plan vs. Ist Februar 2026</h2><canvas id="chartKostenstellen" height="220"></canvas></div>
+        <div class="card"><h2>Kostenverlauf Q1 (Januar und Februar 2026 vs. Plan)</h2><canvas id="chartVerlauf" height="220"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Detailübersicht der vier Kostenstellen (Februar 2026)</h2>
+        <table>
+          <thead><tr><th>Code</th><th>Kostenstelle</th><th>Typ</th><th class="num">Plan (€)</th><th class="num">Ist Feb. (€)</th><th class="num">Abweichung</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>KS-100</strong></td><td>Produktion &amp; Montage</td><td>Fix + Variabel</td><td class="num">345.000 €</td><td class="num">349.800 €</td><td class="num">+4.800 €</td><td><span class="pill warn">Beobachten</span></td></tr>
+            <tr><td><strong>KS-200</strong></td><td>Vertrieb &amp; Projekte</td><td>Gemischt</td><td class="num">92.000 €</td><td class="num">90.900 €</td><td class="num">-1.100 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+            <tr><td><strong>KS-300</strong></td><td>IT &amp; Infrastruktur</td><td>Fix</td><td class="num">48.000 €</td><td class="num">48.500 €</td><td class="num">+500 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+            <tr><td><strong>KS-400</strong></td><td>Verwaltung &amp; Zentrale</td><td>Fix</td><td class="num">85.000 €</td><td class="num">85.000 €</td><td class="num">0 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+          </tbody>
+        </table>
+        <p class="klein">Fiktive Beispielwerte, fest im Quelltext hinterlegt (Stufe 2). Ab Stufe 3 laden Sie Monatswerte zur Laufzeit über die Dropzone.</p>
+      </div>
+    </section>
+
+    <!-- ===== REITER: MONATSABSCHLUSS MIT DROPZONE (ergänzt in Stufe 3) ===== -->
+    <section id="tab-monat" class="tab-panel">
+      <div class="dropzone" id="dropzone">
+        <strong>DATEV- / Excel-Monatsabschluss (.csv oder .xlsx) hier ablegen – oder klicken</strong>
+        <p>Erwartete Spalten: <code>Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar</code> · Die Datei wird nur im Browser gelesen, nichts wird hochgeladen.</p>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" />
+      </div>
+      <div class="toolbar" style="justify-content:space-between">
+        <div><label for="monthFilter"><strong>Aktiver Berichtsmonat:</strong></label> <select id="monthFilter"></select></div>
+        <div id="statusBar" class="klein">Beispieldaten Januar und Februar 2026 (fiktiv) geladen. Tipp: Ziehen Sie <code>daten/kmu_monatsabschluss_2026-03.csv</code> in die Dropzone.</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">Plan-Kosten (Monat)</div><div class="value" id="kpiPlan">–</div><div class="sub" id="kpiPlanSub"></div></div>
+        <div class="kpi"><div class="label">Ist-Kosten (Monat)</div><div class="value" id="kpiIst">–</div><div class="sub" id="kpiDiff"></div></div>
+        <div class="kpi"><div class="label">Fixkosten (Ist)</div><div class="value" id="kpiFix">–</div><div class="sub" id="kpiFixSub"></div></div>
+        <div class="kpi"><div class="label">Kritische Kostenstellen (&gt; 5 %)</div><div class="value" id="kpiAlerts">–</div><div class="sub" id="kpiAlertsSub"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h2>Kostenstellen: Plan vs. Ist</h2><canvas id="chartBar" height="220"></canvas></div>
+        <div class="card"><h2>Monatsverlauf (alle geladenen Monate)</h2><canvas id="chartLine" height="220"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Detailpositionen im ausgewählten Monat</h2>
+        <table>
+          <thead><tr><th>Kostenstelle</th><th>Kategorie</th><th>Kostenart</th><th class="num">Plan (€)</th><th class="num">Ist (€)</th><th class="num">Abweichung</th><th>Ampel &amp; Kommentar</th></tr></thead>
+          <tbody id="detailBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== REITER: BEHÖRDE – PROZESS & WEGWEISER (seit Stufe 2) ===== -->
+    <section id="tab-behoerde" class="tab-panel">
+      <div class="card">
+        <h2>LID – Prozesswegweiser: IT-Beschaffungsantrag</h2>
+        <p>Der Ablauf aus Stufe 1, eingebettet als Mermaid-Diagramm. Die Wertgrenze von 5.000 € ist eine fiktive Hausregel; maßgeblich sind die Vorgaben Ihres Landes bzw. des Bundes.</p>
+        <div class="mermaid">
+flowchart TD
+    A(["Start: Bedarf im Fachreferat erkannt"]) --> B["Beschaffungsantrag & Leistungsbeschreibung erfassen"]
+    B --> C{"Wert über 5.000 EUR netto?"}
+    C -- "Nein (Direktauftrag)" --> D["Referat 21: Mittelverfügbarkeit prüfen"]
+    C -- "Ja (Vergabeverfahren)" --> E["Referat 32: IT-Sicherheit & Architektur prüfen"]
+    E --> F{"IT-Freigabe erteilt?"}
+    F -- "Nein (Nachbesserung)" --> B
+    F -- "Ja" --> G["Referat 21: Vergaberecht & Haushaltsmittel prüfen"]
+    D --> H["Abteilungsleitung: Zeichnung & Freigabe"]
+    G --> H
+    H --> I(["Bestellung auslösen & Akte archivieren"])
+        </div>
+      </div>
+      <div class="card">
+        <h2>Zuständige Funktionen im Prozess (Auszug LID, fiktiv)</h2>
+        <table>
+          <thead><tr><th>Funktion</th><th>Aufgabe im Ablauf</th><th>Ansprechperson (dienstlich)</th><th>Standort</th><th>Durchlaufzeit (Ziel)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Fachreferat IT-Architektur (Ref. 32)</strong></td><td>IT-Sicherheit, Architektur &amp; ISB-Prüfung</td><td>K. Lindner</td><td>Zentrale Nord</td><td>max. 5 Werktage</td></tr>
+            <tr><td><strong>Teamleitung Vergabestelle (Ref. 21)</strong></td><td>Haushaltsmittel &amp; Vergaberecht</td><td>S. Hartmann</td><td>Zentrale Nord</td><td>max. 7 Werktage</td></tr>
+            <tr><td><strong>Abteilungsleitung Zentrale Dienste</strong></td><td>Schlusszeichnung &amp; Bestellfreigabe</td><td>Dr. M. Vogt</td><td>Zentrale Nord</td><td>max. 3 Werktage</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== REITER: IT-ARCHITEKTUR (seit Stufe 2) ===== -->
+    <section id="tab-architektur" class="tab-panel">
+      <div class="card">
+        <h2>IT-Systemkontext: Werkbau Nord GmbH</h2>
+        <p>Datenquellen, die in den Stufen 3 bis 5 an das lokale Cockpit angebunden werden.</p>
+        <div class="mermaid">
+flowchart LR
+    ERP["ERP / Warenwirtschaft"] --> DATEV["DATEV Finanzbuchhaltung"]
+    ZEIT["Zeiterfassung TimeTrack"] --> DATEV
+    DATEV -->|"CSV / XLSX Export"| COCKPIT["Lokales KI-Cockpit (Browser)"]
+    NAS["Netzlaufwerk L: (PDF & Handbücher)"] --> COCKPIT
+    COCKPIT <-->|"HTTP 127.0.0.1 (Stufe 5)"| OLLAMA["Lokale KI (Ollama)"]
+    GF["Geschäftsführung & Controlling"] --> COCKPIT
+    style COCKPIT fill:#0f766e,color:#ffffff,stroke:#115e59,stroke-width:2px
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REITER: DATENBANK (ergänzt in Stufe 4) ===== -->
+    <section id="tab-datenbank" class="tab-panel">
+      <div id="dbHinweis" class="hinweis gelb" style="display:none"></div>
+      <div class="card">
+        <h2>Datenquelle (Tankdeckel für Datenbanken)</h2>
+        <div class="dropzone" id="dbDropzone">
+          <strong>.sqlite-Datenbank oder Kontakt-/Funktionsliste (.csv) hier ablegen – oder klicken</strong>
+          <p>Beispiele: <code>daten/cockpit_stufe4.sqlite</code> oder <code>daten/behoerde_kontakte_500.csv</code> · Verarbeitung nur im Browser</p>
+          <input type="file" id="dbFileInput" accept=".sqlite,.db,.csv" style="display:none" />
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="btnDbExport">Datenbank als .sqlite speichern</button>
+          <span id="dbStatus" class="klein">Datenbank wird vorbereitet …</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>KMU: Einzelbuchungen März 2026 – welche Kostenstelle läuft aus dem Ruder?</h2>
+        <div class="toolbar">
+          <select id="kmuKsFilter">
+            <option value="">Alle Kostenstellen</option>
+            <option value="KS-100">KS-100 Produktion &amp; Montage</option>
+            <option value="KS-200">KS-200 Vertrieb &amp; Projekte</option>
+            <option value="KS-300">KS-300 IT &amp; Infrastruktur</option>
+            <option value="KS-400">KS-400 Verwaltung &amp; Zentrale</option>
+          </select>
+          <button class="btn danger" id="btnOnlyOutliers">Nur Ausreißer / Doppelabrechnungen zeigen</button>
+          <button class="btn" id="btnShowAllKmu">Alle Buchungen</button>
+        </div>
+        <table>
+          <thead><tr><th>Datum</th><th>KS</th><th>Lieferant / Projekt</th><th class="num">Plan</th><th class="num">Ist</th><th>Status</th></tr></thead>
+          <tbody id="kmuTable"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Behörde (LID): Funktionen, Gremien und Ansprechpersonen</h2>
+        <div class="hinweis">Bewertet wird die <strong>Funktion</strong> (Stelle), nicht die Person: Die Kritikalität beschreibt, wie stark die Organisation von einer Funktion abhängt. Personen erscheinen nur als dienstliche Ansprechpersonen. Bevor Sie echte Daten laden, beteiligen Sie Datenschutz und Personal- bzw. Betriebsrat.</div>
+        <div class="toolbar">
+          <input type="text" id="lidSearch" placeholder="Suche Funktion, Ansprechperson, Gremium, Fachverfahren …" style="min-width:260px" />
+          <select id="lidStandort"><option value="">Alle Standorte</option></select>
+          <select id="lidReferat"><option value="">Alle Referate</option></select>
+          <label class="klein"><input type="checkbox" id="lidOnlyKey" /> Kritische Funktionen (≥ 70)</label>
+          <span id="lidCount" style="margin-left:auto;font-weight:600;color:var(--primary);"></span>
+        </div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Funktion</th><th>Referat</th><th>Standort</th><th>Gremien</th><th>Fachverfahren</th><th class="num">Kritikalität (Funktion)</th><th>Vertretung geregelt</th><th>Ansprechperson</th></tr></thead>
+            <tbody id="lidTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REITER: WISSENSGRAPH (ergänzt in Stufe 4) ===== -->
+    <section id="tab-graph" class="tab-panel">
+      <div id="graphHinweis" class="hinweis gelb" style="display:none"></div>
+      <div class="card">
+        <h2>KMU: Ursachen-Graph Kostenstelle → Projekt → Lieferant (März 2026)</h2>
+        <div id="kmuGraph" class="graph-box" style="height:360px"></div>
+        <p class="klein">Rote Kanten markieren die beiden Ursachen: NordMontage Partner GmbH auf Projekt Halle 4 und die Doppelabrechnung der SafeCloud Backup GmbH.</p>
+      </div>
+      <div class="card">
+        <h2>LID: Auswirkungsanalyse (Blast Radius) – „Funktion unbesetzt / Vertretung nicht geregelt“</h2>
+        <div class="toolbar">
+          <label for="blastTarget"><strong>Szenario:</strong></label>
+          <select id="blastTarget"></select>
+          <select id="blastDepth">
+            <option value="1">Tiefe 1 (direkte Abhängigkeiten)</option>
+            <option value="2" selected>Tiefe 2 (Folgewirkungen)</option>
+          </select>
+          <button class="btn danger" id="btnImpact">Auswirkungen berechnen</button>
+        </div>
+        <div id="networkGraph" class="graph-box"></div>
+        <div class="report-box" id="impactReport">Wählen Sie ein Szenario und klicken Sie auf „Auswirkungen berechnen“.</div>
+        <p class="klein">Der Graph zeigt nur Funktionen mit Kritikalität ≥ 70 sowie deren Gremien und Fachverfahren. Die vollständige Liste steht im Reiter „Datenbank“.</p>
+      </div>
+    </section>
+
+    <!-- ===== REITER: KI-ASSISTENT (ergänzt in Stufe 5) ===== -->
+    <section id="tab-ki" class="tab-panel">
+      <div id="kiHinweis" class="hinweis gelb" style="display:none"></div>
+      <div class="demo-banner" id="demoBanner">DEMO-MODUS: Es läuft keine KI. Angezeigt werden vorbereitete Beispielantworten zu den mitgelieferten Beispieltexten.</div>
+      <form class="conn-bar" id="connForm" onsubmit="return false">
+        <strong>Lokale KI:</strong>
+        <label>Endpunkt <input type="text" id="apiUrl" value="http://localhost:11434/api/chat" size="30" /></label>
+        <label>Modell <input type="text" id="modelName" value="qwen3.5:4b" size="13" /></label>
+        <label>API-Schlüssel (nur llama-server) <input type="password" id="apiKey" size="12" autocomplete="off" /></label>
+        <button class="btn primary" id="btnTestConn">Verbindung prüfen</button>
+        <label><input type="checkbox" id="demoModus" /> Demo-Modus (ohne Ollama)</label>
+        <span id="connStatus" style="margin-left:auto;color:#94a3b8;">Noch nicht geprüft</span>
+      </form>
+      <div class="subnav" id="kiSubnav">
+        <button class="active" data-sub="extraktor">1. Daten-Extraktor</button>
+        <button data-sub="triage">2. Posteingangs-Vorsortierung</button>
+        <button data-sub="orakel">3. Firmen-Orakel</button>
+        <button data-sub="gremien">4. LID-Gremiennetz</button>
+      </div>
+
+      <div class="card sub-panel active" id="sub-extraktor">
+        <h2>Blaupause 1 – Daten-Extraktor (pdf.js + JSON-Strukturzwang)</h2>
+        <p>Laden Sie eine PDF- oder Textrechnung (wird nur im Browser gelesen) oder prüfen Sie die fiktive Beispielrechnung der NordMontage Partner GmbH.</p>
+        <input type="file" id="pdfInput" accept=".pdf,.txt" style="margin-bottom:0.6rem;" />
+        <textarea id="invoiceText" rows="7">RECHNUNG Nr. NM-2026-0418
+Aussteller: NordMontage Partner GmbH, Bremen
+Empfaenger: Werkbau Nord GmbH, Kostenstelle KS-100
+Rechnungsdatum: 21.03.2026 | Zahlungsziel: 04.04.2026 | Projekt: Projekt Halle 4
+Position 1: Fremdmontage Regelstunden = 20.400,00 EUR
+Position 2: Nachtrag Wochenend- und Ueberstundenzuschlag = 17.600,00 EUR
+Nettobetrag gesamt: 38.000,00 EUR | Brutto: 45.220,00 EUR
+Hinweis: Freigabe Bauleitung steht noch aus.</textarea>
+        <button class="btn primary" id="btnExtract">Rechnung lokal extrahieren &amp; ins Journal übernehmen</button>
+        <button class="btn" id="btnExportJson">Ergebnisse als JSON exportieren</button>
+        <div class="out-box" id="extractRaw">Noch keine Extraktion gestartet.</div>
+        <table style="margin-top:0.75rem">
+          <thead><tr><th>Rechnungsnr.</th><th>Lieferant</th><th>Kostenstelle</th><th class="num">Netto (€)</th><th>Prüfhinweis (Vorschlag der KI – bitte prüfen)</th></tr></thead>
+          <tbody id="journal"></tbody>
+        </table>
+      </div>
+
+      <div class="card sub-panel" id="sub-triage">
+        <h2>Blaupause 2 – Posteingangs-Vorsortierung (Triage nach Dringlichkeit &amp; Fachbereich)</h2>
+        <textarea id="triageInput" rows="5">Betreff: 2. Mahnung Rechnung SC-2026-0319 (SafeCloud Backup GmbH)
+Sehr geehrte Damen und Herren, fuer unseren Backup-Vertrag im Maerz 2026 sind noch 9.200 EUR offen. Bitte begleichen Sie den Betrag bis Freitag, sonst erfolgt eine automatische Kontosperrung der Sicherungsserver.</textarea>
+        <button class="btn primary" id="btnTriage">Nachricht lokal klassifizieren</button>
+        <div class="out-box" id="triageResult">Das Ergebnis erscheint hier (Dringlichkeit, Fachbereich, Kurzfassung, empfohlene Maßnahme). Die KI sortiert nur vor, sie verschickt nichts.</div>
+      </div>
+
+      <div class="card sub-panel" id="sub-orakel">
+        <h2>Blaupause 3 – Firmen-Orakel (Fragen an eine interne Richtlinie)</h2>
+        <p>Wissensbasis: fiktive Einkaufs- und Freigaberichtlinie der Werkbau Nord GmbH. Eigene Richtlinien laden Sie zur Laufzeit als Textdatei – nicht fest in den Quelltext schreiben.</p>
+        <input type="file" id="handbookInput" accept=".txt" style="margin-bottom:0.6rem;" />
+        <textarea id="handbookText" rows="6">1. Schwellenwerte: Bis 2.500 EUR Projektleitung; 2.501–15.000 EUR Zweitzeichnung Controlling; ueber 15.000 EUR schriftliche Vorab-Freigabe Geschaeftsfuehrung.
+2. Sonderregel Fremdmontage (KS-100): Nachtraege und Ueberstundenzuschlaege von Subunternehmern duerfen nur nach unterzeichnetem Baustellen-Abnahmeprotokoll ausgezahlt werden. Abweichungen > 10 % binnen 48 Stunden an Geschaeftsfuehrung melden.
+3. IT-Vertraege (KS-300): Doppelte Einzelrechnungen im selben Monat sofort sperren und an IT-Leitung melden.</textarea>
+        <input type="text" class="breit" id="oracleQuestion" value="Darf die Rechnung über 38.000 EUR von NordMontage ohne Abnahmeprotokoll bezahlt werden und wer muss freigeben?" />
+        <button class="btn primary" id="btnOracle">Firmen-Orakel lokal befragen</button>
+        <div class="out-box" id="oracleAnswer">Die Antwort erscheint hier – nur auf Basis der Richtlinie, mit Angabe der maßgeblichen Regel.</div>
+      </div>
+
+      <div class="card sub-panel" id="sub-gremien">
+        <h2>Behörde (LID) – Fragen an das Gremiennetz</h2>
+        <p>Fester Datenauszug: offene Beschlüsse aus der Stufe-4-Datenbank (Tabelle <code>lid_beschluesse</code>). Mit dem Knopf holen Sie den aktuellen Stand per SQL-Abfrage.</p>
+        <button class="btn" id="btnLidFromDb">Offene Beschlüsse aus der Datenbank übernehmen</button>
+        <textarea id="lidContext" rows="5" style="margin-top:0.6rem">Gremium: DigitalPakt-Netzausbau | Standort: Regionalstelle Sued (Goettingen) | Zustaendig (Funktion): Koordination DigitalPakt (Ref. 51), Regionalstelle Sued | Ansprechperson: Anja Krueger | Thema: Glasfaser-Anbindung Berufsschulen Los 3 | Offen seit: 2026-01-19 | Status: Offen (ueberfaellig)
+Gremium: Vergabeausschuss Nord | Standort: Zentrale Nord (Hannover) | Zustaendig (Funktion): Teamleitung Vergabestelle (Ref. 21), Vorsitz Vergabeausschuss Nord | Ansprechperson: Stefan Hartmann | Thema: Rahmenvertrag eVergabe-Schnittstelle | Offen seit: 2026-01-12 | Status: Offen (ueberfaellig)
+Gremium: Architektur-Board | Standort: Zentrale Nord (Hannover) | Zustaendig (Funktion): Fachreferat IT-Architektur (Ref. 32) | Ansprechperson: Kerstin Lindner | Thema: Abloesung Altsystem Liegenschaftskataster | Offen seit: 2026-02-10 | Status: Offen</textarea>
+        <input type="text" class="breit" id="lidQuestion" value="Wer ist für den DigitalPakt-Netzausbau am Standort Süd zuständig, und welche überfälligen Beschlüsse gibt es?" />
+        <button class="btn primary" id="btnLidAsk">Gremiennetz lokal abfragen</button>
+        <div class="out-box" id="lidAnswer">Die Antwort erscheint hier.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Das KI-Cockpit – Begleit-Monorepo: on-premise-ai-cockpit.github.io · Betriebsfassung betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html · <span id="libStatus">Bibliotheken werden geladen …</span>
+  </footer>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ================================================================
+    // BLOCK 1: Konfiguration und Bibliotheken laden
+    // Reihenfolge je Bibliothek: ./libs/ (Betriebsordner wie in Abschnitt 8.1) -> ../libs/ (Monorepo), nie Internet
+    // ================================================================
+    const NUR_LOKAL = true; // true = Betriebsfassung: niemals aus dem Internet nachladen
+    const IST_DATEI = location.protocol === "file:"; // per Doppelklick geöffnet?
+    const LIB_ORDNER = ["./libs/", "../libs/"];
+    const BIBLIOTHEKEN = [
+      { name: "Chart.js 4.4.3", datei: "chart.umd.min.js", pruefen: () => window.Chart, cdn: "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" },
+      { name: "Mermaid 10.9.8", datei: "mermaid.min.js", pruefen: () => window.mermaid, cdn: "https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js" },
+      { name: "PapaParse 5.4.1", datei: "papaparse.min.js", pruefen: () => window.Papa, cdn: "https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" },
+      { name: "SheetJS 0.20.3", datei: "xlsx.full.min.js", pruefen: () => window.XLSX, cdn: "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" },
+      { name: "sql.js 1.10.3", datei: "sql-wasm.js", pruefen: () => window.initSqlJs, cdn: "https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-wasm.js" },
+      { name: "vis-network 9.1.9", datei: "vis-network.min.js", pruefen: () => window.vis && window.vis.Network, cdn: "https://cdn.jsdelivr.net/npm/vis-network@9.1.9/standalone/umd/vis-network.min.js" },
+      { name: "pdf.js 3.11.174", datei: "pdf.min.js", pruefen: () => window.pdfjsLib, cdn: "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js" },
+    ];
+    const libQuelle = {}; // Dateiname -> tatsächlich geladene Adresse
+
+    function ladeSkript(url) {
+      return new Promise((ok, fehler) => {
+        const s = document.createElement("script");
+        s.src = url;
+        s.onload = ok;
+        s.onerror = fehler;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ladeBibliothek(lib) {
+      const kandidaten = LIB_ORDNER.map((ordner) => ordner + lib.datei);
+      if (!NUR_LOKAL) kandidaten.push(lib.cdn);
+      for (const url of kandidaten) {
+        try {
+          await ladeSkript(url);
+          if (lib.pruefen()) { libQuelle[lib.datei] = url; return true; }
+        } catch (e) { /* nächste Quelle versuchen */ }
+      }
+      return false;
+    }
+
+    function verzeichnisVon(url) {
+      return url ? url.slice(0, url.lastIndexOf("/") + 1) : "";
+    }
+
+    // ================================================================
+    // BLOCK 2: Hilfsfunktionen (Texte immer per textContent einsetzen, nie per innerHTML)
+    // ================================================================
+    const fmt = (n) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
+
+    function el(tag, eigenschaften = {}, ...kinder) {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(eigenschaften)) {
+        if (k === "text") e.textContent = v;
+        else if (k === "className") e.className = v;
+        else e.setAttribute(k, v);
+      }
+      kinder.forEach((kind) => e.append(kind));
+      return e;
+    }
+
+    function zeigeHinweis(id, teile) {
+      // teile: Liste aus Texten und [code]-Einträgen, z. B. ["Starten Sie ", ["python -m http.server"], "."]
+      const box = document.getElementById(id);
+      if (!box) return;
+      box.replaceChildren(...teile.map((t) => Array.isArray(t) ? el("code", { text: t[0] }) : document.createTextNode(t)));
+      box.style.display = "block";
+    }
+
+    // ================================================================
+    // BLOCK 3: Reiter-Navigation
+    // ================================================================
+    const tabAktionen = {}; // Reiter-Name -> Funktion, die beim Öffnen läuft
+
+    document.querySelectorAll("nav button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        const panel = document.getElementById("tab-" + btn.dataset.tab);
+        panel.classList.add("active");
+        renderMermaidInPanel(panel);
+        if (tabAktionen[btn.dataset.tab]) tabAktionen[btn.dataset.tab]();
+      });
+    });
+
+    async function renderMermaidInPanel(panel) {
+      if (!window.mermaid) return;
+      const blocks = panel.querySelectorAll(".mermaid:not([data-processed])");
+      if (blocks.length > 0) await mermaid.run({ nodes: blocks });
+    }
+
+    // ================================================================
+    // BLOCK 4: Stufe 2 – statische Übersicht (fiktive Beispielwerte Februar 2026)
+    // ================================================================
+    function zeichneStatischeCharts() {
+      new Chart(document.getElementById("chartKostenstellen"), {
+        type: "bar",
+        data: {
+          labels: ["KS-100 Produktion", "KS-200 Vertrieb", "KS-300 IT", "KS-400 Verwaltung"],
+          datasets: [
+            { label: "Plan (€)", data: [345000, 92000, 48000, 85000], backgroundColor: "#94a3b8" },
+            { label: "Ist Feb. (€)", data: [349800, 90900, 48500, 85000], backgroundColor: "#0f766e" }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
+      });
+      new Chart(document.getElementById("chartVerlauf"), {
+        type: "line",
+        data: {
+          labels: ["Januar 2026", "Februar 2026", "März 2026 (offen)"],
+          datasets: [
+            { label: "Plan (€)", data: [570000, 570000, 570000], borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+            { label: "Ist (€)", data: [566400, 574200, null], borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.25 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { suggestedMin: 540000, suggestedMax: 600000 } } }
+      });
+    }
+
+    // ================================================================
+    // BLOCK 5: Stufe 3 – Dropzone (Tankdeckel-Prinzip: Daten kommen zur Laufzeit)
+    // ================================================================
+    // Fiktive Start-Beispieldaten (Januar und Februar 2026), damit der Reiter nicht leer ist
+    let allRows = [
+      { Monat: "2026-01", Kostenstelle: "KS-100", Kategorie: "Fix", Kostenart: "Personal & Hallenmiete", Plan_EUR: 175000, Ist_EUR: 175000, Kommentar: "Plangemaess" },
+      { Monat: "2026-01", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Material & Fertigung", Plan_EUR: 118000, Ist_EUR: 115200, Kommentar: "Geringerer Stahlabruf" },
+      { Monat: "2026-01", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Fremdmontage & Subunternehmer", Plan_EUR: 52000, Ist_EUR: 50800, Kommentar: "Planmaessig" },
+      { Monat: "2026-01", Kostenstelle: "KS-200", Kategorie: "Fix", Kostenart: "Vertrieb Grundkosten", Plan_EUR: 34000, Ist_EUR: 34000, Kommentar: "Plangemaess" },
+      { Monat: "2026-01", Kostenstelle: "KS-200", Kategorie: "Variabel", Kostenart: "Provisionen & Reisekosten", Plan_EUR: 58000, Ist_EUR: 58400, Kommentar: "Messebesuch Nord" },
+      { Monat: "2026-01", Kostenstelle: "KS-300", Kategorie: "Fix", Kostenart: "ERP-Lizenzen, Netz & Wartung", Plan_EUR: 48000, Ist_EUR: 48000, Kommentar: "Stabil" },
+      { Monat: "2026-01", Kostenstelle: "KS-400", Kategorie: "Fix", Kostenart: "Verwaltung & Zentrale", Plan_EUR: 85000, Ist_EUR: 85000, Kommentar: "Plangemaess" },
+      { Monat: "2026-02", Kostenstelle: "KS-100", Kategorie: "Fix", Kostenart: "Personal & Hallenmiete", Plan_EUR: 175000, Ist_EUR: 175000, Kommentar: "Plangemaess" },
+      { Monat: "2026-02", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Material & Fertigung", Plan_EUR: 118000, Ist_EUR: 119800, Kommentar: "Blechpreise +1,5 %" },
+      { Monat: "2026-02", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Fremdmontage & Subunternehmer", Plan_EUR: 52000, Ist_EUR: 55000, Kommentar: "Erste Ueberstunden Halle 4" },
+      { Monat: "2026-02", Kostenstelle: "KS-200", Kategorie: "Fix", Kostenart: "Vertrieb Grundkosten", Plan_EUR: 34000, Ist_EUR: 34000, Kommentar: "Plangemaess" },
+      { Monat: "2026-02", Kostenstelle: "KS-200", Kategorie: "Variabel", Kostenart: "Provisionen & Reisekosten", Plan_EUR: 58000, Ist_EUR: 56900, Kommentar: "Weniger Reisekosten" },
+      { Monat: "2026-02", Kostenstelle: "KS-300", Kategorie: "Fix", Kostenart: "ERP-Lizenzen, Netz & Wartung", Plan_EUR: 48000, Ist_EUR: 48500, Kommentar: "Ersatzteile" },
+      { Monat: "2026-02", Kostenstelle: "KS-400", Kategorie: "Fix", Kostenart: "Verwaltung & Zentrale", Plan_EUR: 85000, Ist_EUR: 85000, Kommentar: "Plangemaess" }
+    ];
+    let barChart = null, lineChart = null;
+
+    // Robuste Zahlenkonvertierung für deutsches Format ("38.400,50 €" -> 38400.5)
+    function parseEuro(val) {
+      if (typeof val === "number") return val;
+      if (!val) return 0;
+      const cleaned = String(val).replace(/[€\s]/g, "").replace(/\.(?=\d{3})/g, "").replace(",", ".");
+      return parseFloat(cleaned) || 0;
+    }
+
+    function normalizeRows(raw) {
+      return raw
+        .filter((r) => r && (r.Kostenstelle || r.kostenstelle))
+        .map((r) => ({
+          Monat: String(r.Monat || r.monat || "Unbekannt").trim(),
+          Kostenstelle: String(r.Kostenstelle || r.kostenstelle).trim(),
+          Kategorie: String(r.Kategorie || r.kategorie || "Fix").trim(),
+          Kostenart: String(r.Kostenart || r.kostenart || "-").trim(),
+          Plan_EUR: parseEuro(r.Plan_EUR ?? r.Plan ?? 0),
+          Ist_EUR: parseEuro(r.Ist_EUR ?? r.Ist ?? 0),
+          Kommentar: String(r.Kommentar || r.kommentar || "").trim()
+        }));
+    }
+
+    function populateMonths() {
+      const months = [...new Set(allRows.map((r) => r.Monat))].sort();
+      const sel = document.getElementById("monthFilter");
+      sel.replaceChildren(...months.map((m) => new Option(m, m)));
+      sel.value = months[months.length - 1];
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const activeMonth = document.getElementById("monthFilter").value;
+      const rows = allRows.filter((r) => r.Monat === activeMonth);
+      const sumPlan = rows.reduce((s, r) => s + r.Plan_EUR, 0);
+      const sumIst = rows.reduce((s, r) => s + r.Ist_EUR, 0);
+      const diff = sumIst - sumPlan;
+      const pct = sumPlan ? (diff / sumPlan) * 100 : 0;
+      const sumFix = rows.filter((r) => r.Kategorie.toLowerCase().startsWith("fix")).reduce((s, r) => s + r.Ist_EUR, 0);
+
+      const ksMap = {};
+      rows.forEach((r) => {
+        if (!ksMap[r.Kostenstelle]) ksMap[r.Kostenstelle] = { plan: 0, ist: 0 };
+        ksMap[r.Kostenstelle].plan += r.Plan_EUR;
+        ksMap[r.Kostenstelle].ist += r.Ist_EUR;
+      });
+      const ksKeys = Object.keys(ksMap).sort();
+      const abw = (k) => (ksMap[k].ist - ksMap[k].plan) / (ksMap[k].plan || 1);
+      const alerts = ksKeys.filter((k) => ksMap[k].plan > 0 && abw(k) > 0.05);
+
+      document.getElementById("kpiPlan").textContent = fmt(sumPlan);
+      document.getElementById("kpiPlanSub").textContent = `${ksKeys.length} Kostenstellen in ${activeMonth}`;
+      document.getElementById("kpiIst").textContent = fmt(sumIst);
+      const diffEl = document.getElementById("kpiDiff");
+      diffEl.textContent = `${diff >= 0 ? "+" : ""}${fmt(diff)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1).replace(".", ",")} %)`;
+      diffEl.className = "sub " + (pct > 5 ? "danger-txt" : (pct > 0.5 ? "warn-txt" : "ok-txt"));
+      document.getElementById("kpiFix").textContent = fmt(sumFix);
+      document.getElementById("kpiFixSub").textContent = `${sumIst ? ((sumFix / sumIst) * 100).toFixed(1).replace(".", ",") : 0} % der Ist-Kosten`;
+      document.getElementById("kpiAlerts").textContent = alerts.length;
+      const alEl = document.getElementById("kpiAlertsSub");
+      alEl.textContent = alerts.length ? `ALARM: ${alerts.join(", ")}` : "Alle Kostenstellen im Korridor";
+      alEl.className = "sub " + (alerts.length ? "danger-txt" : "ok-txt");
+
+      if (window.Chart) {
+        if (barChart) barChart.destroy();
+        barChart = new Chart(document.getElementById("chartBar"), {
+          type: "bar",
+          data: {
+            labels: ksKeys,
+            datasets: [
+              { label: "Plan (€)", data: ksKeys.map((k) => ksMap[k].plan), backgroundColor: "#94a3b8" },
+              { label: "Ist (€)", data: ksKeys.map((k) => ksMap[k].ist), backgroundColor: ksKeys.map((k) => abw(k) > 0.05 ? "#b91c1c" : "#0f766e") }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
+        });
+        const months = [...new Set(allRows.map((r) => r.Monat))].sort();
+        const summe = (m, feld) => allRows.filter((r) => r.Monat === m).reduce((s, r) => s + r[feld], 0);
+        if (lineChart) lineChart.destroy();
+        lineChart = new Chart(document.getElementById("chartLine"), {
+          type: "line",
+          data: {
+            labels: months,
+            datasets: [
+              { label: "Plan (€)", data: months.map((m) => summe(m, "Plan_EUR")), borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+              { label: "Ist (€)", data: months.map((m) => summe(m, "Ist_EUR")), borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.2 }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+        });
+      }
+
+      // Tabelle: Werte aus der Datei werden als Text eingesetzt (Schutz vor eingeschleustem HTML)
+      document.getElementById("detailBody").replaceChildren(...rows.map((r) => {
+        const d = r.Ist_EUR - r.Plan_EUR;
+        const p = r.Plan_EUR ? (d / r.Plan_EUR) * 100 : 0;
+        const ampel = p > 5 ? el("span", { className: "pill danger", text: `ALARM (+${p.toFixed(1).replace(".", ",")} %)` })
+                    : p > 1 ? el("span", { className: "pill warn", text: "Beobachten" })
+                    : el("span", { className: "pill ok", text: "OK" });
+        return el("tr", {},
+          el("td", {}, el("strong", { text: r.Kostenstelle })),
+          el("td", { text: r.Kategorie }),
+          el("td", { text: r.Kostenart }),
+          el("td", { className: "num", text: fmt(r.Plan_EUR) }),
+          el("td", { className: "num", text: fmt(r.Ist_EUR) }),
+          el("td", { className: "num", text: `${d >= 0 ? "+" : ""}${fmt(d)}` }),
+          el("td", {}, ampel, " " + r.Kommentar));
+      }));
+    }
+
+    function handleFile(file) {
+      if (!file) return;
+      const ext = file.name.split(".").pop().toLowerCase();
+      const fertig = (rows, art) => {
+        allRows = rows;
+        document.getElementById("statusBar").textContent = `${art} lokal eingelesen: ${file.name} (${allRows.length} Zeilen)`;
+        populateMonths();
+      };
+      if (ext === "csv") {
+        if (!window.Papa) { document.getElementById("statusBar").textContent = "PapaParse fehlt – siehe Hinweis oben."; return; }
+        Papa.parse(file, { header: true, skipEmptyLines: true, complete: (res) => fertig(normalizeRows(res.data), "CSV") });
+      } else if (ext === "xlsx" || ext === "xls") {
+        if (!window.XLSX) { document.getElementById("statusBar").textContent = "SheetJS fehlt – siehe Hinweis oben."; return; }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const wb = XLSX.read(new Uint8Array(e.target.result), { type: "array" });
+          fertig(normalizeRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]])), "Excel-Datei");
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        document.getElementById("statusBar").textContent = "Bitte eine .csv- oder .xlsx-Datei verwenden.";
+      }
+    }
+
+    function initDropzone() {
+      const dz = document.getElementById("dropzone");
+      const fi = document.getElementById("fileInput");
+      dz.addEventListener("click", () => fi.click());
+      fi.addEventListener("change", (e) => handleFile(e.target.files[0]));
+      dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+      dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+      dz.addEventListener("drop", (e) => { e.preventDefault(); dz.classList.remove("dragover"); handleFile(e.dataTransfer.files[0]); });
+      document.getElementById("monthFilter").addEventListener("change", renderDashboard);
+      populateMonths();
+      tabAktionen.monat = () => { if (barChart) { barChart.resize(); lineChart.resize(); } };
+    }
+
+    // ================================================================
+    // BLOCK 6: Stufe 4 – SQLite-Datenbank (sql.js) und Wissensgraph (vis-network)
+    // ================================================================
+    let SQL = null;   // sql.js-Modul
+    let db = null;    // aktive Datenbank
+    let kmuGraphGezeichnet = false;
+
+    const SCHEMA_LID = `
+      CREATE TABLE IF NOT EXISTS lid_funktionen (id INTEGER PRIMARY KEY, funktion TEXT, ebene TEXT, referat TEXT, standort TEXT,
+        gremien TEXT, fachverfahren TEXT, kritikalitaet INTEGER, vertretung_geregelt TEXT);
+      CREATE TABLE IF NOT EXISTS lid_kontakte (id INTEGER PRIMARY KEY, name TEXT, funktion_id INTEGER, email TEXT);
+      CREATE VIEW IF NOT EXISTS lid_uebersicht AS
+        SELECT f.id, f.funktion, f.ebene, f.referat, f.standort, f.gremien, f.fachverfahren, f.kritikalitaet,
+               f.vertretung_geregelt, k.name AS ansprechpartner, k.email
+        FROM lid_funktionen f LEFT JOIN lid_kontakte k ON k.funktion_id = f.id;`;
+
+    function queryAll(sql, params = []) {
+      const stmt = db.prepare(sql);
+      stmt.bind(params);
+      const out = [];
+      while (stmt.step()) out.push(stmt.getAsObject());
+      stmt.free();
+      return out;
+    }
+
+    function tabelleVorhanden(name) {
+      return db && queryAll("SELECT name FROM sqlite_master WHERE name = ?", [name]).length > 0;
+    }
+
+    // Eingebauter Ersatzbestand: fiktiv, mit denselben Eckzahlen wie daten/cockpit_stufe4.sqlite
+    // (500 Ansprechpersonen, 12 Standorte, 8 Referate, 18 Gremien, 5 Fachverfahren, Kritikalität 10–95)
+    function erzeugeErsatzbestand() {
+      const mem = new SQL.Database();
+      mem.run(`CREATE TABLE kmu_buchungen (id INTEGER PRIMARY KEY, datum TEXT, monat TEXT, kostenstelle TEXT, kategorie TEXT, kostenart TEXT,
+        lieferant TEXT, projekt TEXT, plan_eur REAL, ist_eur REAL, status TEXT);`);
+      [
+        [1, "2026-03-02", "2026-03", "KS-100", "Fix", "Personal & Hallenmiete", "Werkbau Lohn/Miete", "Grundbetrieb", 175000, 175000, "OK"],
+        [2, "2026-03-05", "2026-03", "KS-100", "Variabel", "Material & Fertigung", "Stahlhandel Weser AG", "Projekt Halle 4", 68000, 68200, "OK"],
+        [3, "2026-03-11", "2026-03", "KS-100", "Variabel", "Material & Fertigung", "Hanse Blechtechnik", "Projekt Logistikpark", 50000, 49800, "OK"],
+        [4, "2026-03-14", "2026-03", "KS-100", "Variabel", "Fremdmontage & Subunternehmer", "NordMontage Partner GmbH", "Projekt Halle 4", 28000, 52400, "AUSREISSER"],
+        [5, "2026-03-21", "2026-03", "KS-100", "Variabel", "Fremdmontage & Subunternehmer", "NordMontage Partner GmbH", "Projekt Halle 4", 24000, 38000, "AUSREISSER"],
+        [6, "2026-03-04", "2026-03", "KS-200", "Fix", "Vertrieb Grundkosten", "Intern Vertrieb", "Grundbetrieb", 34000, 34000, "OK"],
+        [7, "2026-03-18", "2026-03", "KS-200", "Variabel", "Provisionen & Reisekosten", "Diverse Reise/Prov.", "Akquise Q1", 58000, 57600, "OK"],
+        [8, "2026-03-03", "2026-03", "KS-300", "Fix", "ERP-Lizenzen, Netz & Wartung", "ERP-Systemhaus Nord", "IT-Basis", 38800, 38800, "OK"],
+        [9, "2026-03-09", "2026-03", "KS-300", "Fix", "ERP-Lizenzen, Netz & Wartung", "SafeCloud Backup GmbH", "IT-Sicherheit", 9200, 9200, "OK"],
+        [10, "2026-03-19", "2026-03", "KS-300", "Fix", "ERP-Lizenzen, Netz & Wartung", "SafeCloud Backup GmbH", "IT-Sicherheit", 0, 9200, "DOPPELABRECHNUNG"],
+        [11, "2026-03-01", "2026-03", "KS-400", "Fix", "Verwaltung & Zentrale", "Werkbau Zentrale", "Grundbetrieb", 85000, 85000, "OK"]
+      ].forEach((r) => mem.run("INSERT INTO kmu_buchungen VALUES (?,?,?,?,?,?,?,?,?,?,?)", r));
+
+      mem.run(`CREATE TABLE lid_beschluesse (id INTEGER PRIMARY KEY, gremium TEXT, standort TEXT, zustaendig TEXT, ansprechpartner TEXT,
+        thema TEXT, offen_seit TEXT, status TEXT);`);
+      [
+        [1, "DigitalPakt-Netzausbau", "Regionalstelle Sued (Goettingen)", "Koordination DigitalPakt (Ref. 51), Regionalstelle Sued", "Anja Krueger", "Glasfaser-Anbindung Berufsschulen Los 3", "2026-01-19", "Offen (ueberfaellig)"],
+        [2, "IT-Lenkungsausschuss", "Zentrale Nord (Hannover)", "Referatsleitung Ref. 32 IT-Betrieb & Sicherheit", "Dr. Sabine Weber", "Freigabe lokales KI-Cockpit (Offline /libs)", "2026-02-28", "In Pruefung"],
+        [3, "Vergabeausschuss Nord", "Zentrale Nord (Hannover)", "Teamleitung Vergabestelle (Ref. 21), Vorsitz Vergabeausschuss Nord", "Stefan Hartmann", "Rahmenvertrag eVergabe-Schnittstelle", "2026-01-12", "Offen (ueberfaellig)"],
+        [4, "Architektur-Board", "Zentrale Nord (Hannover)", "Fachreferat IT-Architektur (Ref. 32)", "Kerstin Lindner", "Abloesung Altsystem Liegenschaftskataster", "2026-02-10", "Offen"]
+      ].forEach((r) => mem.run("INSERT INTO lid_beschluesse VALUES (?,?,?,?,?,?,?,?)", r));
+
+      mem.run(SCHEMA_LID);
+      const standorte = ["Zentrale Nord (Hannover)", "Regionalstelle Ost (Braunschweig)", "Regionalstelle West (Osnabrueck)", "Regionalstelle Sued (Goettingen)",
+        "Regionalstelle Kueste (Oldenburg)", "Regionalstelle Elbe (Lueneburg)", "Aussenstelle Heide (Celle)", "Aussenstelle Weser (Nienburg)",
+        "Aussenstelle Ems (Meppen)", "Aussenstelle Harz (Goslar)", "Aussenstelle Stade", "Aussenstelle Wilhelmshaven"];
+      const referate = ["Ref. 11 Personal & Organisation", "Ref. 21 Vergabe & Haushalt", "Ref. 22 Recht & Pruefung", "Ref. 31 Fachverfahren",
+        "Ref. 32 IT-Betrieb & Sicherheit", "Ref. 41 Bau & Liegenschaften", "Ref. 42 Infrastruktur & Netze", "Ref. 51 Foerderprogramme & DigitalPakt"];
+      const gremien = ["IT-Lenkungsausschuss", "Vergabeausschuss Nord", "Architektur-Board", "ISB-Sicherheitskreis", "Haushaltsausschuss",
+        "DigitalPakt-Netzausbau", "eAkte-Steuerkreis", "Standortleiter-Runde", "Krisenstab IT", "eVergabe-Fachgruppe", "KI-Pilotgruppe",
+        "Qualitaetszirkel Prozesse", "Datenschutz-Arbeitskreis", "Liegenschafts-Konferenz", "Cloud-Pruefgruppe", "Barrierefreiheit-Beirat",
+        "Fortbildungs-Gremium", "Personalrat-Digitalisierung"];
+      const verfahren = ["eAkte / DMS", "eVergabe-Portal", "HKR", "Verzeichnisdienst", "Foerderportal"];
+      const ebenen = ["Sachbearbeitung", "Fachreferat", "Sachbearbeitung", "Teamleitung", "Sachbearbeitung", "Fachreferat", "Stellvertretung", "Koordination"];
+      const schluessel = [
+        [1, "Referatsleitung Ref. 32 IT-Betrieb & Sicherheit", "Referatsleitung", referate[4], standorte[0], "IT-Lenkungsausschuss;ISB-Sicherheitskreis;Architektur-Board;Krisenstab IT", "eVergabe-Portal;eAkte / DMS;HKR", 95, "nein", "Dr. Sabine Weber", "weber.s@lid.example.de"],
+        [2, "Fachreferat IT-Architektur (Ref. 32)", "Fachreferat", referate[4], standorte[0], "Architektur-Board;KI-Pilotgruppe;eAkte-Steuerkreis", "eAkte / DMS;Verzeichnisdienst", 80, "nein", "Kerstin Lindner", "lindner.k@lid.example.de"],
+        [3, "Teamleitung Vergabestelle (Ref. 21), Vorsitz Vergabeausschuss Nord", "Teamleitung", referate[1], standorte[0], "Vergabeausschuss Nord;Haushaltsausschuss;eVergabe-Fachgruppe", "eVergabe-Portal;HKR", 85, "ja", "Stefan Hartmann", "hartmann.s@lid.example.de"],
+        [4, "Abteilungsleitung Zentrale Dienste", "Abteilungsleitung", referate[1], standorte[0], "IT-Lenkungsausschuss;Haushaltsausschuss;Standortleiter-Runde;DigitalPakt-Netzausbau", "HKR;eVergabe-Portal", 90, "ja", "Dr. Martin Vogt", "vogt.m@lid.example.de"],
+        [5, "Koordination DigitalPakt (Ref. 51), Regionalstelle Sued", "Koordination", referate[7], standorte[3], "DigitalPakt-Netzausbau;Standortleiter-Runde;Qualitaetszirkel Prozesse", "eAkte / DMS;Foerderportal", 75, "ja", "Anja Krueger", "krueger.a@lid.example.de"]
+      ];
+      const fuegeEin = (r) => {
+        mem.run("INSERT INTO lid_funktionen VALUES (?,?,?,?,?,?,?,?,?)", r.slice(0, 9));
+        mem.run("INSERT INTO lid_kontakte VALUES (?,?,?,?)", [r[0], r[9], r[0], r[10]]);
+      };
+      schluessel.forEach(fuegeEin);
+      for (let i = 6; i <= 500; i++) {
+        const nr = String(i).padStart(3, "0");
+        const ebene = ebenen[i % ebenen.length];
+        const referat = referate[i % referate.length];
+        const gr = gremien[i % gremien.length] + (i % 4 === 0 ? ";" + gremien[(i + 5) % gremien.length] : "");
+        fuegeEin([i, `${ebene} ${referat}`, ebene, referat, standorte[i % standorte.length], gr, verfahren[i % verfahren.length],
+          10 + ((i * 37) % 56), i % 11 === 0 ? "nein" : "ja", `Ansprechperson ${nr}`, `kontakt.${nr}@lid.example.de`]);
+      }
+      return mem;
+    }
+
+    function setzeDatenbank(neueDb, quelle) {
+      db = neueDb;
+      document.getElementById("dbStatus").textContent = `Aktive Datenquelle: ${quelle}`;
+      populateLidFilters();
+      renderKmu(false);
+      renderLidTable();
+      fuelleSzenarien();
+      kmuGraphGezeichnet = false;
+      if (document.getElementById("tab-graph").classList.contains("active")) tabAktionen.graph();
+    }
+
+    async function initDatenbank() {
+      if (typeof initSqlJs !== "function") {
+        datenbankNichtVerfuegbar(["Die Bibliothek sql.js wurde nicht gefunden (weder im Ordner libs/ noch im Internet). Führen Sie einmal ", ["libs/libs_herunterladen.ps1"], " aus."]);
+        return;
+      }
+      try {
+        const basis = verzeichnisVon(libQuelle["sql-wasm.js"]);
+        const zeitlimit = new Promise((_, nein) => setTimeout(() => nein(new Error("Zeitlimit")), 10000));
+        SQL = await Promise.race([initSqlJs({ locateFile: (f) => basis + f }), zeitlimit]);
+      } catch (e) {
+        datenbankNichtVerfuegbar(IST_DATEI
+          ? ["Sie haben das Cockpit per Doppelklick geöffnet. Der Browser blockiert dann das Nachladen der Datenbank-Engine (sql-wasm.wasm). Starten Sie den lokalen Mini-Server im Cockpit-Ordner: ",
+             ["python -m http.server 8000 --bind 127.0.0.1"], " und öffnen Sie ", ["http://127.0.0.1:8000/"], ". Alle übrigen Reiter funktionieren weiter."]
+          : ["Die Datenbank-Engine (sql-wasm.wasm) konnte nicht geladen werden. Prüfen Sie, ob sql-wasm.wasm neben sql-wasm.js im Ordner libs/ liegt."]);
+        return;
+      }
+      if (IST_DATEI) {
+        zeigeHinweis("dbHinweis", ["Per Doppelklick geöffnet: Die Datenbank läuft hier nur, weil sql.js aus dem Internet kam. Ohne Internet (Ordner libs/) brauchen Sie den lokalen Mini-Server ",
+          ["python -m http.server 8000 --bind 127.0.0.1"], ". Die Beispieldatenbank wählen Sie oben per Klick aus."]);
+      } else {
+        for (const pfad of ["./daten/cockpit_stufe4.sqlite", "../daten/cockpit_stufe4.sqlite"]) {
+          try {
+            const r = await fetch(pfad);
+            if (r.ok) { setzeDatenbank(new SQL.Database(new Uint8Array(await r.arrayBuffer())), `Beispieldatenbank ${pfad} (fiktiv)`); return; }
+          } catch (e) { /* nächsten Pfad versuchen */ }
+        }
+      }
+      setzeDatenbank(erzeugeErsatzbestand(), "eingebauter Ersatzbestand (fiktiv, gleiche Eckzahlen wie die Beispieldatenbank)");
+    }
+
+    function datenbankNichtVerfuegbar(teile) {
+      zeigeHinweis("dbHinweis", teile);
+      zeigeHinweis("graphHinweis", teile);
+      document.getElementById("dbStatus").textContent = "Datenbank nicht verfügbar";
+    }
+
+    function ladeDbDatei(file) {
+      if (!file) return;
+      if (!SQL) { document.getElementById("dbStatus").textContent = "Die Datenbank-Engine ist nicht geladen – siehe Hinweis oben."; return; }
+      const ext = file.name.split(".").pop().toLowerCase();
+      if (ext === "csv") {
+        if (!window.Papa) { document.getElementById("dbStatus").textContent = "PapaParse fehlt für den CSV-Import."; return; }
+        Papa.parse(file, { header: true, skipEmptyLines: true, complete: (res) => importiereKontaktCsv(res.data, file.name) });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { setzeDatenbank(new SQL.Database(new Uint8Array(reader.result)), `${file.name} (lokal geladen)`); }
+        catch (e) { document.getElementById("dbStatus").textContent = `Keine gültige SQLite-Datei: ${file.name}`; }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // CSV im Format von daten/behoerde_kontakte_500.csv in die Tabellen lid_funktionen und lid_kontakte übernehmen
+    function importiereKontaktCsv(zeilen, dateiname) {
+      if (!db) db = new SQL.Database();
+      db.run("DROP VIEW IF EXISTS lid_uebersicht; DROP TABLE IF EXISTS lid_kontakte; DROP TABLE IF EXISTS lid_funktionen;");
+      db.run(SCHEMA_LID);
+      let n = 0;
+      zeilen.forEach((z) => {
+        const id = parseInt(z.ID, 10);
+        if (!id) return;
+        db.run("INSERT INTO lid_funktionen VALUES (?,?,?,?,?,?,?,?,?)", [id, z.Funktion || "", z.Ebene || "", z.Referat || "", z.Standort || "",
+          z.Gremien || "", z.Fachverfahren || "", parseInt(z.Kritikalitaet_Funktion, 10) || 0, z.Vertretung_geregelt || ""]);
+        db.run("INSERT INTO lid_kontakte VALUES (?,?,?,?)", [id, z.Ansprechpartner || "", id, z.Email || ""]);
+        n++;
+      });
+      setzeDatenbank(db, `${dateiname} importiert (${n} Funktionen)`);
+    }
+
+    function exportiereDatenbank() {
+      if (!db) return;
+      const blob = new Blob([db.export()], { type: "application/x-sqlite3" });
+      const a = el("a", { href: URL.createObjectURL(blob), download: "cockpit_stufe4.sqlite" });
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function renderKmu(onlyOutliers = false) {
+      const tbody = document.getElementById("kmuTable");
+      if (!tabelleVorhanden("kmu_buchungen")) { tbody.replaceChildren(el("tr", {}, el("td", { colspan: "6", text: "Tabelle kmu_buchungen ist in dieser Datenbank nicht vorhanden." }))); return; }
+      const ks = document.getElementById("kmuKsFilter").value;
+      let sql = "SELECT * FROM kmu_buchungen WHERE 1=1";
+      const params = [];
+      if (ks) { sql += " AND kostenstelle = ?"; params.push(ks); }
+      if (onlyOutliers) sql += " AND status != 'OK'";
+      sql += " ORDER BY (ist_eur - plan_eur) DESC";
+      tbody.replaceChildren(...queryAll(sql, params).map((r) => el("tr", {},
+        el("td", { text: r.datum }),
+        el("td", {}, el("strong", { text: r.kostenstelle })),
+        el("td", {}, r.lieferant, el("br"), el("small", { className: "klein", text: r.projekt })),
+        el("td", { className: "num", text: fmt(r.plan_eur) }),
+        el("td", { className: "num", text: fmt(r.ist_eur) }),
+        el("td", {}, el("span", { className: "pill " + (r.status === "OK" ? "ok" : "danger"), text: r.status })))));
+    }
+
+    function populateLidFilters() {
+      if (!tabelleVorhanden("lid_funktionen")) return;
+      const standorte = queryAll("SELECT DISTINCT standort FROM lid_funktionen ORDER BY standort");
+      const referate = queryAll("SELECT DISTINCT referat FROM lid_funktionen ORDER BY referat");
+      document.getElementById("lidStandort").replaceChildren(new Option(`Alle ${standorte.length} Standorte`, ""), ...standorte.map((s) => new Option(s.standort, s.standort)));
+      document.getElementById("lidReferat").replaceChildren(new Option(`Alle ${referate.length} Referate`, ""), ...referate.map((r) => new Option(r.referat, r.referat)));
+    }
+
+    function renderLidTable() {
+      const tbody = document.getElementById("lidTable");
+      if (!tabelleVorhanden("lid_funktionen")) {
+        tbody.replaceChildren(el("tr", {}, el("td", { colspan: "8", text: "Tabelle lid_funktionen fehlt. Laden Sie daten/cockpit_stufe4.sqlite oder daten/behoerde_kontakte_500.csv." })));
+        document.getElementById("lidCount").textContent = "";
+        return;
+      }
+      const q = document.getElementById("lidSearch").value.trim().toLowerCase();
+      const st = document.getElementById("lidStandort").value;
+      const rf = document.getElementById("lidReferat").value;
+      let sql = "SELECT * FROM lid_uebersicht WHERE 1=1";
+      const params = [];
+      if (st) { sql += " AND standort = ?"; params.push(st); }
+      if (rf) { sql += " AND referat = ?"; params.push(rf); }
+      if (document.getElementById("lidOnlyKey").checked) sql += " AND kritikalitaet >= 70";
+      if (q) {
+        sql += " AND (LOWER(funktion) LIKE ? OR LOWER(ansprechpartner) LIKE ? OR LOWER(gremien) LIKE ? OR LOWER(fachverfahren) LIKE ?)";
+        params.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+      }
+      sql += " ORDER BY kritikalitaet DESC, id ASC LIMIT 150";
+      const rows = queryAll(sql, params);
+      const gesamt = queryAll("SELECT COUNT(*) AS c FROM lid_kontakte")[0].c;
+      document.getElementById("lidCount").textContent = `${rows.length} angezeigt (Gesamtbestand: ${gesamt} Ansprechpersonen)`;
+      tbody.replaceChildren(...rows.map((r) => el("tr", {},
+        el("td", {}, el("strong", { text: r.funktion })),
+        el("td", { text: r.referat }),
+        el("td", { text: r.standort }),
+        el("td", { text: (r.gremien || "").replaceAll(";", ", ") }),
+        el("td", { text: (r.fachverfahren || "").replaceAll(";", ", ") }),
+        el("td", { className: "num" }, el("span", { className: "pill " + (r.kritikalitaet >= 70 ? "danger" : "ok"), text: String(r.kritikalitaet) })),
+        el("td", { text: r.vertretung_geregelt }),
+        el("td", { text: r.ansprechpartner || "–" }))));
+    }
+
+    function fuelleSzenarien() {
+      const sel = document.getElementById("blastTarget");
+      if (!tabelleVorhanden("lid_funktionen")) { sel.replaceChildren(); return; }
+      const kritisch = queryAll("SELECT * FROM lid_uebersicht WHERE kritikalitaet >= 70 ORDER BY kritikalitaet DESC");
+      sel.replaceChildren(
+        ...kritisch.map((f) => new Option(`Funktion unbesetzt: ${f.funktion} (Vertretung geregelt: ${f.vertretung_geregelt})`, "F:" + f.id)),
+        new Option("Fachverfahren fällt aus: eVergabe-Portal", "V:eVergabe-Portal"),
+        new Option("Fachverfahren fällt aus: HKR (Haushalts- und Kassenverfahren)", "V:HKR"));
+      const weber = kritisch.find((f) => f.id === 1);
+      if (weber) sel.value = "F:1";
+    }
+
+    function renderKmuGraph() {
+      if (!window.vis || !tabelleVorhanden("kmu_buchungen")) return;
+      const rows = queryAll("SELECT * FROM kmu_buchungen");
+      const nodes = new Map();
+      const kanten = new Map(); // gleiche Verbindung nur einmal zeichnen, Abweichungen aufsummieren
+      const kante = (from, to, alarm, betrag) => {
+        const k = kanten.get(from + ">" + to) || { from, to, alarm: false, betrag: 0 };
+        k.alarm = k.alarm || alarm;
+        if (alarm) k.betrag += betrag;
+        kanten.set(from + ">" + to, k);
+      };
+      rows.forEach((r) => {
+        const alarm = r.status !== "OK";
+        nodes.set("KS:" + r.kostenstelle, { id: "KS:" + r.kostenstelle, label: r.kostenstelle, color: "#1e293b", font: { color: "#ffffff" }, shape: "box" });
+        const pr = "PR:" + r.kostenstelle + "|" + r.projekt; // Projekt je Kostenstelle getrennt, damit der Graph übersichtlich bleibt
+        nodes.set(pr, { id: pr, label: r.projekt, color: "#e2e8f0", shape: "ellipse" });
+        nodes.set("LF:" + r.lieferant, { id: "LF:" + r.lieferant, label: r.lieferant, color: alarm ? "#fee2e2" : "#dcfce7", shape: "box" });
+        kante("KS:" + r.kostenstelle, pr, alarm, 0);
+        kante(pr, "LF:" + r.lieferant, alarm, r.ist_eur - r.plan_eur);
+      });
+      const edges = [...kanten.values()].map((k) => ({ from: k.from, to: k.to, label: k.betrag ? `+${fmt(k.betrag)}` : "",
+        color: k.alarm ? "#b91c1c" : "#94a3b8", width: k.alarm ? 3 : 1 }));
+      new vis.Network(document.getElementById("kmuGraph"), { nodes: [...nodes.values()], edges }, {
+        layout: { hierarchical: { enabled: true, direction: "LR", sortMethod: "directed", levelSeparation: 260, nodeSpacing: 55, treeSpacing: 40 } },
+        nodes: { font: { size: 15 }, margin: 8 },
+        physics: { enabled: false },
+        edges: { smooth: { type: "cubicBezier" }, font: { background: "#ffffff", size: 12 } }
+      });
+      kmuGraphGezeichnet = true;
+    }
+
+    // Auswirkungsanalyse (Blast Radius): Welche Gremien, Fachverfahren und weiteren Funktionen sind betroffen,
+    // wenn eine Funktion unbesetzt ist und keine Vertretung greift? Breitensuche bis zur gewählten Tiefe.
+    function runImpactAnalysis() {
+      const report = document.getElementById("impactReport");
+      if (!window.vis || !tabelleVorhanden("lid_funktionen")) { report.textContent = "Graph nicht verfügbar – siehe Hinweis oben."; return; }
+      const startId = document.getElementById("blastTarget").value;
+      const maxDepth = parseInt(document.getElementById("blastDepth").value, 10);
+      const funktionen = queryAll("SELECT * FROM lid_uebersicht WHERE kritikalitaet >= 70");
+      const knoten = new Map();
+      const kanten = [];
+      funktionen.forEach((f) => {
+        const fid = "F:" + f.id;
+        knoten.set(fid, { id: fid, label: `${f.funktion}\n(Ansprechperson: ${f.ansprechpartner || "–"})`, shape: "dot", size: 18, art: "Funktion", name: f.funktion, person: f.ansprechpartner });
+        (f.gremien || "").split(";").map((g) => g.trim()).filter(Boolean).forEach((g) => {
+          knoten.set("G:" + g, { id: "G:" + g, label: g, shape: "box", art: "Gremium", name: g });
+          kanten.push({ from: fid, to: "G:" + g, label: "Mitglied" });
+        });
+        (f.fachverfahren || "").split(";").map((v) => v.trim()).filter(Boolean).forEach((v) => {
+          knoten.set("V:" + v, { id: "V:" + v, label: v, shape: "diamond", size: 16, art: "Fachverfahren", name: v });
+          kanten.push({ from: fid, to: "V:" + v, label: "betreut" });
+        });
+      });
+
+      const dist = new Map([[startId, 0]]);
+      const queue = [startId];
+      while (queue.length) {
+        const curr = queue.shift();
+        const d = dist.get(curr);
+        if (d >= maxDepth) continue;
+        kanten.forEach((e) => {
+          const nxt = e.from === curr ? e.to : (e.to === curr ? e.from : null);
+          if (nxt && !dist.has(nxt)) { dist.set(nxt, d + 1); queue.push(nxt); }
+        });
+      }
+
+      const farbe = (d) => d === 0 ? "#991b1b" : d === 1 ? "#ef4444" : d === 2 ? "#f59e0b" : "#cbd5e1";
+      const visNodes = [...knoten.values()].map((n) => {
+        const d = dist.get(n.id);
+        return { id: n.id, label: n.label, shape: n.shape, size: n.size, color: { background: farbe(d), border: "#0f172a" }, font: { color: d === 0 ? "#ffffff" : "#0f172a" } };
+      });
+      const visEdges = kanten.map((e) => {
+        const treffer = dist.has(e.from) && dist.has(e.to);
+        return { ...e, color: treffer ? "#b91c1c" : "#e2e8f0", width: treffer ? 2.5 : 1 };
+      });
+      new vis.Network(document.getElementById("networkGraph"), { nodes: visNodes, edges: visEdges }, {
+        physics: { stabilization: { iterations: 200 }, barnesHut: { springLength: 150 } }
+      });
+
+      const beschreibe = (id) => {
+        const n = knoten.get(id);
+        if (!n) return id.slice(2);
+        return n.art === "Funktion" ? `${n.name} (Ansprechperson: ${n.person || "–"})` : `${n.art}: ${n.name}`;
+      };
+      const ebene = (stufe) => [...dist.entries()].filter(([, d]) => d === stufe).map(([id]) => beschreibe(id));
+      const start = knoten.get(startId);
+      const titel = start && start.art === "Funktion"
+        ? `Szenario: Funktion „${start.name}“ ist unbesetzt, eine Vertretung greift nicht (Tiefe ${maxDepth}).`
+        : `Szenario: Fachverfahren „${startId.slice(2)}“ fällt aus (Tiefe ${maxDepth}).`;
+      const liste = (eintraege) => el("ul", {}, ...(eintraege.length ? eintraege : ["keine"]).map((t) => el("li", { text: t })));
+      const e1 = ebene(1), e2 = ebene(2);
+      report.replaceChildren(
+        el("strong", { text: titel }),
+        el("div", { text: `Ebene 1 (rot, direkt betroffen – ${e1.length}):` }), liste(e1),
+        ...(maxDepth >= 2 ? [el("div", { text: `Ebene 2 (orange, Folgewirkung – ${e2.length}):` }), liste(e2)] : []),
+        el("div", { className: "klein", text: "Maßnahme: Für Funktionen ohne geregelte Vertretung eine Vertretung benennen und Zuständigkeiten dokumentieren. Die Analyse bewertet Funktionen, nicht Personen." }));
+    }
+
+    function initStufe4() {
+      const dz = document.getElementById("dbDropzone");
+      const fi = document.getElementById("dbFileInput");
+      dz.addEventListener("click", () => fi.click());
+      fi.addEventListener("change", (e) => ladeDbDatei(e.target.files[0]));
+      dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+      dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+      dz.addEventListener("drop", (e) => { e.preventDefault(); dz.classList.remove("dragover"); ladeDbDatei(e.dataTransfer.files[0]); });
+      document.getElementById("btnDbExport").addEventListener("click", exportiereDatenbank);
+      document.getElementById("kmuKsFilter").addEventListener("change", () => db && renderKmu(false));
+      document.getElementById("btnOnlyOutliers").addEventListener("click", () => db && renderKmu(true));
+      document.getElementById("btnShowAllKmu").addEventListener("click", () => db && renderKmu(false));
+      ["lidSearch", "lidStandort", "lidReferat", "lidOnlyKey"].forEach((id) =>
+        document.getElementById(id).addEventListener("input", () => db && renderLidTable()));
+      document.getElementById("btnImpact").addEventListener("click", () => db && runImpactAnalysis());
+      if (!window.vis) zeigeHinweis("graphHinweis", ["Die Bibliothek vis-network wurde nicht gefunden. Führen Sie einmal ", ["libs/libs_herunterladen.ps1"], " aus."]);
+      tabAktionen.graph = () => {
+        if (!db) return;
+        if (!kmuGraphGezeichnet) renderKmuGraph();
+        runImpactAnalysis();
+      };
+      initDatenbank();
+    }
+
+    // ================================================================
+    // BLOCK 7: Stufe 5 – KI-Assistent nach dem Kellner-Prinzip (lokale KI über fetch)
+    // ================================================================
+    const extractedRecords = [];
+    const DEMO_ERLAUBT = false;
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 3500);
+    }
+
+    function demoAktiv() {
+      return document.getElementById("demoModus").checked;
+    }
+
+    function aktualisiereDemoAnzeige() {
+      document.getElementById("demoBanner").style.display = demoAktiv() ? "block" : "none";
+    }
+
+    // Vorbereitete Beispielantworten – nur für die mitgelieferten Beispieltexte
+    const DEMO_ANTWORTEN = {
+      extraktor: { erkennung: "NM-2026-0418", antwort: JSON.stringify({ rechnungsnr: "NM-2026-0418", lieferant: "NordMontage Partner GmbH", kostenstelle: "KS-100", netto_eur: 38000, pruefhinweis: "Nachtrag 17.600 EUR; Freigabe Bauleitung bzw. Abnahmeprotokoll fehlt" }) },
+      triage: { erkennung: "SC-2026-0319", antwort: JSON.stringify({ dringlichkeit: "HOCH", fachbereich: "IT & Buchhaltung (KS-300)", kurzzusammenfassung: "2. Mahnung SafeCloud über 9.200 EUR, Sperrung der Sicherungsserver angedroht", sofortmassnahme: "Vor Zahlung Doppelabrechnung im März (09.03. und 19.03.) prüfen und IT-Leitung informieren (Richtlinie Nr. 3)" }, null, 2) },
+      orakel: { erkennung: "38.000", antwort: "Nein.\n- Regel 2 (Sonderregel Fremdmontage KS-100): Nachträge und Überstundenzuschläge dürfen nur nach unterzeichnetem Baustellen-Abnahmeprotokoll ausgezahlt werden.\n- Regel 1 (Schwellenwerte): Über 15.000 EUR ist eine schriftliche Vorab-Freigabe der Geschäftsführung nötig.\n- Regel 2: Bei mehr als 10 % Abweichung zum Kostenstellen-Plan ist binnen 48 Stunden eine Ursachenmeldung an die Geschäftsführung Pflicht." },
+      gremien: { erkennung: "DigitalPakt", antwort: "- Zuständig für den DigitalPakt-Netzausbau (Regionalstelle Sued, Göttingen): Funktion „Koordination DigitalPakt (Ref. 51)“, Ansprechperson Anja Krueger.\n- Überfällige Beschlüsse:\n  1. Glasfaser-Anbindung Berufsschulen Los 3 (DigitalPakt-Netzausbau), offen seit 19.01.2026\n  2. Rahmenvertrag eVergabe-Schnittstelle (Vergabeausschuss Nord), offen seit 12.01.2026 – Funktion „Teamleitung Vergabestelle (Ref. 21)“, Ansprechperson Stefan Hartmann" }
+    };
+
+    function demoAntwort(aufgabe, eingabe) {
+      const d = DEMO_ANTWORTEN[aufgabe];
+      if (!eingabe.includes(d.erkennung)) {
+        throw new Error("Im Demo-Modus gibt es nur Beispielantworten zu den mitgelieferten Beispieltexten. Für eigene Texte schalten Sie den Demo-Modus aus und starten Ollama.");
+      }
+      return d.antwort;
+    }
+
+    function kiFehlertext(err) {
+      if (IST_DATEI) {
+        return "Hinweis: Das Cockpit wurde per Doppelklick (file://) geöffnet. Der Browser sendet dann die Herkunft „null“, und die lokale KI lehnt die Anfrage ab.\n" +
+               "So geht es: Starten Sie betrieb-uebergabe/start_cockpit_sicher.bat (bzw. python -m http.server 8000 --bind 127.0.0.1 im Cockpit-Ordner) und öffnen Sie das Cockpit über http://127.0.0.1:8000/. Zum Ausprobieren ohne KI schalten Sie den Demo-Modus ein.";
+      }
+      return "Die lokale KI ist nicht erreichbar (" + err.message + ").\nHäufige Ursachen: Ollama läuft nicht oder auf einem anderen Port; Modellname falsch (Verbindung prüfen zeigt die installierten Modelle); " +
+             "das Cockpit wird von einer Intranet-Adresse geöffnet, die nicht in OLLAMA_ORIGINS eingetragen ist; bei llama-server fehlt der API-Schlüssel.";
+    }
+
+    async function askOllama(systemPrompt, userPrompt, expectJson = false) {
+      const url = document.getElementById("apiUrl").value.trim();
+      const model = document.getElementById("modelName").value.trim();
+      const apiKey = document.getElementById("apiKey").value.trim();
+      const isOpenAICompat = url.includes("/v1/chat/completions");
+      const messages = [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ];
+      // Ollama nativ (/api/chat) oder OpenAI-kompatibel (/v1/chat/completions, z. B. llama-server)
+      const payload = isOpenAICompat
+        ? { model, stream: false, temperature: 0.1, messages, ...(expectJson ? { response_format: { type: "json_object" } } : {}) }
+        : { model, stream: false, think: false, options: { temperature: 0.1 }, messages, ...(expectJson ? { format: "json" } : {}) };
+      const headers = { "Content-Type": "application/json" };
+      if (apiKey) headers.Authorization = "Bearer " + apiKey; // nur zur Laufzeit eingeben, nie im Quelltext speichern
+      const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      return isOpenAICompat ? (data.choices?.[0]?.message?.content || "") : (data.message?.content || "");
+    }
+
+    // Entweder Demo-Antwort oder echte lokale KI
+    async function frageKI(aufgabe, systemPrompt, userPrompt, expectJson) {
+      if (demoAktiv()) return demoAntwort(aufgabe, userPrompt);
+      return askOllama(systemPrompt, userPrompt, expectJson);
+    }
+
+    function zeigeAntwort(boxId, text) {
+      const box = document.getElementById(boxId);
+      if (demoAktiv()) box.replaceChildren(el("span", { className: "demo-marke", text: "DEMO – vorbereitete Beispielantwort, nicht von einer KI erzeugt" }), text);
+      else box.textContent = text;
+    }
+
+    function zeigeFehler(boxId, err) {
+      document.getElementById(boxId).textContent = demoAktiv() ? err.message : kiFehlertext(err);
+    }
+
+    // Neue Zeile im Journal: alle Werte der KI als Text einsetzen (textContent), nie als HTML
+    function addJournalRow(r) {
+      document.getElementById("journal").append(el("tr", {},
+        el("td", {}, el("strong", { text: String(r.rechnungsnr || "-") })),
+        el("td", { text: String(r.lieferant || "-") }),
+        el("td", { text: String(r.kostenstelle || "-") }),
+        el("td", { className: "num", text: typeof r.netto_eur === "number" ? fmt(r.netto_eur) : String(r.netto_eur ?? "-") }),
+        el("td", {}, el("span", { className: "pill warn", text: String(r.pruefhinweis || "OK") }))));
+    }
+
+    async function verbindungPruefen() {
+      const status = document.getElementById("connStatus");
+      if (demoAktiv()) { status.textContent = "Demo-Modus aktiv – es wird keine KI angesprochen."; status.style.color = "#fbbf24"; return; }
+      if (IST_DATEI) { status.textContent = "Per Doppelklick geöffnet – bitte über http://127.0.0.1:8000/ starten (siehe Hinweis)."; status.style.color = "#fbbf24"; return; }
+      const rawUrl = document.getElementById("apiUrl").value.trim();
+      const isOpenAICompat = rawUrl.includes("/v1/");
+      const apiKey = document.getElementById("apiKey").value.trim();
+      try {
+        const base = rawUrl.replace(/\/(api|v1)\/.*$/, "");
+        const res = await fetch(isOpenAICompat ? `${base}/v1/models` : `${base}/api/tags`, { headers: apiKey ? { Authorization: "Bearer " + apiKey } : {} });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const list = isOpenAICompat ? (data.data || []).map((m) => m.id) : (data.models || []).map((m) => m.name);
+        const cloud = list.filter((n) => /cloud/i.test(n));
+        status.textContent = `Verbunden. Modelle: ${list.slice(0, 4).join(", ") || "keine"}` + (cloud.length ? " – Achtung: Cloud-Modelle vorhanden, für Zone Rot nicht verwenden!" : "");
+        status.style.color = cloud.length ? "#fbbf24" : "#4ade80";
+        showToast("Verbindung zur lokalen KI hergestellt.");
+      } catch (e) {
+        status.textContent = "Keine Verbindung – Ollama gestartet? Endpunkt richtig?";
+        status.style.color = "#f87171";
+      }
+    }
+
+    function initStufe5() {
+      if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = verzeichnisVon(libQuelle["pdf.min.js"]) + "pdf.worker.min.js";
+      const demo = document.getElementById("demoModus");
+      const autoDemo = DEMO_ERLAUBT && (IST_DATEI || location.hostname.endsWith("github.io"));
+      demo.checked = autoDemo;
+      if (!DEMO_ERLAUBT) demo.parentElement.style.display = "none";
+      demo.addEventListener("change", aktualisiereDemoAnzeige);
+      aktualisiereDemoAnzeige();
+      if (IST_DATEI) {
+        zeigeHinweis("kiHinweis", ["Per Doppelklick geöffnet: Die lokale KI ist von hier aus nicht erreichbar (der Browser sendet die Herkunft „null“). Starten Sie ",
+          ["betrieb-uebergabe/start_cockpit_sicher.bat"], " oder ", ["python -m http.server 8000 --bind 127.0.0.1"], " und öffnen Sie das Cockpit über ", ["http://127.0.0.1:8000/"],
+          ". Alle anderen Reiter funktionieren weiter." + (DEMO_ERLAUBT ? " Zum Ausprobieren ist der Demo-Modus eingeschaltet." : "")]);
+      } else if (autoDemo) {
+        zeigeHinweis("kiHinweis", ["Online-Vorschau: Auf dieser Webseite läuft keine KI, deshalb ist der Demo-Modus eingeschaltet. Mit Ihrer lokalen Ollama-Installation nutzen Sie das Cockpit über ",
+          ["http://127.0.0.1:8000/"], " (siehe Kapitel 6)."]);
+      }
+
+      document.querySelectorAll("#kiSubnav button").forEach((b) => b.addEventListener("click", () => {
+        document.querySelectorAll("#kiSubnav button").forEach((x) => x.classList.remove("active"));
+        document.querySelectorAll(".sub-panel").forEach((p) => p.classList.remove("active"));
+        b.classList.add("active");
+        document.getElementById("sub-" + b.dataset.sub).classList.add("active");
+      }));
+      document.getElementById("btnTestConn").addEventListener("click", verbindungPruefen);
+
+      // PDF oder TXT lokal einlesen (pdf.js ohne eval: Schutz gegen präparierte PDFs, CVE-2024-4367)
+      document.getElementById("pdfInput").addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.name.toLowerCase().endsWith(".txt")) {
+          document.getElementById("invoiceText").value = await file.text();
+          showToast(`Textdatei ${file.name} geladen.`);
+          return;
+        }
+        if (!window.pdfjsLib) { showToast("pdf.js fehlt – bitte Text einfügen oder libs/ befüllen."); return; }
+        try {
+          const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer(), isEvalSupported: false }).promise;
+          let text = "";
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const content = await (await pdf.getPage(i)).getTextContent();
+            text += content.items.map((it) => it.str).join(" ") + "\n";
+          }
+          document.getElementById("invoiceText").value = text.trim();
+          showToast(`PDF (${pdf.numPages} Seite/n) lokal ausgelesen.`);
+        } catch (err) {
+          showToast("PDF konnte nicht gelesen werden: " + err.message);
+        }
+      });
+
+      document.getElementById("handbookInput").addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        document.getElementById("handbookText").value = await file.text();
+        showToast(`Richtlinie ${file.name} geladen (nur im Browser).`);
+      });
+
+      // Blaupause 1: Daten-Extraktor mit JSON-Strukturzwang
+      document.getElementById("btnExtract").addEventListener("click", async () => {
+        const out = document.getElementById("extractRaw");
+        out.textContent = "Extrahiere Rechnungsfelder im JSON-Format …";
+        try {
+          const raw = await frageKI("extraktor",
+            'Sie sind ein Buchhaltungs-Extraktor. Antworten Sie AUSSCHLIESSLICH mit gültigem JSON ohne Markdown oder Einleitung mit genau diesen Schlüsseln: {"rechnungsnr":"","lieferant":"","kostenstelle":"","netto_eur":0,"pruefhinweis":""}. Steht ein Wert nicht im Text, lassen Sie das Feld leer. Erfinden Sie nichts.',
+            document.getElementById("invoiceText").value, true);
+          const obj = JSON.parse(raw.replace(/```json|```/g, "").trim());
+          extractedRecords.push(obj);
+          zeigeAntwort("extractRaw", JSON.stringify(obj, null, 2));
+          addJournalRow(obj);
+          showToast("Rechnung ins Journal übernommen – bitte prüfen.");
+        } catch (err) {
+          if (err instanceof SyntaxError) out.textContent = "Die Antwort war kein gültiges JSON. Bitte erneut versuchen oder ein anderes Modell wählen.";
+          else zeigeFehler("extractRaw", err);
+        }
+      });
+
+      // Blaupause 2: Posteingangs-Triage
+      document.getElementById("btnTriage").addEventListener("click", async () => {
+        const out = document.getElementById("triageResult");
+        out.textContent = "Klassifiziere Nachricht …";
+        try {
+          const raw = await frageKI("triage",
+            'Klassifizieren Sie die Nachricht als JSON mit den Feldern {"dringlichkeit":"HOCH|MITTEL|NIEDRIG","fachbereich":"","kurzzusammenfassung":"","sofortmassnahme":""}. Keine Einleitung. Erfinden Sie keine Fakten, die nicht im Text stehen.',
+            document.getElementById("triageInput").value, true);
+          zeigeAntwort("triageResult", raw);
+          showToast("Triage abgeschlossen.");
+        } catch (err) { zeigeFehler("triageResult", err); }
+      });
+
+      // Blaupause 3: Firmen-Orakel mit Anti-Halluzinations-Satz
+      document.getElementById("btnOracle").addEventListener("click", async () => {
+        const out = document.getElementById("oracleAnswer");
+        out.textContent = "Prüfe Richtlinie …";
+        try {
+          const ans = await frageKI("orakel",
+            "Beantworten Sie die Frage sachlich auf Deutsch und AUSSCHLIESSLICH auf Basis der mitgelieferten Richtlinie. Nennen Sie die maßgebliche Regel mit Nummer. " +
+            "Wenn die Antwort nicht eindeutig aus der bereitgestellten Richtlinie hervorgeht, antworten Sie wörtlich mit: 'Dazu liegt in der hinterlegten Richtlinie keine Regelung vor – bitte klären Sie den Vorgang direkt mit Controlling bzw. Referat 21.'",
+            `RICHTLINIE:\n${document.getElementById("handbookText").value}\n\nFRAGE:\n${document.getElementById("oracleQuestion").value}`, false);
+          zeigeAntwort("oracleAnswer", ans);
+          showToast("Firmen-Orakel hat geantwortet.");
+        } catch (err) { zeigeFehler("oracleAnswer", err); }
+      });
+
+      // Brücke Stufe 4 -> Stufe 5: offene Beschlüsse per SQL holen
+      document.getElementById("btnLidFromDb").addEventListener("click", () => {
+        if (!db || !tabelleVorhanden("lid_beschluesse")) { showToast("Keine Datenbank geladen (Reiter „Datenbank“)."); return; }
+        const zeilen = queryAll("SELECT gremium, standort, zustaendig, ansprechpartner, thema, offen_seit, status FROM lid_beschluesse WHERE status LIKE 'Offen%' ORDER BY offen_seit");
+        document.getElementById("lidContext").value = zeilen.map((z) =>
+          `Gremium: ${z.gremium} | Standort: ${z.standort} | Zustaendig (Funktion): ${z.zustaendig} | Ansprechperson: ${z.ansprechpartner || "-"} | Thema: ${z.thema} | Offen seit: ${z.offen_seit} | Status: ${z.status}`).join("\n");
+        showToast(`${zeilen.length} offene Beschlüsse übernommen.`);
+      });
+
+      // Blaupause 4: Fragen an das Gremiennetz
+      document.getElementById("btnLidAsk").addEventListener("click", async () => {
+        const out = document.getElementById("lidAnswer");
+        out.textContent = "Werte Datenauszug aus …";
+        try {
+          const ans = await frageKI("gremien",
+            "Sie sind ein Verwaltungsassistent für das Landesamt (LID). Beantworten Sie die Frage knapp in Stichpunkten und ausschließlich anhand des gelieferten Datenauszugs. Wenn der Auszug die Frage nicht beantwortet, sagen Sie das.",
+            `GREMIENDATEN:\n${document.getElementById("lidContext").value}\n\nFRAGE:\n${document.getElementById("lidQuestion").value}`, false);
+          zeigeAntwort("lidAnswer", ans);
+          showToast("Abfrage abgeschlossen.");
+        } catch (err) { zeigeFehler("lidAnswer", err); }
+      });
+
+      document.getElementById("btnExportJson").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(extractedRecords, null, 2)], { type: "application/json" });
+        const a = el("a", { href: URL.createObjectURL(blob), download: "ki_cockpit_extrakte.json" });
+        a.click();
+        URL.revokeObjectURL(a.href);
+        showToast("JSON-Export heruntergeladen.");
+      });
+    }
+
+    // ================================================================
+    // START: erst Bibliotheken laden, dann die Reiter einrichten
+    // ================================================================
+    async function start() {
+      const ergebnisse = await Promise.all(BIBLIOTHEKEN.map(ladeBibliothek));
+      const fehlend = BIBLIOTHEKEN.filter((_, i) => !ergebnisse[i]).map((l) => l.name);
+      const lokal = Object.values(libQuelle).filter((u) => !u.startsWith("http")).length;
+      const online = Object.values(libQuelle).length - lokal;
+      document.getElementById("libStatus").textContent =
+        `Bibliotheken: ${lokal} lokal aus libs/, ${online} aus dem Internet` + (fehlend.length ? `, ${fehlend.length} fehlen` : "");
+      if (fehlend.length) {
+        zeigeHinweis("libHinweis", [`Nicht geladen: ${fehlend.join(", ")}. ` + (NUR_LOKAL
+          ? "Diese Betriebsfassung lädt nur aus dem Ordner libs/. Führen Sie einmal "
+          : "Weder im Ordner libs/ noch im Internet gefunden. Für den Offline-Betrieb führen Sie einmal "),
+          ["libs/libs_herunterladen.ps1"], " aus (siehe libs/README_LIBS.md). Die übrigen Funktionen arbeiten weiter."]);
+      }
+      if (window.mermaid) {
+        mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict" });
+        renderMermaidInPanel(document.querySelector(".tab-panel.active"));
+      }
+      if (window.Chart) zeichneStatischeCharts();
+      initDropzone();
+      initStufe4();
+      initStufe5();
+      // Direktaufruf eines Reiters über die Adresse, z. B. cockpit.html#datenbank
+      const ziel = document.querySelector(`nav button[data-tab="${location.hash.slice(1).replace(/[^a-z0-9-]/gi, "")}"]`);
+      if (ziel) ziel.click();
+    }
+    start();
+  </script>
+</body>
+</html>

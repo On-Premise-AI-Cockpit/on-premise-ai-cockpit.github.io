@@ -3,27 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Das KI-Cockpit — Begleit-Monorepo (On-Premise AI Cockpit)</title>
+  <title>Das KI-Cockpit – Begleit-Monorepo</title>
   <style>
     :root { --bg:#f8fafc; --surface:#ffffff; --ink:#0f172a; --muted:#475569; --primary:#0f766e; --accent:#1e293b; --border:#e2e8f0; }
     * { box-sizing:border-box; }
     body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; }
     header { background:var(--accent); color:#f8fafc; padding:2.2rem 1.5rem; text-align:center; }
     header h1 { margin:0; font-size:1.95rem; }
-    header p { max-width:820px; margin:0.65rem auto 1.25rem; color:#cbd5e1; }
+    header p { max-width:860px; margin:0.65rem auto 1.25rem; color:#cbd5e1; }
+    header p.untertitel { color:#f1f5f9; font-size:1.08rem; margin-bottom:0.3rem; }
     .cta-row { display:flex; flex-wrap:wrap; justify-content:center; gap:0.55rem; }
     .cta { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; padding:0.7rem 1.25rem; border-radius:8px; font-weight:600; font-size:0.93rem; }
     .cta.sec { background:#334155; }
     .cta.outline { background:transparent; border:1.5px solid #5eead4; color:#ccfbf1; }
     .cta:hover { opacity:0.92; }
     main { max-width:1120px; margin:2rem auto; padding:0 1.25rem 3.5rem; }
-    .pitch { background:#f0fdfa; border:1px solid #99f6e4; border-left:4px solid var(--primary); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.65rem; font-size:0.94rem; color:#134e4a; }
+    .pitch { background:#f0fdfa; border:1px solid #99f6e4; border-left:4px solid var(--primary); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.25rem; font-size:0.94rem; color:#134e4a; }
     .pitch strong { color:#0f172a; }
+    .quickwin { background:#fffbeb; border:1px solid #fde68a; border-left:4px solid #d97706; border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.65rem; font-size:0.93rem; color:#78350f; }
+    .quickwin ol { margin:0.4rem 0 0 1.2rem; padding:0; }
+    .quickwin a { color:#92400e; font-weight:600; }
     .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.15rem; }
     .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.35rem; display:flex; flex-direction:column; justify-content:space-between; }
     .tag { display:inline-block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--primary); background:#f0fdfa; border:1px solid #99f6e4; padding:0.18rem 0.55rem; border-radius:999px; margin-bottom:0.5rem; }
     .card h2 { margin:0.2rem 0 0.5rem; font-size:1.12rem; }
-    .card p { margin:0 0 1rem; font-size:0.9rem; color:var(--muted); }
+    .card p { margin:0 0 0.6rem; font-size:0.9rem; color:var(--muted); }
+    .card p.voraus { font-size:0.82rem; color:#334155; background:#f1f5f9; border-radius:6px; padding:0.4rem 0.6rem; }
     .links a { display:inline-block; margin-right:0.75rem; margin-top:0.3rem; color:var(--primary); font-weight:600; text-decoration:none; font-size:0.88rem; }
     .links a:hover { text-decoration:underline; }
     .section-title { margin:2.5rem 0 1rem; font-size:1.35rem; border-bottom:2px solid var(--border); padding-bottom:0.45rem; }
@@ -31,43 +36,59 @@
     .gov-item { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--accent); border-radius:9px; padding:0.95rem 1.1rem; font-size:0.88rem; color:var(--muted); }
     .gov-item h3 { margin:0 0 0.35rem; font-size:0.96rem; color:var(--ink); display:flex; align-items:center; gap:0.45rem; }
     .gov-num { display:inline-flex; align-items:center; justify-content:center; width:1.35rem; height:1.35rem; border-radius:50%; background:var(--primary); color:#fff; font-size:0.76rem; font-weight:700; flex-shrink:0; }
+    .prompt-intro { font-size:0.9rem; color:var(--muted); margin:-0.3rem 0 1rem; }
     .prompt-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(440px,1fr)); gap:1.15rem; }
     .prompt-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; min-width:0; display:flex; flex-direction:column; }
-    .prompt-card h3 { margin:0 0 0.6rem; font-size:0.98rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; }
-    .prompt-card pre { margin:0; background:#f1f5f9; border:1px solid var(--border); border-radius:7px; padding:0.75rem; font-size:0.82rem; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; overflow-x:auto; font-family:Consolas,monospace; color:#0f172a; flex:1; }
+    .prompt-card h3 { margin:0 0 0.6rem; font-size:0.95rem; display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem; }
+    .prompt-card pre { margin:0; background:#f1f5f9; border:1px solid var(--border); border-radius:7px; padding:0.75rem; font-size:0.8rem; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; max-height:340px; overflow:auto; font-family:Consolas,monospace; color:#0f172a; flex:1; }
     @media (max-width: 540px) { .prompt-grid { grid-template-columns:1fr; } }
-    .copy-btn { background:var(--primary); color:#fff; border:none; border-radius:6px; padding:0.28rem 0.65rem; font-size:0.76rem; font-weight:600; cursor:pointer; }
+    .copy-btn { background:var(--primary); color:#fff; border:none; border-radius:6px; padding:0.28rem 0.65rem; font-size:0.76rem; font-weight:600; cursor:pointer; flex-shrink:0; }
     .copy-btn:hover { opacity:0.9; }
     footer { text-align:center; font-size:0.84rem; color:var(--muted); padding:1.5rem; border-top:1px solid var(--border); }
   </style>
 </head>
 <body>
   <header>
-    <h1>Das KI-Cockpit — Begleit-Monorepo</h1>
-    <p>Prozesse, Zahlen und Abhängigkeiten im Blick: Souveräne KI-Quick-Wins bauen mit lokaler KI – ohne Vorkenntnisse, ohne Cloud-Zwang und für 0 Euro Lizenzkosten. Alle 5 Ausbaustufen, Beispieldaten (Werkbau Nord GmbH &amp; LID) und Governance-Vorlagen an einem Ort.</p>
+    <h1>Das KI-Cockpit – Begleit-Monorepo</h1>
+    <p class="untertitel">Prozesse, Zahlen und Abhängigkeiten im Blick: Souveräne Dashboards bauen mit lokaler KI — ohne Vorkenntnisse und Lizenzkosten</p>
+    <p>Alle fünf Ausbaustufen, fiktive Beispieldaten (Werkbau Nord GmbH und Landesamt LID), die Prompts aus dem Buch und Vorlagen für die IT-Freigabe an einem Ort.</p>
     <div class="cta-row">
       <a class="cta" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io/archive/refs/heads/main.zip">Komplett-Paket als ZIP herunterladen</a>
       <a class="cta outline" href="KI-Cockpit_Spickzettel_A4.pdf">A4-Spickzettel zum Ausdrucken (PDF)</a>
-      <a class="cta sec" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io">GitHub Repository öffnen</a>
+      <a class="cta sec" href="https://github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io">GitHub-Repository öffnen</a>
     </div>
   </header>
 
   <main>
     <div class="pitch">
-      <strong>KI-Quick-Wins statt jahrelanger IT-Projekte – sicher und governance-konform statt Schatten-IT:</strong> Große Lösungen in Unternehmen und Behörden dauern oft Jahre und verschlingen hohe Budgets. Hier finden Sie alle einsatzfertigen Vorlagen aus dem Buch, um Fachabteilungen kontrolliert, lokal und prüfsicher zu befähigen.
+      <strong>Kleine Werkzeuge statt jahrelanger IT-Projekte – geordnet statt als Schatten-IT.</strong> Viele Fachkräfte können sich kleine Werkzeuge heute selbst bauen. Hier finden Sie die Vorlagen aus dem Buch, mit denen Fachabteilungen lokal und nachvollziehbar eigene Dashboards bauen und sie mit IT, Datenschutz und Personal- bzw. Betriebsrat abstimmen.
     </div>
 
+    <div class="quickwin">
+      <strong>Ihr erster Quick Win – ohne Installation:</strong>
+      <ol>
+        <li>Laden Sie den <a href="daten/kmu_monatsabschluss_2026-03.csv">März-Export (.csv)</a> herunter (fiktive Daten der Werkbau Nord GmbH).</li>
+        <li>Öffnen Sie das <a href="stufe3-dropzone/cockpit.html#monat">Dropzone-Cockpit</a> (Reiter „Monatsabschluss (Dropzone)“).</li>
+        <li>Ziehen Sie die Datei in das gestrichelte Feld. Für März 2026 meldet das Cockpit zwei Kostenstellen mit mehr als 5 % Abweichung. Die Datei wird nur in Ihrem Browser gelesen.</li>
+      </ol>
+    </div>
+
+    <h2 class="section-title">Ein Cockpit, das mitwächst: die fünf Ausbaustufen</h2>
+    <p class="prompt-intro">Von Stufe 2 bis 5 erweitern Sie eine einzige Datei <code>cockpit.html</code>. Jede Stufe ergänzt Reiter, die vorhandenen bleiben unverändert. Im Repository ist <code>stufeN-…/cockpit.html</code> jeweils der Stand nach Stufe N. Verteilt wird der zuletzt von Ihrer Organisation freigegebene Stand.</p>
     <div class="grid">
       <div class="card">
         <div>
           <span class="tag">Stufe 1 · Kapitel 2</span>
-          <h2>Diagramme aus Text (Diagram-as-Code)</h2>
-          <p>Mermaid-Kostenfluss &amp; Torte (Werkbau Nord GmbH), Behörden-Prozessaufnahme (Mermaid &amp; BPMN 2.0 XML) sowie C4-IT-Landschaften (PlantUML).</p>
+          <h2>Diagramme aus Text</h2>
+          <p>Mermaid-Kostenfluss und Torte (Werkbau Nord GmbH), Behörden-Prozessaufnahme (Mermaid und BPMN 2.0 XML) sowie C4-IT-Landschaften (PlantUML).</p>
+          <p class="voraus">Voraussetzung: keine Installation. Online-Editoren wie mermaid.live nur mit unkritischen bzw. anonymisierten Inhalten oder nach Freigabe.</p>
         </div>
         <div class="links">
-          <a href="stufe1-diagramme/kmu_kostenstruktur_fluss.mmd">KMU Fluss (.mmd)</a>
-          <a href="stufe1-diagramme/behoerde_beschaffung.bpmn">LID Prozess (.bpmn)</a>
+          <a href="stufe1-diagramme/kmu_kostenstruktur_fluss.mmd">KMU-Fluss (.mmd)</a>
+          <a href="stufe1-diagramme/kmu_kostenstellen_torte.mmd">KMU-Torte (.mmd)</a>
+          <a href="stufe1-diagramme/behoerde_beschaffung.bpmn">LID-Prozess (.bpmn)</a>
           <a href="stufe1-diagramme/kmu_it_landschaft_c4.puml">C4 KMU (.puml)</a>
+          <a href="stufe1-diagramme/behoerde_it_landschaft_c4.puml">C4 LID (.puml)</a>
         </div>
       </div>
 
@@ -75,7 +96,8 @@
         <div>
           <span class="tag">Stufe 2 · Kapitel 3</span>
           <h2>Das statische HTML-Cockpit</h2>
-          <p>Erste lokale <code>cockpit.html</code> mit KPI-Kacheln, Chart.js-Verläufen, Reiternavigation, Behörden-Prozessseite und IT-Architektur-Sicht.</p>
+          <p>Erste <code>cockpit.html</code> mit KPI-Kacheln, Chart.js-Diagrammen, Reiternavigation, Behörden-Prozessseite und IT-Architektur-Sicht.</p>
+          <p class="voraus">Voraussetzung: Browser und Windows-Editor. Öffnen per Doppelklick.</p>
         </div>
         <div class="links">
           <a href="stufe2-html-cockpit/cockpit.html">Live-Demo öffnen →</a>
@@ -85,37 +107,43 @@
       <div class="card">
         <div>
           <span class="tag">Stufe 3 · Kapitel 4</span>
-          <h2>Dropzone &amp; Lokaler Prozess-Editor</h2>
-          <p>Tankdeckel-Prinzip: DATEV-/Excel-Exporte (.csv/.xlsx) per Drag-and-Drop einlesen – plus der eigenständige BPMN-Editor für Behörden.</p>
+          <h2>Dropzone und lokaler Prozess-Editor</h2>
+          <p>Tankdeckel-Prinzip: Neuer Reiter „Monatsabschluss (Dropzone)“ liest DATEV- und Excel-Exporte (.csv/.xlsx) im Browser ein. Dazu der eigenständige BPMN-Editor.</p>
+          <p class="voraus">Voraussetzung: keine Installation. Öffnen per Doppelklick.</p>
         </div>
         <div class="links">
           <a href="stufe3-dropzone/cockpit.html">Dropzone-Cockpit →</a>
           <a href="stufe3-dropzone/prozess_editor.html">prozess_editor.html →</a>
           <a href="daten/kmu_monatsabschluss_2026-03.csv">März-Export (.csv)</a>
           <a href="daten/kmu_monatsabschluss_2026-03.xlsx">März-Export (.xlsx)</a>
+          <a href="daten/kmu_nur_maerz_2026.csv">nur März (.csv)</a>
         </div>
       </div>
 
       <div class="card">
         <div>
           <span class="tag">Stufe 4 · Kapitel 5</span>
-          <h2>SQLite-Datenbank &amp; Wissensgraph</h2>
-          <p><code>sql.js</code> &amp; <code>Vis.js</code>: KMU-Ausreißer-Analyse auf Buchungsebene sowie 500 LID-Ansprechpartner an 12 Standorten mit mehrstufigem Blast Radius.</p>
+          <h2>Datenbank und Wissensgraph</h2>
+          <p>Neue Reiter „Datenbank (SQLite)“ und „Wissensgraph“: Einzelbuchungen und Ausreißer der Werkbau Nord GmbH, 500 Ansprechpersonen an 12 Standorten des LID und eine Auswirkungsanalyse (Blast Radius) für den Fall „Funktion unbesetzt / Vertretung nicht geregelt“. Bewertet werden Funktionen, nicht Personen.</p>
+          <p class="voraus">Voraussetzung: lokaler Mini-Server (<code>python -m http.server 8000 --bind 127.0.0.1</code>), weil Browser die Datenbank-Engine unter <code>file://</code> blockieren. Python stellt meist die IT bereit.</p>
         </div>
         <div class="links">
           <a href="stufe4-datenbank-graph/cockpit.html">Stufe-4-Cockpit öffnen →</a>
+          <a href="daten/cockpit_stufe4.sqlite">Beispieldatenbank (.sqlite)</a>
           <a href="daten/behoerde_kontakte_500.csv">500 Kontakte (.csv)</a>
+          <a href="daten/erzeuge_cockpit_stufe4.py">Erzeugungs-Skript (.py)</a>
         </div>
       </div>
 
       <div class="card">
         <div>
           <span class="tag">Stufe 5 · Kapitel 6</span>
-          <h2>Das mitdenkende Smart-Master-Cockpit</h2>
-          <p>Kellner-Prinzip via <code>fetch</code>-API &amp; lokalem Ollama/<code>llama-server</code>: PDF-Rechnungs-Extraktor (<code>pdf.js</code>), Posteingangs-Triage, Firmen-Orakel &amp; LID-Gremienabfrage.</p>
+          <h2>KI-Assistent mit lokaler KI</h2>
+          <p>Neuer Reiter „KI-Assistent (lokal)“ nach dem Kellner-Prinzip: Rechnungs-Extraktor (pdf.js), Posteingangs-Vorsortierung, Firmen-Orakel und Fragen an das LID-Gremiennetz. Auf dieser Webseite läuft keine KI; die Live-Demo zeigt deshalb einen gekennzeichneten Demo-Modus mit vorbereiteten Beispielantworten.</p>
+          <p class="voraus">Voraussetzung: zusätzlich Ollama (Installation über IT-Freigabe), Start z. B. mit <code>betrieb-uebergabe/start_cockpit_sicher.bat</code>.</p>
         </div>
         <div class="links">
-          <a href="stufe5-smart-cockpit/cockpit.html">Smart-Cockpit öffnen →</a>
+          <a href="stufe5-smart-cockpit/cockpit.html#ki">Stufe-5-Cockpit öffnen (Demo) →</a>
           <a href="daten/beispiel_rechnung_nordmontage.pdf">Beispielrechnung (.pdf)</a>
           <a href="daten/beispiel_handbuch_werkbau_nord.txt">Richtlinie (.txt)</a>
         </div>
@@ -123,87 +151,315 @@
 
       <div class="card">
         <div>
-          <span class="tag">Teil C · Kapitel 8</span>
-          <h2>Offline-Betrieb (/libs) &amp; IT-Übergabe</h2>
-          <p>100 % Intranet-Fähigkeit ohne CDNs, PowerShell-Downloadskript für alle Bibliotheken sowie das fertige Übergabepaket für IT-Sicherheit &amp; Personalrat.</p>
+          <span class="tag">Teil C · Kapitel 7 und 8</span>
+          <h2>Offline-Betrieb (/libs) und IT-Übergabe</h2>
+          <p>Download-Skript und Bibliotheksliste für den Betrieb ohne Internet, Betriebsfassung <code>2026-11-18_cockpit_v1.2_stabil.html</code>, Vorlage für das Übergabepaket an IT, ISB, Datenschutz und Personal- bzw. Betriebsrat sowie Startdateien.</p>
+          <p class="voraus">Wichtig: Der Ordner <code>libs/</code> ist im Paket leer. Führen Sie <code>libs/libs_herunterladen.ps1</code> einmal an einem Rechner mit Internet aus; erst dann läuft das Paket offline.</p>
         </div>
         <div class="links">
-          <a href="libs/README_LIBS.md">Offline /libs-Anleitung</a>
-          <a href="betrieb-uebergabe/UEBERGABEPAKET_IT_PERSONALRAT.md">IT-Übergabepaket</a>
-          <a href="betrieb-uebergabe/LIESMICH_TEAM.md">Team-Kurzanleitung</a>
+          <a href="libs/README_LIBS.md">Offline-Anleitung /libs</a>
+          <a href="libs/libs_herunterladen.ps1">Download-Skript (.ps1)</a>
+          <a href="betrieb-uebergabe/UEBERGABEPAKET_IT_PERSONALRAT.md">Übergabepaket</a>
+          <a href="betrieb-uebergabe/LIESMICH_TEAM.md">Team-Anleitung</a>
+          <a href="betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html">Betriebsfassung v1.2</a>
           <a href="betrieb-uebergabe/start_cockpit_sicher.bat">Sicherer Start (.bat)</a>
+          <a href="betrieb-uebergabe/start_llama_server_profil_a.bat">llama-server Profil A (.bat)</a>
+          <a href="betrieb-uebergabe/Modelfile.controlling">Modelfile</a>
         </div>
       </div>
     </div>
 
-    <h2 class="section-title">Governance statt Schatten-IT: Die 6 Leitplanken (Kapitel 8.5)</h2>
+    <h2 class="section-title">Governance statt Schatten-IT: die sechs Leitplanken (Abschnitt 8.5)</h2>
     <div class="gov-grid">
       <div class="gov-item">
         <h3><span class="gov-num">1</span>Datenhaltung (Tankdeckel-Prinzip)</h3>
-        Die HTML-Datei bleibt vollständig datenfrei. Exporte werden ausschließlich lokal im Browser-Arbeitsspeicher verarbeitet und beim Schließen verworfen.
+        Die Cockpit-Datei enthält keine produktiven Echtdaten. Mitgelieferte Beispieldaten sind fiktiv; Ihre echten Daten laden Sie zur Laufzeit.
       </div>
       <div class="gov-item">
-        <h3><span class="gov-num">2</span>100 % Offline über /libs</h3>
-        Alle Bibliotheken liegen lokal im Unterordner <code>/libs/</code>. Im Flugzeugmodus zeigt der Browser-Netzwerkmonitor (<code>F12</code>) exakt 0 ausgehende Verbindungen.
+        <h3><span class="gov-num">2</span>Netzwerk und Offline-Betrieb</h3>
+        Mit gefülltem Ordner <code>libs/</code> lädt das Cockpit keine externen Ressourcen. Prüfbar im Netzwerkmonitor (<code>F12</code>) – der Test belegt das Verhalten der Seite, nicht des ganzen Rechners.
       </div>
       <div class="gov-item">
-        <h3><span class="gov-num">3</span>Sichere lokale KI-Schnittstelle</h3>
-        Gezielte Freigabe auf <code>127.0.0.1</code> statt Wildcard (<code>*</code>) für Ollama oder <code>llama-server</code>, kombiniert mit der Zündschlüssel-Regel.
+        <h3><span class="gov-num">3</span>Lokale KI-Schnittstelle</h3>
+        Ollama nur an <code>127.0.0.1</code> gebunden (Standard), nie <code>OLLAMA_ORIGINS="*"</code>, Cloud-Funktionen abgeschaltet. <code>OLLAMA_ORIGINS</code> erweitert die Freigaben nur. <code>llama-server</code> mit <code>--host 127.0.0.1</code> und API-Schlüssel. Zündschlüssel-Regel.
       </div>
       <div class="gov-item">
-        <h3><span class="gov-num">4</span>Rollen &amp; Versionierung</h3>
-        Klare ISO-Namenskonvention (<code>JJJJ-MM-TT_cockpit_v1.2_stabil.html</code>), sofortiges Rollback über <code>/archiv/</code> und zwei benannte Pflege-Verantwortliche.
+        <h3><span class="gov-num">4</span>Verantwortung und Pflege</h3>
+        Zwei benannte Pflege-Verantwortliche mit Vertretung, Versionierung nach dem Schema <code>JJJJ-MM-TT_cockpit_vX.Y_stabil.html</code> und Unterordner <code>archiv/</code>.
       </div>
       <div class="gov-item">
-        <h3><span class="gov-num">5</span>Lizenz- &amp; Prüfsicherheit</h3>
-        Dokumentierte Bibliotheksliste (SBOM: MIT, Apache-2.0, <code>bpmn.io</code>-Lizenz) und 1-seitige C4-Architekturskizze für die IT-Prüfung.
+        <h3><span class="gov-num">5</span>Lizenz- und Prüfsicherheit</h3>
+        Bibliotheksliste mit Version und Lizenz (MIT, Apache-2.0, <code>bpmn.io</code>-Lizenz), Prüfsummen und eine C4-Architekturskizze für die IT-Prüfung.
       </div>
       <div class="gov-item">
-        <h3><span class="gov-num">6</span>Mitbestimmung &amp; Kontrolle</h3>
-        Kein Login, kein Nutzer-Tracking, keine Leistungs- oder Verhaltenskontrolle. KI liefert Entwürfe – der Mensch prüft und entscheidet.
+        <h3><span class="gov-num">6</span>Mitbestimmung und Kontrolle</h3>
+        Kein Login und keine Nutzungsprotokolle im Cockpit. Ollama und Mini-Server können eigene Logs schreiben; diese werden offengelegt. Nicht für Leistungskontrolle ausgelegt – die Bewertung nimmt der Personal- bzw. Betriebsrat vor. KI liefert Vorschläge, der Mensch entscheidet.
       </div>
     </div>
 
-    <h2 class="section-title">Online-Spickzettel &amp; Master-Prompts (1-Klick-Kopie)</h2>
+    <h2 class="section-title">Alle Prompts aus dem Buch (1-Klick-Kopie)</h2>
+    <p class="prompt-intro">Bei Ausbau-Prompts fügen Sie unter der Trennlinie <code>---</code> Ihre bisherige <code>cockpit.html</code> vollständig ein. Enthält Ihre Datei echte Zahlen oder Namen, gehört sie nicht in eine Cloud-KI – ersetzen Sie die Werte vorher durch Platzhalter oder arbeiten Sie mit Ihrer lokalen KI.</p>
     <div class="prompt-grid">
+<!--PROMPTS-START-->
       <div class="prompt-card">
-        <h3>1. Meta-Prompting (Einleitung) <button class="copy-btn" data-copy="p1">Kopieren</button></h3>
-        <pre id="p1">Ich möchte [Ziel präzise beschreiben, z. B. ein lokales HTML-Dashboard zur Auswertung von vier Kostenstellen]. Entwerfen Sie mir dafür den professionellen, strukturierten Prompt, den ich einer Programmier-KI übergeben kann, damit sie die Lösung sauber und ohne externe Server-Abhängigkeiten umsetzt.</pre>
+        <h3>P0.1 · 1. Meta-Prompting (Einleitung) <button class="copy-btn" data-copy="p0-1">Kopieren</button></h3>
+        <pre id="p0-1">Ich möchte [Ziel präzise beschreiben, z. B. ein lokales HTML-Dashboard zur Auswertung von vier Kostenstellen mit Monatsvergleich bauen].
+Entwerfen Sie mir dafür einen strukturierten Prompt, den ich anschließend einer Programmier-KI übergeben kann, damit sie die Lösung ohne externe Server-Abhängigkeiten umsetzt.</pre>
       </div>
       <div class="prompt-card">
-        <h3>2. Lokale Anonymisierung (Kap. 1.4) <button class="copy-btn" data-copy="p2">Kopieren</button></h3>
-        <pre id="p2">Sie sind ein strikter Datenschutz-Assistent. Ersetzen Sie alle Personennamen ([NAME_1]), Firmen ([FIRMA_A]), Orte und Aktenzeichen konsistent. Dieselbe Entität erhält immer denselben Platzhalter. Erhalten Sie Satzbau und Fachkontext vollständig.
+        <h3>P1.1 · Erster Praxistest: lokale Datenbereinigung per Drag-and-Drop (Abschnitt 1.4) <button class="copy-btn" data-copy="p1-1">Kopieren</button></h3>
+        <pre id="p1-1">Sie sind ein strikter Datenschutz-Assistent für Unternehmen und Behörden.
+Pseudonymisieren Sie den unten stehenden Text für eine interne Weiterverarbeitung.
+
+Regeln:
+1. Ersetzen Sie alle Personennamen durch einheitliche Platzhalter ([NAME_1], [NAME_2], ...).
+2. Ersetzen Sie alle Firmen-, Lieferanten- und Kundennamen durch ([FIRMA_A], [FIRMA_B], ...).
+3. Ersetzen Sie Orte, Standorte, Aktenzeichen, E-Mail-Adressen und Telefonnummern durch ([ORT_1], [AZ_1], [KONTAKT_1]).
+4. Dieselbe Person oder Organisation erhält im gesamten Text immer denselben Platzhalter.
+5. Erhalten Sie Satzbau, fachliche Zusammenhänge und die Struktur des Dokuments.
+6. Geben Sie am Ende eine kurze Liste der ersetzten Kategorien aus, OHNE die ursprünglichen Klarnamen zu wiederholen.
 
 ---
-[TEXT HIER EINFÜGEN]</pre>
+[HIER DEN ZU BEREINIGENDEN TEXT EINFÜGEN]</pre>
       </div>
       <div class="prompt-card">
-        <h3>3. JSON-Strukturzwang (Kap. 6.1) <button class="copy-btn" data-copy="p3">Kopieren</button></h3>
-        <pre id="p3">Antworten Sie AUSSCHLIESSLICH mit gültigem JSON ohne Einleitung oder Markdown mit exakt diesen Schlüsseln: {"rechnungsnr":"","lieferant":"","kostenstelle":"","netto_eur":0,"pruefhinweis":""}</pre>
-      </div>
-      <div class="prompt-card">
-        <h3>4. Sichere lokale API-Freigabe (Kap. 6.2) <button class="copy-btn" data-copy="p4">Kopieren</button></h3>
-        <pre id="p4"># Windows PowerShell (Ollama mit konkretem Origin statt *):
-$env:OLLAMA_ORIGINS="http://localhost:8000,http://127.0.0.1:8000"; ollama serve
+        <h3>P2.1 · Schritt 2: Der Prompt für Fluss- und Tortendiagramm (Abschnitt 2.2) <button class="copy-btn" data-copy="p2-1">Kopieren</button></h3>
+        <pre id="p2-1">Sie sind ein Controlling-Analyst für mittelständische Betriebe.
+Analysieren Sie die folgenden monatlichen Plankosten der Werkbau Nord GmbH.
 
-# Zweites Fenster im Cockpit-Ordner:
-python -m http.server 8000 --bind 127.0.0.1</pre>
+Aufgaben:
+1. Gruppieren Sie alle Positionen strikt nach Fixkosten und variablen Kosten und bilden Sie die Summen sowie Prozentanteile.
+2. Erstellen Sie daraus ein Mermaid-Flussdiagramm (flowchart LR), das links mit den Gesamtkosten beginnt, sich in Fixkosten und variable Kosten aufteilt und rechts die einzelnen Kostenblöcke je Kostenstelle zeigt. Setzen Sie alle Beschriftungen in doppelte Anführungszeichen und färben Sie Gesamtkosten, Fixkosten und variable Kosten deutlich unterschiedlich ein.
+3. Erstellen Sie zusätzlich ein zweites Mermaid-Tortendiagramm (pie showData), das die Monatskosten auf die vier Kostenstellen (KS-100 bis KS-400) aufteilt.
+
+---
+KS-100 Produktion &amp; Montage: Personal &amp; Hallenmiete (Fix) 175.000 EUR; Material &amp; Fertigung (Variabel) 118.000 EUR; Fremdmontage &amp; Subunternehmer (Variabel) 52.000 EUR.
+KS-200 Vertrieb &amp; Projekte: Vertrieb Grundkosten (Fix) 34.000 EUR; Provisionen &amp; Reisekosten (Variabel) 58.000 EUR.
+KS-300 IT &amp; Infrastruktur: ERP-Lizenzen, Netz &amp; Wartung (Fix) 48.000 EUR.
+KS-400 Verwaltung &amp; Zentrale: Buchhaltung, Personal, Versicherungen &amp; Leitung (Fix) 85.000 EUR.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P2.2 · Schritt 1: Prozess im KI-Dialog erheben (statt leeres Blatt) (Abschnitt 2.3) <button class="copy-btn" data-copy="p2-2">Kopieren</button></h3>
+        <pre id="p2-2">Sie sind ein erfahrener Organisationsberater für öffentliche Verwaltungen.
+Ich möchte den Prozess „IT-Beschaffungsantrag über 5.000 EUR“ im Landesamt für Infrastruktur und Digitalisierung (LID) aufnehmen.
+Stellen Sie mir nacheinander 5 gezielte, kurze Fragen zu Auslöser, beteiligten Referaten, Schwellenwerten, Prüfschleifen und Abschluss. Erst nach meinen Antworten fassen Sie den Ablauf strukturiert zusammen.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P2.3 · Schritt 2: Das schnelle Mermaid-Flussdiagramm für die Fachabteilung (Abschnitt 2.3) <button class="copy-btn" data-copy="p2-3">Kopieren</button></h3>
+        <pre id="p2-3">Übersetzen Sie die folgende Prozessbeschreibung aus einer Landesbehörde in ein klares Mermaid-Flussdiagramm (flowchart TD).
+Nutzen Sie abgerundete Knoten für Start und Ende, Rauten für Entscheidungen und setzen Sie alle Texte in doppelte Anführungszeichen.
+
+---
+[HIER DIE PROZESSBESCHREIBUNG EINFÜGEN]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P2.4 · Schritt 3: Der Schritt zum Standard – BPMN 2.0 mit Swimlanes (Abschnitt 2.3) <button class="copy-btn" data-copy="p2-4">Kopieren</button></h3>
+        <pre id="p2-4">Erstellen Sie valides BPMN-2.0-XML für den Hauptpfad (&gt; 5.000 EUR) des folgenden Behördenprozesses.
+Nutzen Sie vier horizontale Swimlanes (Lanes) in einem Pool:
+1. Fachreferat (Bedarfsträger)
+2. Referat 32 (IT-Betrieb &amp; Sicherheit)
+3. Referat 21 (Vergabe &amp; Haushalt)
+4. Abteilungsleitung
+
+WICHTIG: Generieren Sie zwingend den kompletten Abschnitt &lt;bpmndi:BPMNDiagram&gt; mit überlappungsfreien Koordinaten (Bounds und Waypoints) für alle Lanes, Aufgaben, Gateways und Pfeile, damit das Diagramm in bpmn.io gerendert werden kann.
+Geben Sie ausschließlich den reinen XML-Code aus, ohne einleitenden Text.
+
+---
+[HIER DIE PROZESSBESCHREIBUNG EINFÜGEN]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P2.5 · C4-System-Context mit PlantUML erstellen (Abschnitt 2.4) <button class="copy-btn" data-copy="p2-5">Kopieren</button></h3>
+        <pre id="p2-5">Erstellen Sie ein PlantUML-Architekturdiagramm nach dem C4-Modell (Ebene 1: System Context).
+Das zentrale System ist „Lokales KI-Cockpit“ der Werkbau Nord GmbH.
+Zeigen Sie alle Personen, Umsysteme und die Richtung sowie Art der Datenflüsse (Rel) beschriftet an.
+WICHTIG: Nutzen Sie zwingend den internen Standard-Include (!include &lt;C4/C4_Context&gt;) und KEINE externen GitHub-URLs, damit der PlantUML-Renderer zuverlässig ohne Ladefehler arbeitet.
+
+---
+Personen: Geschäftsführung; Controlling &amp; Buchhaltung; Projektleitung Montage.
+Umsysteme: ERP / Warenwirtschaft; DATEV Finanzbuchhaltung; Zeiterfassung (TimeTrack); Netzlaufwerk L: (PDF-Rechnungen &amp; Handbücher); Lokale KI (Ollama).</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P3.1 · Schritt 1: Der Bauplan-Prompt für cockpit.html (Abschnitt 3.3) <button class="copy-btn" data-copy="p3-1">Kopieren</button></h3>
+        <pre id="p3-1">Sie agieren als erfahrener Frontend-Architekt für betriebswirtschaftliche Dashboards.
+Erstellen Sie eine einzige, eigenständige und im Browser lauffähige HTML-Datei (cockpit.html) mit modernem Management-Design (helle Oberfläche, dunkle Kopfzeile, hohe Lesbarkeit, keine verspielten Effekte).
+
+Technische Vorgaben:
+- Alles in EINER HTML-Datei (HTML, CSS und JavaScript vereint).
+- Binden Sie Chart.js (v4.4.3) und Mermaid.js (v10.9.8) über jsDelivr-CDN ein.
+- Reiternavigation mit 3 Tabs:
+  1. „KMU-Controlling (Werkbau Nord)“ (Standard-Tab)
+  2. „Behörde: Prozess &amp; Wegweiser (LID)“
+  3. „IT-Architektur (C4-Kontext)“
+- Bauen Sie die Reiternavigation so auf, dass später weitere Reiter ergänzt werden können.
+- WICHTIG: Rendern Sie Mermaid-Diagramme in verdeckten Tabs erst beim Öffnen des jeweiligen Tabs (mermaid.initialize({ startOnLoad: false })), damit keine Darstellungsfehler entstehen.
+
+Inhalte für Tab 1 (Werkbau Nord GmbH, Stand Februar 2026):
+- 4 KPI-Kacheln: Monats-Plan 570.000 €, Ist-Kosten Feb. 574.200 € (+4.200 € / +0,7 % Warnhinweis), Fixkosten 342.000 € (60 %), Variable Kosten 228.000 € (40 %).
+- Chart 1 (Balkendiagramm Plan vs. Ist): KS-100 Produktion (345.000 / 349.800), KS-200 Vertrieb (92.000 / 90.900), KS-300 IT (48.000 / 48.500), KS-400 Verwaltung (85.000 / 85.000).
+- Chart 2 (Linienverlauf Q1): Plan-Linie 570.000 € (Jan–März), Ist-Kosten Jan 566.400 €, Feb 574.200 €, März noch offen (null).
+- Übersichtstabelle mit Code, Kostenstelle, Typ, Plan, Ist, Abweichung und Status-Pill („Beobachten“ bei KS-100, sonst „Im Plan“).
+
+Inhalte für Tab 2 (LID Behörden-Prozessseite):
+- Eingebettetes Mermaid-Flussdiagramm zum Prozess „IT-Beschaffungsantrag &gt; 5.000 EUR“ (Fachreferat -&gt; Referat 32 IT-Betrieb &amp; Sicherheit -&gt; Referat 21 Vergabe &amp; Haushalt -&gt; Abteilungsleitung).
+- Darunter eine Tabelle fester Ansprechpartner mit Referat, Aufgabe, Ansprechpartner, Standort (Zentrale Nord) und Ziel-Durchlaufzeit.
+
+Inhalte für Tab 3 (IT-Architektur):
+- Mermaid-Systemkontext der Werkbau Nord GmbH (ERP, Zeiterfassung -&gt; DATEV -&gt; Lokales KI-Cockpit &lt;- Netzlaufwerk L: &lt;-&gt; Lokale KI Ollama).
+
+Geben Sie ausschließlich den vollständigen HTML-Code aus.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P3.2 · Design-Feinschliff per Ping-Pong-Prinzip (Abschnitt 3.4) <button class="copy-btn" data-copy="p3-2">Kopieren</button></h3>
+        <pre id="p3-2">Hier ist der aktuelle Stand meiner cockpit.html (Stufe 2). Bitte nehmen Sie drei gezielte Anpassungen vor, ohne bestehende Reiter, Funktionen oder Daten zu verändern:
+1. Fügen Sie oben rechts in der Kopfzeile einen dezenten Button „Als PDF drucken“ hinzu (window.print()) und ergänzen Sie eine @media print CSS-Regel, die Navigation und Button im Ausdruck ausblendet.
+2. Ergänzen Sie in der Kostenstellen-Tabelle von Tab 1 eine fett gedruckte &lt;tfoot&gt;-Summenzeile (Plan 570.000 €, Ist 574.200 €, Abweichung +4.200 €).
+3. Ändern Sie die Farbvariable --accent auf #0b2545 (Firmen-Dunkelblau).
+
+Geben Sie die vollständige aktualisierte HTML-Datei aus.
+
+---
+[HIER DEN VOLLSTÄNDIGEN INHALT IHRER cockpit.html EINFÜGEN]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P4.1 · Schritt 1: Der Ausbau-Prompt für cockpit.html (Abschnitt 4.2) <button class="copy-btn" data-copy="p4-1">Kopieren</button></h3>
+        <pre id="p4-1">Unten nach der Trennlinie --- steht meine bisherige cockpit.html (Stufe 2) vollständig. Erweitern Sie diese Datei um eine Dropzone nach dem Tankdeckel-Prinzip (Verarbeitung nur lokal im Browser, kein Upload auf einen Server).
+
+Grundregeln:
+- Lassen Sie alle vorhandenen Reiter unverändert: „Behörde: Prozess &amp; Wegweiser (LID)“ und „IT-Architektur (C4-Kontext)“ behalten Inhalt und Funktion. Der Ausbau betrifft nur den Reiter „KMU-Controlling (Werkbau Nord)“.
+- Die fest eingetragenen Zahlen in diesem Reiter entfallen. Hinterlegen Sie stattdessen Januar und Februar 2026 als kleine, fiktive Start-Beispieldaten, damit das Cockpit beim ersten Öffnen nicht leer ist.
+- Setzen Sie Inhalte aus eingelesenen Dateien ausschließlich per textContent ein, nie per innerHTML.
+
+Technische Vorgaben:
+- Chart.js (v4.4.3) und Mermaid (v10.9.8) bleiben eingebunden. Binden Sie zusätzlich PapaParse (v5.4.1, jsDelivr) für .csv und SheetJS 0.20.3 für .xlsx/.xls ein, und zwar von https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js (nicht die veraltete Version 0.18.5).
+- Oben im Reiter erscheint eine gut sichtbare Dropzone (klickbar und per Drag-and-Drop bedienbar).
+- Erwartetes Spaltenschema: Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar.
+- Schreiben Sie eine robuste Hilfsfunktion parseEuro(), die reine Zahlen und deutsche Formatierungen (z. B. "38.400,50 €") in Zahlen umwandelt. Nennen Sie die Einlesefunktionen handleFile() und normalizeRows() und die Zeichenfunktion renderDashboard().
+- Sobald eine neue Datei abgelegt wird:
+  1. Aktualisieren sich die vier KPI-Kacheln (Plan, Ist mit Abweichung in € und %, Fixkosten-Anteil, Anzahl kritischer Kostenstellen über +5 % Planabweichung).
+  2. Befüllt sich ein Auswahlfeld für den Berichtsmonat und springt auf den neuesten Monat.
+  3. Zerstören und zeichnen Sie die Chart.js-Diagramme neu (barChart.destroy() / lineChart.destroy()); Kostenstellen mit mehr als 5 % Planüberschreitung erscheinen im Balkendiagramm rot (#b91c1c) statt petrol (#0f766e).
+  4. Aktualisiert sich die Detailtabelle mit roten ALARM-Hinweisen.
+
+Geben Sie die vollständige, lauffähige HTML-Datei mit allen Reitern aus.
+
+---
+[HIER DEN VOLLSTÄNDIGEN INHALT IHRER BISHERIGEN cockpit.html EINFÜGEN]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P4.2 · Praxis-Variante für reale ERP- und DATEV-Exporte (Abschnitt 4.2) <button class="copy-btn" data-copy="p4-2">Kopieren</button></h3>
+        <pre id="p4-2">Mein realer DATEV-Export hat 3 einleitende Info-Zeilen vor den eigentlichen Spaltenköpfen, heißt dort „KSt“ statt „Kostenstelle“ und enthält am Ende eine Zeile „Gesamtsumme“. Die ersten Zeilen des Exports und meine vollständige cockpit.html folgen unten nach ---.
+Passen Sie ausschließlich die Einlesefunktionen handleFile() und normalizeRows() so an, dass die ersten 3 Zeilen übersprungen, „KSt“ korrekt zugeordnet und Zeilen mit „Gesamtsumme“ ignoriert werden. Alle Reiter bleiben unverändert.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P4.3 · Der Prompt für Ihren eigenen Prozess-Editor (Abschnitt 4.3) <button class="copy-btn" data-copy="p4-3">Kopieren</button></h3>
+        <pre id="p4-3">Sie agieren als Frontend-Entwickler für behördliche Fachanwendungen.
+Erstellen Sie eine eigenständige, lauffähige HTML-Datei (prozess_editor.html), die einen vollwertigen lokalen BPMN-2.0-Editor auf Basis von bpmn-js (Modeler, v17.9.1 über unpkg) bereitstellt.
+
+Anforderungen:
+- Bildschirmfüllende Zeichenfläche (#canvas) mit der linken BPMN-Standard-Palette (Aufgaben, Gateways, Swimlanes/Pools, Ereignisse).
+- Schlanke Kopfzeile mit vier Schaltflächen:
+  1. „Neues Diagramm“ (lädt ein minimales Start-Ereignis)
+  2. „.bpmn öffnen“ (liest lokale .bpmn/.xml-Dateien über FileReader ein; zusätzlich per Drag-and-Drop auf die Zeichenfläche)
+  3. „BPMN (.bpmn) speichern“ (lädt den aktuellen XML-Stand lokal herunter)
+  4. „Grafik (.svg) speichern“ (exportiert eine verlustfreie Vektorgrafik für Handbücher oder das Cockpit)
+- Alle Daten bleiben lokal im Browser; kein Upload.
+
+Geben Sie ausschließlich den vollständigen HTML-Code aus.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P5.1 · Der Ausbau-Prompt für Datenbank und Wissensgraph (Abschnitt 5.2) <button class="copy-btn" data-copy="p5-1">Kopieren</button></h3>
+        <pre id="p5-1">Erweitern Sie meine bestehende cockpit.html (Stufe 3) um eine Browser-SQLite-Datenbank (sql.js v1.10.3) und interaktive Wissensgraphen (vis-network v9.1.9). Ich füge meine bisherige cockpit.html unten vollständig ein. Lassen Sie alle vorhandenen Reiter unverändert und ergänzen Sie zwei neue Reiter: „Datenbank“ und „Wissensgraph“.
+
+Anforderungen:
+1. Tankdeckel-Prinzip: Dropzone für .sqlite- und .csv-Dateien. Eine CSV wird in die passende Tabelle übernommen. Button „Datenbank als .sqlite speichern“. Fiktive Demo-Daten nur als Start-Fallback.
+2. Reiter „Datenbank“, Bereich „KMU-Buchungen“:
+   - Tabelle kmu_buchungen (datum, kostenstelle, lieferant, projekt, plan_eur, ist_eur, status).
+   - Kostenstellen-Filter und Button „Nur Ausreißer / Doppelabrechnungen zeigen“.
+   - Daneben ein Vis.js-Ursachengraph (Kostenstelle -&gt; Projekt -&gt; Lieferant), der auffällige Buchungen mit dicken roten Kanten (#b91c1c) und Differenzbetrag hervorhebt.
+3. Reiter „Datenbank“, Bereich „LID-Kontakte“ (500 Funktionen, 12 Standorte):
+   - Tabellen lid_funktionen (Funktion, Referat, Standort, Gremien, Fachverfahren, kritikalitaet, vertretung_geregelt) und lid_kontakte (dienstliche Ansprechperson je Funktion über funktion_id). Die Kritikalität bewertet die Funktion, nicht die Person.
+   - Live-Suche, Auswahllisten für Standort und Referat, Kästchen „Kritische Funktionen (&gt;= 70)“.
+   - Performante Darstellung (SQL LIMIT 120 und Zähler des Gesamtbestands).
+4. Reiter „Wissensgraph“ (LID-Gremiennetz und Blast Radius):
+   - Auswahlfeld für eine Funktion oder ein Fachverfahren, Tiefenwahl (Tiefe 1 oder 2) und Button „Auswirkungen berechnen“. Szenario: „Funktion unbesetzt / Vertretung nicht geregelt“.
+   - Breitensuche über die Graph-Kanten zur Berechnung des Blast Radius mit farblicher Hervorhebung (Startknoten „unbesetzt“ = dunkelrot, Ebene 1 = rot, Ebene 2 = orange, Rest = grau) und einem kurzen Textbericht unter dem Graphen.
+5. Wird die Datei per Doppelklick (file://) geöffnet, zeigen nur die beiden neuen Reiter einen freundlichen Hinweis: „Bitte über den lokalen Mini-Server öffnen: http://localhost:8000/cockpit.html“. Alle übrigen Reiter funktionieren weiter.
+6. Daten aus Dateien nie per innerHTML einsetzen, sondern per textContent.
+
+Geben Sie ausschließlich den vollständigen, lauffähigen HTML-Code der erweiterten Datei aus.
+---
+[Hier den vollständigen Inhalt Ihrer bisherigen cockpit.html einfügen]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P6.1 · Der Ausbau-Prompt für den KI-Assistenten (Abschnitt 6.4) <button class="copy-btn" data-copy="p6-1">Kopieren</button></h3>
+        <pre id="p6-1">Erweitern Sie meine bestehende cockpit.html (Stufe 4) um einen neuen Reiter „KI-Assistent“ mit Anbindung an eine lokale Ollama-Instanz nach dem Kellner-Prinzip (fetch, JSON-Modus). Ich füge meine bisherige cockpit.html unten vollständig ein. Lassen Sie alle vorhandenen Reiter unverändert.
+
+Vorgaben für den neuen Reiter:
+- Verbindungsleiste mit Eingabefeldern für Endpunkt (Standard: http://localhost:11434/api/chat), Modellname (Standard: qwen3.5:4b) und optionalen API-Schlüssel (Passwortfeld, nur für llama-server) sowie Button „Verbindung prüfen“ (fragt /api/tags ab). Modellname und Schlüssel werden bei jedem Aufruf aus den Feldern gelesen.
+- Aufrufe mit stream: false, think: false und temperature 0.1.
+- Vier Bereiche:
+  1. Daten-Extraktor: Liest PDFs lokal mit pdf.js 3.11.174 (jsDelivr, pdfjs-dist) und immer mit isEvalSupported: false oder übernimmt eingefügten Rechnungstext. Fordert per format "json" die Felder {rechnungsnr, lieferant, kostenstelle, netto_eur, pruefhinweis} an, prüft sie auf Vollständigkeit und fügt jede Extraktion einer Tabelle hinzu.
+  2. Posteingang: Ordnet Texte per JSON nach dringlichkeit (HOCH/MITTEL/NIEDRIG), fachbereich, kurzzusammenfassung und sofortmassnahme ein.
+  3. Firmen-Orakel: Fragefeld, das ausschließlich auf Basis einer zur Laufzeit geladenen Richtlinie (.txt per Dropzone) antwortet, die Fundstelle nennt und bei fehlender Regelung den festgelegten Hinweissatz ausgibt.
+  4. LID-Gremiennetz: Button „Offene Beschlüsse aus der Datenbank übernehmen“ holt per SQL die offenen Beschlüsse aus der bereits geladenen Tabelle lid_beschluesse (zuständige Funktion und Ansprechperson). Damit beantwortet der Bereich Fragen zu Zuständigkeiten und überfälligen Beschlüssen.
+- Bestätigungsmeldungen (Toasts) und ein Button zum Herunterladen aller extrahierten Datensätze als JSON-Datei.
+- Alle Inhalte aus Dateien und KI-Antworten per textContent einsetzen, nie per innerHTML.
+- Wird die Datei per Doppelklick (file://) geöffnet oder ist Ollama nicht erreichbar, zeigt nur dieser Reiter einen freundlichen Hinweis und bietet einen Demo-Modus mit fiktiven Beispielantworten an. Alle übrigen Reiter funktionieren weiter.
+
+Geben Sie ausschließlich den vollständigen HTML-Code der erweiterten Datei aus.
+---
+[Hier den vollständigen Inhalt Ihrer bisherigen cockpit.html einfügen]</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P6.2 · Vorlage für neue Fachbereiche (Abschnitt 6.5) <button class="copy-btn" data-copy="p6-2">Kopieren</button></h3>
+        <pre id="p6-2">Analysieren Sie den Reiter „KI-Assistent“ meines bestehenden Cockpits (fetch-Aufruf an localhost:11434/api/chat mit JSON-Modus, pdf.js-Extraktor mit isEvalSupported: false, Ausgabe per textContent, Toast-Meldungen).
+Behalten Sie diese technische Struktur bei, aber passen Sie Oberfläche, JSON-Felder und fiktive Beispieldaten für folgenden Fachbereich an: [IHR FACHBEREICH, z. B. Bauantrags-Vorprüfung im Referat 41].</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P8.1 · Die Lösung: alle Bibliotheken lokal in /libs/ (Abschnitt 8.1) <button class="copy-btn" data-copy="p8-1">Kopieren</button></h3>
+        <pre id="p8-1">Hier ist meine vollständige cockpit.html: [Datei einfügen]
+Stellen Sie alle Bibliotheken auf den lokalen Ordner ./libs/ um, einschließlich der Zusatzdateien von sql.js (locateFile) und pdf.js (workerSrc). Setzen Sie beim Öffnen von PDF-Dateien isEvalSupported: false. Lassen Sie alle vorhandenen Reiter und Funktionen unverändert.</pre>
+      </div>
+      <div class="prompt-card">
+        <h3>P8.2 · Den Code aufräumen (Abschnitt 8.2) <button class="copy-btn" data-copy="p8-2">Kopieren</button></h3>
+        <pre id="p8-2">Hier ist meine vollständige cockpit.html: [Datei einfügen]
+Gliedern Sie den Code in vier klar kommentierte Blöcke, ohne eine Funktion oder einen Reiter zu verändern:
+1. === BLOCK 1: KONFIGURATION UND SCHWELLENWERTE === (Farben, Kostenstellen-Namen, Schwellenwerte wie 5 % Warnung und den API-Endpunkt zentral oben sammeln; keine Daten und keine Schlüssel)
+2. === BLOCK 2: DESIGN UND LAYOUT (CSS) ===
+3. === BLOCK 3: STRUKTUR UND REITER (HTML) ===
+4. === BLOCK 4: LOGIK UND SCHNITTSTELLEN (JS, unterteilt in Daten-Import, Diagramme, SQLite/Graph und KI-Anbindung) ===
+Ersetzen Sie dabei jedes innerHTML, das Inhalte aus Dateien oder KI-Antworten einsetzt, durch textContent.</pre>
+      </div>
+<!--PROMPTS-END-->
+      <div class="prompt-card">
+        <h3>Startbefehle für Stufe 4 und 5 (Abschnitt 6.2) <button class="copy-btn" data-copy="cmd-start">Kopieren</button></h3>
+        <pre id="cmd-start"># Fenster 1 – nur nötig, wenn die Ollama-App nicht läuft (Stufe 5):
+$env:OLLAMA_HOST="127.0.0.1:11434"; $env:OLLAMA_NO_CLOUD="1"; ollama serve
+
+# Fenster 2 – im Ordner des Begleitpakets (ab Stufe 4):
+python -m http.server 8000 --bind 127.0.0.1
+
+# Danach im Browser: http://127.0.0.1:8000/stufe5-smart-cockpit/cockpit.html
+# OLLAMA_ORIGINS ist für localhost nicht nötig und darf nie "*" sein.</pre>
       </div>
     </div>
   </main>
 
   <footer>
-    Michael Estel — „Das KI-Cockpit“ (2026) · Kontakt: michael@estel.email · Organisation: github.com/On-Premise-AI-Cockpit · <a href="KI-Cockpit_Spickzettel_A4.pdf" style="color:var(--primary);font-weight:600;text-decoration:none;">A4-Spickzettel (PDF)</a>
+    Michael Estel – „Das KI-Cockpit“ (2026) · Vorlagen unter MIT-Lizenz, Bibliotheken unter eigenen Lizenzen (siehe <a href="libs/README_LIBS.md" style="color:var(--primary);">libs/README_LIBS.md</a>) · Kontakt: michael@estel.email · github.com/On-Premise-AI-Cockpit
   </footer>
 
   <script>
     document.querySelectorAll(".copy-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const text = document.getElementById(btn.dataset.copy).textContent;
-        await navigator.clipboard.writeText(text);
-        const orig = btn.textContent;
-        btn.textContent = "Kopiert ✓";
-        setTimeout(() => { btn.textContent = orig; }, 1800);
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = "Kopiert ✓";
+        } catch (e) {
+          btn.textContent = "Bitte markieren und Strg+C";
+        }
+        setTimeout(() => { btn.textContent = "Kopieren"; }, 1800);
       });
     });
   </script>

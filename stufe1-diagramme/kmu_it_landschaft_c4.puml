@@ -2,7 +2,7 @@
 !include <C4/C4_Context>
 
 LAYOUT_WITH_LEGEND()
-title System-Context (C4) — Werkbau Nord GmbH (Controlling & Betriebs-IT)
+title System-Context (C4) – Werkbau Nord GmbH (Controlling & Betriebs-IT)
 
 Person(gf, "Geschaeftsfuehrung", "Steuert Gesamtbetrieb, Liquiditaet und Investitionen.")
 Person(ctrl, "Controlling & Buchhaltung", "Erstellt Monatsabschluesse und prueft Kostenstellen.")

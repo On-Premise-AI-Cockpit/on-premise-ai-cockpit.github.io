@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KI-Cockpit (Stufe 3: Dropzone) — Werkbau Nord GmbH</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <title>KI-Cockpit (Stufe 3) – Werkbau Nord GmbH & LID</title>
+  <!--
+    Das KI-Cockpit – kumulativer Stand nach Stufe 3. Jede Stufe ergänzt Reiter, vorhandene Reiter bleiben unverändert.
+    Begleit-Monorepo zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
+    Alle mitgelieferten Beispieldaten sind fiktiv. Ihre echten Daten laden Sie erst zur Laufzeit.
+    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Monorepo oder direkt neben dieser Datei),
+    sonst aus dem Internet (CDN). So läuft die Datei online und nach Befüllen von libs/ auch offline.
+  -->
   <style>
     :root {
       --bg: #f1f5f9; --surface: #ffffff; --ink: #0f172a; --muted: #475569;
@@ -14,25 +18,18 @@
       --ok: #15803d; --border: #e2e8f0;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
-    header { background: var(--accent); color: #f8fafc; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+    header { background: var(--accent); color: #f8fafc; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     header h1 { margin: 0; font-size: 1.35rem; }
     header p { margin: 0.2rem 0 0; font-size: 0.88rem; color: #cbd5e1; }
-    main { max-width: 1240px; margin: 1.5rem auto; padding: 0 1.5rem 3rem; }
-    .dropzone {
-      background: var(--surface); border: 2px dashed #0f766e; border-radius: 12px;
-      padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; cursor: pointer;
-      transition: background 0.15s ease, transform 0.15s ease;
-    }
-    .dropzone.dragover { background: #ccfbf1; transform: scale(1.005); }
-    .dropzone strong { color: var(--primary); font-size: 1.05rem; }
-    .dropzone p { margin: 0.35rem 0 0; font-size: 0.88rem; color: var(--muted); }
-    .controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    select, button.btn {
-      padding: 0.5rem 0.9rem; border-radius: 8px; border: 1px solid var(--border);
-      background: var(--surface); font-size: 0.9rem; cursor: pointer;
-    }
-    button.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    .badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.82rem; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    nav button { background: none; border: none; border-bottom: 3px solid transparent; padding: 0.85rem 1.05rem; font-size: 0.93rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    nav button.active { color: var(--primary); border-bottom-color: var(--primary); }
+    nav button .neu { font-size: 0.68rem; background: #ccfbf1; color: #115e59; border-radius: 999px; padding: 0.05rem 0.4rem; margin-left: 0.3rem; vertical-align: middle; }
+    main { max-width: 1280px; margin: 1.5rem auto; padding: 0 1.5rem 3rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.15rem 1.25rem; }
     .kpi .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
@@ -43,88 +40,303 @@
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
     .card h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.55rem; }
     table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th, td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); background: #f8fafc; }
+    th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; background: #f8fafc; }
     .num { text-align: right; font-variant-numeric: tabular-nums; }
-    .pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+    .pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
     .pill.ok { background: #dcfce7; color: #166534; }
     .pill.warn { background: #fef3c7; color: #92400e; }
     .pill.danger { background: #fee2e2; color: #991b1b; }
-    #statusBar { font-size: 0.85rem; color: var(--muted); }
+    .hinweis { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 0.8rem 1rem; margin: 0 0 1rem; font-size: 0.9rem; color: #1e3a8a; }
+    .hinweis.gelb { background: #fffbeb; border-color: #fde68a; border-left-color: #d97706; color: #78350f; }
+    .hinweis code { background: rgba(255,255,255,0.7); padding: 0 0.25rem; border-radius: 4px; }
+    .klein { font-size: 0.82rem; color: var(--muted); }
+    select, input, button.btn, textarea { font-family: inherit; }
+    select, input[type="text"], input[type="password"], button.btn { padding: 0.45rem 0.75rem; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); font-size: 0.88rem; }
+    button.btn { cursor: pointer; }
+    button.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    button.btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); font-weight: 600; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; align-items: center; }
+    footer { text-align: center; font-size: 0.82rem; color: var(--muted); padding: 1.5rem; border-top: 1px solid var(--border); }
+    .dropzone { background: var(--surface); border: 2px dashed var(--primary); border-radius: 12px; padding: 1.4rem; text-align: center; margin-bottom: 1.25rem; cursor: pointer; transition: background 0.15s ease; }
+    .dropzone.dragover { background: #ccfbf1; }
+    .dropzone strong { color: var(--primary); font-size: 1.02rem; }
+    .dropzone p { margin: 0.35rem 0 0; font-size: 0.86rem; color: var(--muted); }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <h1>KI-Cockpit — Werkbau Nord GmbH (Stufe 3: Dropzone)</h1>
-      <p>Tankdeckel-Prinzip: Programm und Daten sind getrennt — ziehen Sie neue .csv- oder .xlsx-Exporte direkt herein.</p>
+      <h1>KI-Cockpit – Werkbau Nord GmbH &amp; LID</h1>
+      <p>Stufe 3: + Dropzone für Monatsexporte (Kapitel 4)</p>
     </div>
-    <div id="badgeStand" style="background:rgba(255,255,255,0.14);padding:0.35rem 0.85rem;border-radius:999px;font-size:0.84rem;">
-      Standarddaten geladen (Februar 2026)
-    </div>
+    <span class="badge">Stufe 3 von 5</span>
   </header>
 
+  <nav role="tablist">
+    <button class="active" data-tab="kmu">KMU-Controlling</button>
+    <button data-tab="monat">Monatsabschluss (Dropzone) <span class="neu">neu</span></button>
+    <button data-tab="behoerde">Behörde: Prozess &amp; Wegweiser</button>
+    <button data-tab="architektur">IT-Architektur</button>
+  </nav>
+
   <main>
-    <div class="dropzone" id="dropzone">
-      <strong>DATEV- / Excel-Monatsabschluss (.csv oder .xlsx) hier ablegen — oder klicken</strong>
-      <p>Erwartete Spalten: <code>Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar</code> (Verarbeitung 100 % lokal im Browser)</p>
-      <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" />
-    </div>
+    <div id="libHinweis" class="hinweis gelb" style="display:none"></div>
 
-    <div class="controls">
-      <div>
-        <label for="monthFilter"><strong>Aktiver Berichtsmonat:</strong></label>
-        <select id="monthFilter"></select>
+    <!-- ===== REITER: KMU-CONTROLLING (seit Stufe 2, statische Übersicht Februar 2026) ===== -->
+    <section id="tab-kmu" class="tab-panel active">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">Monats-Plan (gesamt)</div><div class="value">570.000 €</div><div class="sub ok-txt">4 Kostenstellen (KS-100 bis KS-400)</div></div>
+        <div class="kpi"><div class="label">Ist-Kosten Februar 2026</div><div class="value">574.200 €</div><div class="sub warn-txt">+4.200 € (+0,7 % über Plan)</div></div>
+        <div class="kpi"><div class="label">Fixkosten (Plan)</div><div class="value">342.000 €</div><div class="sub ok-txt">60,0 % fixe Strukturkosten</div></div>
+        <div class="kpi"><div class="label">Variable Kosten (Plan)</div><div class="value">228.000 €</div><div class="sub ok-txt">40,0 % auftragsabhängig</div></div>
       </div>
-      <div id="statusBar">Tipp: Ziehen Sie <code>daten/kmu_monatsabschluss_2026-03.csv</code> in die Dropzone.</div>
-    </div>
+      <div class="grid-2">
+        <div class="card"><h2>Kostenstellen: Plan vs. Ist Februar 2026</h2><canvas id="chartKostenstellen" height="220"></canvas></div>
+        <div class="card"><h2>Kostenverlauf Q1 (Januar und Februar 2026 vs. Plan)</h2><canvas id="chartVerlauf" height="220"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Detailübersicht der vier Kostenstellen (Februar 2026)</h2>
+        <table>
+          <thead><tr><th>Code</th><th>Kostenstelle</th><th>Typ</th><th class="num">Plan (€)</th><th class="num">Ist Feb. (€)</th><th class="num">Abweichung</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>KS-100</strong></td><td>Produktion &amp; Montage</td><td>Fix + Variabel</td><td class="num">345.000 €</td><td class="num">349.800 €</td><td class="num">+4.800 €</td><td><span class="pill warn">Beobachten</span></td></tr>
+            <tr><td><strong>KS-200</strong></td><td>Vertrieb &amp; Projekte</td><td>Gemischt</td><td class="num">92.000 €</td><td class="num">90.900 €</td><td class="num">-1.100 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+            <tr><td><strong>KS-300</strong></td><td>IT &amp; Infrastruktur</td><td>Fix</td><td class="num">48.000 €</td><td class="num">48.500 €</td><td class="num">+500 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+            <tr><td><strong>KS-400</strong></td><td>Verwaltung &amp; Zentrale</td><td>Fix</td><td class="num">85.000 €</td><td class="num">85.000 €</td><td class="num">0 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+          </tbody>
+        </table>
+        <p class="klein">Fiktive Beispielwerte, fest im Quelltext hinterlegt (Stufe 2). Ab Stufe 3 laden Sie Monatswerte zur Laufzeit über die Dropzone.</p>
+      </div>
+    </section>
 
-    <div class="kpi-grid">
-      <div class="kpi"><div class="label">Plan-Kosten (Monat)</div><div class="value" id="kpiPlan">–</div><div class="sub" id="kpiPlanSub"></div></div>
-      <div class="kpi"><div class="label">Ist-Kosten (Monat)</div><div class="value" id="kpiIst">–</div><div class="sub" id="kpiDiff"></div></div>
-      <div class="kpi"><div class="label">Fixkosten (Ist)</div><div class="value" id="kpiFix">–</div><div class="sub" id="kpiFixSub"></div></div>
-      <div class="kpi"><div class="label">Kritische Kostenstellen (&gt; 5 %)</div><div class="value" id="kpiAlerts">–</div><div class="sub" id="kpiAlertsSub"></div></div>
-    </div>
+    <!-- ===== REITER: MONATSABSCHLUSS MIT DROPZONE (ergänzt in Stufe 3) ===== -->
+    <section id="tab-monat" class="tab-panel">
+      <div class="dropzone" id="dropzone">
+        <strong>DATEV- / Excel-Monatsabschluss (.csv oder .xlsx) hier ablegen – oder klicken</strong>
+        <p>Erwartete Spalten: <code>Monat;Kostenstelle;Kategorie;Kostenart;Plan_EUR;Ist_EUR;Kommentar</code> · Die Datei wird nur im Browser gelesen, nichts wird hochgeladen.</p>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" />
+      </div>
+      <div class="toolbar" style="justify-content:space-between">
+        <div><label for="monthFilter"><strong>Aktiver Berichtsmonat:</strong></label> <select id="monthFilter"></select></div>
+        <div id="statusBar" class="klein">Beispieldaten Januar und Februar 2026 (fiktiv) geladen. Tipp: Ziehen Sie <code>daten/kmu_monatsabschluss_2026-03.csv</code> in die Dropzone.</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">Plan-Kosten (Monat)</div><div class="value" id="kpiPlan">–</div><div class="sub" id="kpiPlanSub"></div></div>
+        <div class="kpi"><div class="label">Ist-Kosten (Monat)</div><div class="value" id="kpiIst">–</div><div class="sub" id="kpiDiff"></div></div>
+        <div class="kpi"><div class="label">Fixkosten (Ist)</div><div class="value" id="kpiFix">–</div><div class="sub" id="kpiFixSub"></div></div>
+        <div class="kpi"><div class="label">Kritische Kostenstellen (&gt; 5 %)</div><div class="value" id="kpiAlerts">–</div><div class="sub" id="kpiAlertsSub"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h2>Kostenstellen: Plan vs. Ist</h2><canvas id="chartBar" height="220"></canvas></div>
+        <div class="card"><h2>Monatsverlauf (alle geladenen Monate)</h2><canvas id="chartLine" height="220"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Detailpositionen im ausgewählten Monat</h2>
+        <table>
+          <thead><tr><th>Kostenstelle</th><th>Kategorie</th><th>Kostenart</th><th class="num">Plan (€)</th><th class="num">Ist (€)</th><th class="num">Abweichung</th><th>Ampel &amp; Kommentar</th></tr></thead>
+          <tbody id="detailBody"></tbody>
+        </table>
+      </div>
+    </section>
 
-    <div class="grid-2">
-      <div class="card"><h2>Kostenstellen: Plan vs. Ist</h2><canvas id="chartBar" height="220"></canvas></div>
-      <div class="card"><h2>Monatsverlauf (alle geladenen Monate)</h2><canvas id="chartLine" height="220"></canvas></div>
-    </div>
+    <!-- ===== REITER: BEHÖRDE – PROZESS & WEGWEISER (seit Stufe 2) ===== -->
+    <section id="tab-behoerde" class="tab-panel">
+      <div class="card">
+        <h2>LID – Prozesswegweiser: IT-Beschaffungsantrag</h2>
+        <p>Der Ablauf aus Stufe 1, eingebettet als Mermaid-Diagramm. Die Wertgrenze von 5.000 € ist eine fiktive Hausregel; maßgeblich sind die Vorgaben Ihres Landes bzw. des Bundes.</p>
+        <div class="mermaid">
+flowchart TD
+    A(["Start: Bedarf im Fachreferat erkannt"]) --> B["Beschaffungsantrag & Leistungsbeschreibung erfassen"]
+    B --> C{"Wert über 5.000 EUR netto?"}
+    C -- "Nein (Direktauftrag)" --> D["Referat 21: Mittelverfügbarkeit prüfen"]
+    C -- "Ja (Vergabeverfahren)" --> E["Referat 32: IT-Sicherheit & Architektur prüfen"]
+    E --> F{"IT-Freigabe erteilt?"}
+    F -- "Nein (Nachbesserung)" --> B
+    F -- "Ja" --> G["Referat 21: Vergaberecht & Haushaltsmittel prüfen"]
+    D --> H["Abteilungsleitung: Zeichnung & Freigabe"]
+    G --> H
+    H --> I(["Bestellung auslösen & Akte archivieren"])
+        </div>
+      </div>
+      <div class="card">
+        <h2>Zuständige Funktionen im Prozess (Auszug LID, fiktiv)</h2>
+        <table>
+          <thead><tr><th>Funktion</th><th>Aufgabe im Ablauf</th><th>Ansprechperson (dienstlich)</th><th>Standort</th><th>Durchlaufzeit (Ziel)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Fachreferat IT-Architektur (Ref. 32)</strong></td><td>IT-Sicherheit, Architektur &amp; ISB-Prüfung</td><td>K. Lindner</td><td>Zentrale Nord</td><td>max. 5 Werktage</td></tr>
+            <tr><td><strong>Teamleitung Vergabestelle (Ref. 21)</strong></td><td>Haushaltsmittel &amp; Vergaberecht</td><td>S. Hartmann</td><td>Zentrale Nord</td><td>max. 7 Werktage</td></tr>
+            <tr><td><strong>Abteilungsleitung Zentrale Dienste</strong></td><td>Schlusszeichnung &amp; Bestellfreigabe</td><td>Dr. M. Vogt</td><td>Zentrale Nord</td><td>max. 3 Werktage</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2>Detailpositionen im ausgewählten Monat</h2>
-      <table>
-        <thead>
-          <tr><th>Kostenstelle</th><th>Kategorie</th><th>Kostenart</th><th class="num">Plan (€)</th><th class="num">Ist (€)</th><th class="num">Abweichung</th><th>Ampel &amp; Kommentar</th></tr>
-        </thead>
-        <tbody id="detailBody"></tbody>
-      </table>
-    </div>
+    <!-- ===== REITER: IT-ARCHITEKTUR (seit Stufe 2) ===== -->
+    <section id="tab-architektur" class="tab-panel">
+      <div class="card">
+        <h2>IT-Systemkontext: Werkbau Nord GmbH</h2>
+        <p>Datenquellen, die in den Stufen 3 bis 5 an das lokale Cockpit angebunden werden.</p>
+        <div class="mermaid">
+flowchart LR
+    ERP["ERP / Warenwirtschaft"] --> DATEV["DATEV Finanzbuchhaltung"]
+    ZEIT["Zeiterfassung TimeTrack"] --> DATEV
+    DATEV -->|"CSV / XLSX Export"| COCKPIT["Lokales KI-Cockpit (Browser)"]
+    NAS["Netzlaufwerk L: (PDF & Handbücher)"] --> COCKPIT
+    COCKPIT <-->|"HTTP 127.0.0.1 (Stufe 5)"| OLLAMA["Lokale KI (Ollama)"]
+    GF["Geschäftsführung & Controlling"] --> COCKPIT
+    style COCKPIT fill:#0f766e,color:#ffffff,stroke:#115e59,stroke-width:2px
+        </div>
+      </div>
+    </section>
+
+
   </main>
 
+  <footer>
+    Das KI-Cockpit – Begleit-Monorepo: on-premise-ai-cockpit.github.io · Stufe 3: stufe3-dropzone/cockpit.html · <span id="libStatus">Bibliotheken werden geladen …</span>
+  </footer>
+
   <script>
-    // Initialdaten (Januar & Februar 2026 als Demo-Basis vor dem ersten Drag-and-Drop)
-    let allRows = [
-      { Monat:"2026-01", Kostenstelle:"KS-100", Kategorie:"Fix", Kostenart:"Personal & Hallenmiete", Plan_EUR:175000, Ist_EUR:175000, Kommentar:"Plangemaess" },
-      { Monat:"2026-01", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Material & Fertigung", Plan_EUR:118000, Ist_EUR:115200, Kommentar:"Geringerer Stahlabruf" },
-      { Monat:"2026-01", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Fremdmontage & Subunternehmer", Plan_EUR:52000, Ist_EUR:50800, Kommentar:"Planmaessig" },
-      { Monat:"2026-01", Kostenstelle:"KS-200", Kategorie:"Fix", Kostenart:"Vertrieb Grundkosten", Plan_EUR:34000, Ist_EUR:34000, Kommentar:"Plangemaess" },
-      { Monat:"2026-01", Kostenstelle:"KS-200", Kategorie:"Variabel", Kostenart:"Provisionen & Reisekosten", Plan_EUR:58000, Ist_EUR:58400, Kommentar:"Messebesuch Nord" },
-      { Monat:"2026-01", Kostenstelle:"KS-300", Kategorie:"Fix", Kostenart:"ERP-Lizenzen, Netz & Wartung", Plan_EUR:48000, Ist_EUR:48000, Kommentar:"Stabil" },
-      { Monat:"2026-01", Kostenstelle:"KS-400", Kategorie:"Fix", Kostenart:"Verwaltung & Zentrale", Plan_EUR:85000, Ist_EUR:85000, Kommentar:"Plangemaess" },
-      { Monat:"2026-02", Kostenstelle:"KS-100", Kategorie:"Fix", Kostenart:"Personal & Hallenmiete", Plan_EUR:175000, Ist_EUR:175000, Kommentar:"Plangemaess" },
-      { Monat:"2026-02", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Material & Fertigung", Plan_EUR:118000, Ist_EUR:119800, Kommentar:"Blechpreise +1,5 %" },
-      { Monat:"2026-02", Kostenstelle:"KS-100", Kategorie:"Variabel", Kostenart:"Fremdmontage & Subunternehmer", Plan_EUR:52000, Ist_EUR:55000, Kommentar:"Erste Ueberstunden Halle 4" },
-      { Monat:"2026-02", Kostenstelle:"KS-200", Kategorie:"Fix", Kostenart:"Vertrieb Grundkosten", Plan_EUR:34000, Ist_EUR:34000, Kommentar:"Plangemaess" },
-      { Monat:"2026-02", Kostenstelle:"KS-200", Kategorie:"Variabel", Kostenart:"Provisionen & Reisekosten", Plan_EUR:58000, Ist_EUR:56900, Kommentar:"Weniger Reisekosten" },
-      { Monat:"2026-02", Kostenstelle:"KS-300", Kategorie:"Fix", Kostenart:"ERP-Lizenzen, Netz & Wartung", Plan_EUR:48000, Ist_EUR:48500, Kommentar:"Ersatzteile" },
-      { Monat:"2026-02", Kostenstelle:"KS-400", Kategorie:"Fix", Kostenart:"Verwaltung & Zentrale", Plan_EUR:85000, Ist_EUR:85000, Kommentar:"Plangemaess" }
+    // ================================================================
+    // BLOCK 1: Konfiguration und Bibliotheken laden
+    // Reihenfolge je Bibliothek: ../libs/ (Monorepo) -> ./libs/ (eigener Ordner) -> Internet (CDN)
+    // ================================================================
+    const NUR_LOKAL = false; // true = Betriebsfassung: niemals aus dem Internet nachladen
+    const IST_DATEI = location.protocol === "file:"; // per Doppelklick geöffnet?
+    const LIB_ORDNER = ["../libs/", "./libs/"];
+    const BIBLIOTHEKEN = [
+      { name: "Chart.js 4.4.3", datei: "chart.umd.min.js", pruefen: () => window.Chart, cdn: "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" },
+      { name: "Mermaid 10.9.8", datei: "mermaid.min.js", pruefen: () => window.mermaid, cdn: "https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js" },
+      { name: "PapaParse 5.4.1", datei: "papaparse.min.js", pruefen: () => window.Papa, cdn: "https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" },
+      { name: "SheetJS 0.20.3", datei: "xlsx.full.min.js", pruefen: () => window.XLSX, cdn: "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" },
     ];
+    const libQuelle = {}; // Dateiname -> tatsächlich geladene Adresse
 
+    function ladeSkript(url) {
+      return new Promise((ok, fehler) => {
+        const s = document.createElement("script");
+        s.src = url;
+        s.onload = ok;
+        s.onerror = fehler;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ladeBibliothek(lib) {
+      const kandidaten = LIB_ORDNER.map((ordner) => ordner + lib.datei);
+      if (!NUR_LOKAL) kandidaten.push(lib.cdn);
+      for (const url of kandidaten) {
+        try {
+          await ladeSkript(url);
+          if (lib.pruefen()) { libQuelle[lib.datei] = url; return true; }
+        } catch (e) { /* nächste Quelle versuchen */ }
+      }
+      return false;
+    }
+
+    function verzeichnisVon(url) {
+      return url ? url.slice(0, url.lastIndexOf("/") + 1) : "";
+    }
+
+    // ================================================================
+    // BLOCK 2: Hilfsfunktionen (Texte immer per textContent einsetzen, nie per innerHTML)
+    // ================================================================
+    const fmt = (n) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
+
+    function el(tag, eigenschaften = {}, ...kinder) {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(eigenschaften)) {
+        if (k === "text") e.textContent = v;
+        else if (k === "className") e.className = v;
+        else e.setAttribute(k, v);
+      }
+      kinder.forEach((kind) => e.append(kind));
+      return e;
+    }
+
+    function zeigeHinweis(id, teile) {
+      // teile: Liste aus Texten und [code]-Einträgen, z. B. ["Starten Sie ", ["python -m http.server"], "."]
+      const box = document.getElementById(id);
+      if (!box) return;
+      box.replaceChildren(...teile.map((t) => Array.isArray(t) ? el("code", { text: t[0] }) : document.createTextNode(t)));
+      box.style.display = "block";
+    }
+
+    // ================================================================
+    // BLOCK 3: Reiter-Navigation
+    // ================================================================
+    const tabAktionen = {}; // Reiter-Name -> Funktion, die beim Öffnen läuft
+
+    document.querySelectorAll("nav button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        const panel = document.getElementById("tab-" + btn.dataset.tab);
+        panel.classList.add("active");
+        renderMermaidInPanel(panel);
+        if (tabAktionen[btn.dataset.tab]) tabAktionen[btn.dataset.tab]();
+      });
+    });
+
+    async function renderMermaidInPanel(panel) {
+      if (!window.mermaid) return;
+      const blocks = panel.querySelectorAll(".mermaid:not([data-processed])");
+      if (blocks.length > 0) await mermaid.run({ nodes: blocks });
+    }
+
+    // ================================================================
+    // BLOCK 4: Stufe 2 – statische Übersicht (fiktive Beispielwerte Februar 2026)
+    // ================================================================
+    function zeichneStatischeCharts() {
+      new Chart(document.getElementById("chartKostenstellen"), {
+        type: "bar",
+        data: {
+          labels: ["KS-100 Produktion", "KS-200 Vertrieb", "KS-300 IT", "KS-400 Verwaltung"],
+          datasets: [
+            { label: "Plan (€)", data: [345000, 92000, 48000, 85000], backgroundColor: "#94a3b8" },
+            { label: "Ist Feb. (€)", data: [349800, 90900, 48500, 85000], backgroundColor: "#0f766e" }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
+      });
+      new Chart(document.getElementById("chartVerlauf"), {
+        type: "line",
+        data: {
+          labels: ["Januar 2026", "Februar 2026", "März 2026 (offen)"],
+          datasets: [
+            { label: "Plan (€)", data: [570000, 570000, 570000], borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+            { label: "Ist (€)", data: [566400, 574200, null], borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.25 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { suggestedMin: 540000, suggestedMax: 600000 } } }
+      });
+    }
+
+    // ================================================================
+    // BLOCK 5: Stufe 3 – Dropzone (Tankdeckel-Prinzip: Daten kommen zur Laufzeit)
+    // ================================================================
+    // Fiktive Start-Beispieldaten (Januar und Februar 2026), damit der Reiter nicht leer ist
+    let allRows = [
+      { Monat: "2026-01", Kostenstelle: "KS-100", Kategorie: "Fix", Kostenart: "Personal & Hallenmiete", Plan_EUR: 175000, Ist_EUR: 175000, Kommentar: "Plangemaess" },
+      { Monat: "2026-01", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Material & Fertigung", Plan_EUR: 118000, Ist_EUR: 115200, Kommentar: "Geringerer Stahlabruf" },
+      { Monat: "2026-01", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Fremdmontage & Subunternehmer", Plan_EUR: 52000, Ist_EUR: 50800, Kommentar: "Planmaessig" },
+      { Monat: "2026-01", Kostenstelle: "KS-200", Kategorie: "Fix", Kostenart: "Vertrieb Grundkosten", Plan_EUR: 34000, Ist_EUR: 34000, Kommentar: "Plangemaess" },
+      { Monat: "2026-01", Kostenstelle: "KS-200", Kategorie: "Variabel", Kostenart: "Provisionen & Reisekosten", Plan_EUR: 58000, Ist_EUR: 58400, Kommentar: "Messebesuch Nord" },
+      { Monat: "2026-01", Kostenstelle: "KS-300", Kategorie: "Fix", Kostenart: "ERP-Lizenzen, Netz & Wartung", Plan_EUR: 48000, Ist_EUR: 48000, Kommentar: "Stabil" },
+      { Monat: "2026-01", Kostenstelle: "KS-400", Kategorie: "Fix", Kostenart: "Verwaltung & Zentrale", Plan_EUR: 85000, Ist_EUR: 85000, Kommentar: "Plangemaess" },
+      { Monat: "2026-02", Kostenstelle: "KS-100", Kategorie: "Fix", Kostenart: "Personal & Hallenmiete", Plan_EUR: 175000, Ist_EUR: 175000, Kommentar: "Plangemaess" },
+      { Monat: "2026-02", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Material & Fertigung", Plan_EUR: 118000, Ist_EUR: 119800, Kommentar: "Blechpreise +1,5 %" },
+      { Monat: "2026-02", Kostenstelle: "KS-100", Kategorie: "Variabel", Kostenart: "Fremdmontage & Subunternehmer", Plan_EUR: 52000, Ist_EUR: 55000, Kommentar: "Erste Ueberstunden Halle 4" },
+      { Monat: "2026-02", Kostenstelle: "KS-200", Kategorie: "Fix", Kostenart: "Vertrieb Grundkosten", Plan_EUR: 34000, Ist_EUR: 34000, Kommentar: "Plangemaess" },
+      { Monat: "2026-02", Kostenstelle: "KS-200", Kategorie: "Variabel", Kostenart: "Provisionen & Reisekosten", Plan_EUR: 58000, Ist_EUR: 56900, Kommentar: "Weniger Reisekosten" },
+      { Monat: "2026-02", Kostenstelle: "KS-300", Kategorie: "Fix", Kostenart: "ERP-Lizenzen, Netz & Wartung", Plan_EUR: 48000, Ist_EUR: 48500, Kommentar: "Ersatzteile" },
+      { Monat: "2026-02", Kostenstelle: "KS-400", Kategorie: "Fix", Kostenart: "Verwaltung & Zentrale", Plan_EUR: 85000, Ist_EUR: 85000, Kommentar: "Plangemaess" }
+    ];
     let barChart = null, lineChart = null;
-    const fmt = (n) => new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 }).format(n);
 
-    // Robuste Zahlenkonvertierung fuer deutsches Komma-Format ("38.400,50" -> 38400.5)
+    // Robuste Zahlenkonvertierung für deutsches Format ("38.400,50 €" -> 38400.5)
     function parseEuro(val) {
       if (typeof val === "number") return val;
       if (!val) return 0;
@@ -149,7 +361,7 @@
     function populateMonths() {
       const months = [...new Set(allRows.map((r) => r.Monat))].sort();
       const sel = document.getElementById("monthFilter");
-      sel.innerHTML = months.map((m) => `<option value="${m}">${m}</option>`).join("");
+      sel.replaceChildren(...months.map((m) => new Option(m, m)));
       sel.value = months[months.length - 1];
       renderDashboard();
     }
@@ -157,14 +369,12 @@
     function renderDashboard() {
       const activeMonth = document.getElementById("monthFilter").value;
       const rows = allRows.filter((r) => r.Monat === activeMonth);
-
       const sumPlan = rows.reduce((s, r) => s + r.Plan_EUR, 0);
       const sumIst = rows.reduce((s, r) => s + r.Ist_EUR, 0);
       const diff = sumIst - sumPlan;
       const pct = sumPlan ? (diff / sumPlan) * 100 : 0;
       const sumFix = rows.filter((r) => r.Kategorie.toLowerCase().startsWith("fix")).reduce((s, r) => s + r.Ist_EUR, 0);
 
-      // Gruppierung nach Kostenstelle
       const ksMap = {};
       rows.forEach((r) => {
         if (!ksMap[r.Kostenstelle]) ksMap[r.Kostenstelle] = { plan: 0, ist: 0 };
@@ -172,114 +382,135 @@
         ksMap[r.Kostenstelle].ist += r.Ist_EUR;
       });
       const ksKeys = Object.keys(ksMap).sort();
-      const alerts = ksKeys.filter((k) => ksMap[k].plan > 0 && ((ksMap[k].ist - ksMap[k].plan) / ksMap[k].plan) > 0.05);
+      const abw = (k) => (ksMap[k].ist - ksMap[k].plan) / (ksMap[k].plan || 1);
+      const alerts = ksKeys.filter((k) => ksMap[k].plan > 0 && abw(k) > 0.05);
 
       document.getElementById("kpiPlan").textContent = fmt(sumPlan);
       document.getElementById("kpiPlanSub").textContent = `${ksKeys.length} Kostenstellen in ${activeMonth}`;
       document.getElementById("kpiIst").textContent = fmt(sumIst);
       const diffEl = document.getElementById("kpiDiff");
-      diffEl.textContent = `${diff >= 0 ? "+" : ""}${fmt(diff)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)} %)`;
+      diffEl.textContent = `${diff >= 0 ? "+" : ""}${fmt(diff)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1).replace(".", ",")} %)`;
       diffEl.className = "sub " + (pct > 5 ? "danger-txt" : (pct > 0.5 ? "warn-txt" : "ok-txt"));
-
       document.getElementById("kpiFix").textContent = fmt(sumFix);
-      document.getElementById("kpiFixSub").textContent = `${sumIst ? ((sumFix / sumIst) * 100).toFixed(1) : 0} % der Ist-Kosten`;
-
+      document.getElementById("kpiFixSub").textContent = `${sumIst ? ((sumFix / sumIst) * 100).toFixed(1).replace(".", ",") : 0} % der Ist-Kosten`;
       document.getElementById("kpiAlerts").textContent = alerts.length;
       const alEl = document.getElementById("kpiAlertsSub");
       alEl.textContent = alerts.length ? `ALARM: ${alerts.join(", ")}` : "Alle Kostenstellen im Korridor";
       alEl.className = "sub " + (alerts.length ? "danger-txt" : "ok-txt");
 
-      // Balkendiagramm aktualisieren
-      if (barChart) barChart.destroy();
-      barChart = new Chart(document.getElementById("chartBar"), {
-        type: "bar",
-        data: {
-          labels: ksKeys,
-          datasets: [
-            { label: "Plan (€)", data: ksKeys.map((k) => ksMap[k].plan), backgroundColor: "#94a3b8" },
-            {
-              label: "Ist (€)",
-              data: ksKeys.map((k) => ksMap[k].ist),
-              backgroundColor: ksKeys.map((k) => ((ksMap[k].ist - ksMap[k].plan) / (ksMap[k].plan || 1) > 0.05) ? "#b91c1c" : "#0f766e")
-            }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
-      });
+      if (window.Chart) {
+        if (barChart) barChart.destroy();
+        barChart = new Chart(document.getElementById("chartBar"), {
+          type: "bar",
+          data: {
+            labels: ksKeys,
+            datasets: [
+              { label: "Plan (€)", data: ksKeys.map((k) => ksMap[k].plan), backgroundColor: "#94a3b8" },
+              { label: "Ist (€)", data: ksKeys.map((k) => ksMap[k].ist), backgroundColor: ksKeys.map((k) => abw(k) > 0.05 ? "#b91c1c" : "#0f766e") }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
+        });
+        const months = [...new Set(allRows.map((r) => r.Monat))].sort();
+        const summe = (m, feld) => allRows.filter((r) => r.Monat === m).reduce((s, r) => s + r[feld], 0);
+        if (lineChart) lineChart.destroy();
+        lineChart = new Chart(document.getElementById("chartLine"), {
+          type: "line",
+          data: {
+            labels: months,
+            datasets: [
+              { label: "Plan (€)", data: months.map((m) => summe(m, "Plan_EUR")), borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+              { label: "Ist (€)", data: months.map((m) => summe(m, "Ist_EUR")), borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.2 }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+        });
+      }
 
-      // Linienverlauf ueber alle Monate
-      const months = [...new Set(allRows.map((r) => r.Monat))].sort();
-      const mPlan = months.map((m) => allRows.filter((r) => r.Monat === m).reduce((s, r) => s + r.Plan_EUR, 0));
-      const mIst = months.map((m) => allRows.filter((r) => r.Monat === m).reduce((s, r) => s + r.Ist_EUR, 0));
-      if (lineChart) lineChart.destroy();
-      lineChart = new Chart(document.getElementById("chartLine"), {
-        type: "line",
-        data: {
-          labels: months,
-          datasets: [
-            { label: "Plan (€)", data: mPlan, borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
-            { label: "Ist (€)", data: mIst, borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.2 }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { position: "bottom" } } }
-      });
-
-      // Tabelle fuellen
-      document.getElementById("detailBody").innerHTML = rows.map((r) => {
+      // Tabelle: Werte aus der Datei werden als Text eingesetzt (Schutz vor eingeschleustem HTML)
+      document.getElementById("detailBody").replaceChildren(...rows.map((r) => {
         const d = r.Ist_EUR - r.Plan_EUR;
         const p = r.Plan_EUR ? (d / r.Plan_EUR) * 100 : 0;
-        const badge = p > 5 ? `<span class="pill danger">ALARM (+${p.toFixed(1)} %)</span>` :
-                      p > 1 ? `<span class="pill warn">Beobachten</span>` : `<span class="pill ok">OK</span>`;
-        return `<tr>
-          <td><strong>${r.Kostenstelle}</strong></td>
-          <td>${r.Kategorie}</td>
-          <td>${r.Kostenart}</td>
-          <td class="num">${fmt(r.Plan_EUR)}</td>
-          <td class="num">${fmt(r.Ist_EUR)}</td>
-          <td class="num">${d >= 0 ? "+" : ""}${fmt(d)}</td>
-          <td>${badge} ${r.Kommentar}</td>
-        </tr>`;
-      }).join("");
+        const ampel = p > 5 ? el("span", { className: "pill danger", text: `ALARM (+${p.toFixed(1).replace(".", ",")} %)` })
+                    : p > 1 ? el("span", { className: "pill warn", text: "Beobachten" })
+                    : el("span", { className: "pill ok", text: "OK" });
+        return el("tr", {},
+          el("td", {}, el("strong", { text: r.Kostenstelle })),
+          el("td", { text: r.Kategorie }),
+          el("td", { text: r.Kostenart }),
+          el("td", { className: "num", text: fmt(r.Plan_EUR) }),
+          el("td", { className: "num", text: fmt(r.Ist_EUR) }),
+          el("td", { className: "num", text: `${d >= 0 ? "+" : ""}${fmt(d)}` }),
+          el("td", {}, ampel, " " + r.Kommentar));
+      }));
     }
 
     function handleFile(file) {
       if (!file) return;
       const ext = file.name.split(".").pop().toLowerCase();
+      const fertig = (rows, art) => {
+        allRows = rows;
+        document.getElementById("statusBar").textContent = `${art} lokal eingelesen: ${file.name} (${allRows.length} Zeilen)`;
+        populateMonths();
+      };
       if (ext === "csv") {
-        Papa.parse(file, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (res) => {
-            allRows = normalizeRows(res.data);
-            document.getElementById("badgeStand").textContent = `Datei aktiv: ${file.name} (${allRows.length} Zeilen)`;
-            document.getElementById("statusBar").textContent = `Erfolgreich lokal eingelesen: ${file.name}`;
-            populateMonths();
-          }
-        });
+        if (!window.Papa) { document.getElementById("statusBar").textContent = "PapaParse fehlt – siehe Hinweis oben."; return; }
+        Papa.parse(file, { header: true, skipEmptyLines: true, complete: (res) => fertig(normalizeRows(res.data), "CSV") });
       } else if (ext === "xlsx" || ext === "xls") {
+        if (!window.XLSX) { document.getElementById("statusBar").textContent = "SheetJS fehlt – siehe Hinweis oben."; return; }
         const reader = new FileReader();
         reader.onload = (e) => {
           const wb = XLSX.read(new Uint8Array(e.target.result), { type: "array" });
-          const sheet = wb.Sheets[wb.SheetNames[0]];
-          allRows = normalizeRows(XLSX.utils.sheet_to_json(sheet));
-          document.getElementById("badgeStand").textContent = `Excel aktiv: ${file.name} (${allRows.length} Zeilen)`;
-          document.getElementById("statusBar").textContent = `Erfolgreich lokal eingelesen: ${file.name}`;
-          populateMonths();
+          fertig(normalizeRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]])), "Excel-Datei");
         };
         reader.readAsArrayBuffer(file);
+      } else {
+        document.getElementById("statusBar").textContent = "Bitte eine .csv- oder .xlsx-Datei verwenden.";
       }
     }
 
-    const dz = document.getElementById("dropzone");
-    const fi = document.getElementById("fileInput");
-    dz.addEventListener("click", () => fi.click());
-    fi.addEventListener("change", (e) => handleFile(e.target.files[0]));
-    dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
-    dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
-    dz.addEventListener("drop", (e) => { e.preventDefault(); dz.classList.remove("dragover"); handleFile(e.dataTransfer.files[0]); });
-    document.getElementById("monthFilter").addEventListener("change", renderDashboard);
+    function initDropzone() {
+      const dz = document.getElementById("dropzone");
+      const fi = document.getElementById("fileInput");
+      dz.addEventListener("click", () => fi.click());
+      fi.addEventListener("change", (e) => handleFile(e.target.files[0]));
+      dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+      dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+      dz.addEventListener("drop", (e) => { e.preventDefault(); dz.classList.remove("dragover"); handleFile(e.dataTransfer.files[0]); });
+      document.getElementById("monthFilter").addEventListener("change", renderDashboard);
+      populateMonths();
+      tabAktionen.monat = () => { if (barChart) { barChart.resize(); lineChart.resize(); } };
+    }
 
-    populateMonths();
+
+
+    // ================================================================
+    // START: erst Bibliotheken laden, dann die Reiter einrichten
+    // ================================================================
+    async function start() {
+      const ergebnisse = await Promise.all(BIBLIOTHEKEN.map(ladeBibliothek));
+      const fehlend = BIBLIOTHEKEN.filter((_, i) => !ergebnisse[i]).map((l) => l.name);
+      const lokal = Object.values(libQuelle).filter((u) => !u.startsWith("http")).length;
+      const online = Object.values(libQuelle).length - lokal;
+      document.getElementById("libStatus").textContent =
+        `Bibliotheken: ${lokal} lokal aus libs/, ${online} aus dem Internet` + (fehlend.length ? `, ${fehlend.length} fehlen` : "");
+      if (fehlend.length) {
+        zeigeHinweis("libHinweis", [`Nicht geladen: ${fehlend.join(", ")}. ` + (NUR_LOKAL
+          ? "Diese Betriebsfassung lädt nur aus dem Ordner libs/. Führen Sie einmal "
+          : "Weder im Ordner libs/ noch im Internet gefunden. Für den Offline-Betrieb führen Sie einmal "),
+          ["libs/libs_herunterladen.ps1"], " aus (siehe libs/README_LIBS.md). Die übrigen Funktionen arbeiten weiter."]);
+      }
+      if (window.mermaid) {
+        mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict" });
+        renderMermaidInPanel(document.querySelector(".tab-panel.active"));
+      }
+      if (window.Chart) zeichneStatischeCharts();
+      initDropzone();
+      // Direktaufruf eines Reiters über die Adresse, z. B. cockpit.html#datenbank
+      const ziel = document.querySelector(`nav button[data-tab="${location.hash.slice(1).replace(/[^a-z0-9-]/gi, "")}"]`);
+      if (ziel) ziel.click();
+    }
+    start();
   </script>
 </body>
 </html>

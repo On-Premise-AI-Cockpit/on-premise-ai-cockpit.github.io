@@ -3,31 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lokaler BPMN-Prozess-Editor (LID) — prozess_editor.html</title>
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.9.1/dist/assets/diagram-js.css" />
-  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.9.1/dist/assets/bpmn-font/css/bpmn.css" />
-  <script src="https://unpkg.com/bpmn-js@17.9.1/dist/bpmn-modeler.development.js"></script>
+  <title>Lokaler BPMN-Prozess-Editor (LID) – prozess_editor.html</title>
+  <!--
+    Eigenständiges Zusatzwerkzeug zu Stufe 3 (Kapitel 4). Lizenz der Vorlage: MIT.
+    bpmn-js steht unter der bpmn.io-Lizenz: Das bpmn.io-Logo unten rechts im Diagramm muss sichtbar bleiben.
+    Bibliotheken: zuerst aus libs/ (eine Ebene höher wie im Monorepo oder direkt neben dieser Datei), sonst aus dem Internet (CDN).
+  -->
   <style>
     * { box-sizing: border-box; }
     body, html { margin: 0; padding: 0; height: 100%; font-family: "Segoe UI", system-ui, sans-serif; display: flex; flex-direction: column; }
-    header {
-      background: #1e293b; color: #f8fafc; padding: 0.75rem 1.25rem;
-      display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
-    }
+    header { background: #1e293b; color: #f8fafc; padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     header h1 { margin: 0; font-size: 1.05rem; }
     .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    button, label.btn {
-      background: #0f766e; color: #fff; border: none; border-radius: 6px;
-      padding: 0.45rem 0.85rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-    }
+    button, label.btn { background: #0f766e; color: #fff; border: none; border-radius: 6px; padding: 0.45rem 0.85rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
     button.sec, label.btn.sec { background: #334155; }
     #canvas { flex: 1; background: #ffffff; }
+    #hinweis { display: none; background: #fffbeb; border-bottom: 1px solid #fde68a; color: #78350f; padding: 0.6rem 1.25rem; font-size: 0.88rem; }
     footer { background: #f1f5f9; border-top: 1px solid #cbd5e1; padding: 0.4rem 1.25rem; font-size: 0.8rem; color: #475569; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Lokaler BPMN-2.0-Prozess-Editor — Landesamt für Infrastruktur und Digitalisierung (LID)</h1>
+    <h1>Lokaler BPMN-2.0-Prozess-Editor – Landesamt für Infrastruktur und Digitalisierung (LID)</h1>
     <div class="toolbar">
       <button class="sec" id="btnNew">Neues Diagramm</button>
       <label class="btn sec" for="bpmnUpload">.bpmn öffnen</label>
@@ -36,14 +33,39 @@
       <button id="btnDownloadSvg">Grafik (.svg) speichern</button>
     </div>
   </header>
-
+  <div id="hinweis"></div>
   <div id="canvas"></div>
-
   <footer>
-    100 % lokale Verarbeitung im Browser (Tankdeckel-Prinzip) — öffnen Sie z. B. <code>stufe1-diagramme/behoerde_beschaffung.bpmn</code> per Klick oder Drag-and-Drop.
+    Verarbeitung nur im Browser (Tankdeckel-Prinzip). Öffnen Sie z. B. <code>stufe1-diagramme/behoerde_beschaffung.bpmn</code> per Klick oder ziehen Sie die Datei auf die Zeichenfläche. · <span id="libStatus">Bibliothek wird geladen …</span>
   </footer>
 
   <script>
+    // ===== Bibliotheken laden: ../libs/ → ./libs/ → Internet (CDN) =====
+    const LIB_ORDNER = ["../libs/", "./libs/"];
+    const CDN = "https://cdn.jsdelivr.net/npm/bpmn-js@17.9.1/dist/";
+    const STYLES = [
+      { datei: "diagram-js.css", cdn: CDN + "assets/diagram-js.css" },
+      { datei: "bpmn-js.css", cdn: CDN + "assets/bpmn-js.css" },
+      { datei: "bpmn-font/css/bpmn.css", cdn: CDN + "assets/bpmn-font/css/bpmn.css" }
+    ];
+
+    function ladeElement(tag, url) {
+      return new Promise((ok, fehler) => {
+        const e = document.createElement(tag);
+        if (tag === "link") { e.rel = "stylesheet"; e.href = url; } else { e.src = url; }
+        e.onload = ok;
+        e.onerror = () => { e.remove(); fehler(); };
+        document.head.appendChild(e);
+      });
+    }
+
+    async function ladeMitFallback(tag, datei, cdn) {
+      for (const url of [...LIB_ORDNER.map((o) => o + datei), cdn]) {
+        try { await ladeElement(tag, url); return url; } catch (e) { /* nächste Quelle */ }
+      }
+      return null;
+    }
+
     const starterXml = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
@@ -61,7 +83,7 @@
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>`;
 
-    const modeler = new BpmnJS({ container: "#canvas" });
+    let modeler = null;
 
     async function loadXml(xml) {
       try {
@@ -81,39 +103,42 @@
       URL.revokeObjectURL(a.href);
     }
 
-    document.getElementById("btnNew").addEventListener("click", () => loadXml(starterXml));
-
-    document.getElementById("bpmnUpload").addEventListener("change", (e) => {
-      const file = e.target.files[0];
+    function leseDatei(file) {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (ev) => loadXml(ev.target.result);
       reader.readAsText(file, "UTF-8");
-    });
+    }
 
-    document.getElementById("btnDownloadXml").addEventListener("click", async () => {
-      const { xml } = await modeler.saveXML({ format: true });
-      triggerDownload(xml, "lid_prozess_aktualisiert.bpmn", "application/xml");
-    });
-
-    document.getElementById("btnDownloadSvg").addEventListener("click", async () => {
-      const { svg } = await modeler.saveSVG();
-      triggerDownload(svg, "lid_prozess.svg", "image/svg+xml");
-    });
-
-    // Drag-and-Drop direkt auf die Zeichenflaeche
-    const canvasEl = document.getElementById("canvas");
-    canvasEl.addEventListener("dragover", (e) => e.preventDefault());
-    canvasEl.addEventListener("drop", (e) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => loadXml(ev.target.result);
-      reader.readAsText(file, "UTF-8");
-    });
-
-    loadXml(starterXml);
+    async function start() {
+      const css = await Promise.all(STYLES.map((s) => ladeMitFallback("link", s.datei, s.cdn)));
+      const js = await ladeMitFallback("script", "bpmn-modeler.development.js", CDN + "bpmn-modeler.development.js");
+      const quellen = [...css, js].filter(Boolean);
+      const lokal = quellen.filter((u) => !u.startsWith("http")).length;
+      document.getElementById("libStatus").textContent = `bpmn-js 17.9.1: ${lokal} von 4 Dateien lokal aus libs/, ${quellen.length - lokal} aus dem Internet`;
+      if (!js || !window.BpmnJS) {
+        const h = document.getElementById("hinweis");
+        h.textContent = "bpmn-js wurde weder im Ordner libs/ noch im Internet gefunden. Für den Offline-Betrieb führen Sie einmal libs/libs_herunterladen.ps1 aus (siehe libs/README_LIBS.md).";
+        h.style.display = "block";
+        return;
+      }
+      modeler = new BpmnJS({ container: "#canvas" });
+      document.getElementById("btnNew").addEventListener("click", () => loadXml(starterXml));
+      document.getElementById("bpmnUpload").addEventListener("change", (e) => leseDatei(e.target.files[0]));
+      document.getElementById("btnDownloadXml").addEventListener("click", async () => {
+        const { xml } = await modeler.saveXML({ format: true });
+        triggerDownload(xml, "lid_prozess_aktualisiert.bpmn", "application/xml");
+      });
+      document.getElementById("btnDownloadSvg").addEventListener("click", async () => {
+        const { svg } = await modeler.saveSVG();
+        triggerDownload(svg, "lid_prozess.svg", "image/svg+xml");
+      });
+      const canvasEl = document.getElementById("canvas");
+      canvasEl.addEventListener("dragover", (e) => e.preventDefault());
+      canvasEl.addEventListener("drop", (e) => { e.preventDefault(); leseDatei(e.dataTransfer.files[0]); });
+      loadXml(starterXml);
+    }
+    start();
   </script>
 </body>
 </html>

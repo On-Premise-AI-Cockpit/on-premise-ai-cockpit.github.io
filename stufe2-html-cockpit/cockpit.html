@@ -3,371 +3,310 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KI-Cockpit (Stufe 2) — Werkbau Nord GmbH &amp; LID</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+  <title>KI-Cockpit (Stufe 2) – Werkbau Nord GmbH & LID</title>
+  <!--
+    Das KI-Cockpit – kumulativer Stand nach Stufe 2. Jede Stufe ergänzt Reiter, vorhandene Reiter bleiben unverändert.
+    Begleit-Monorepo zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
+    Alle mitgelieferten Beispieldaten sind fiktiv. Ihre echten Daten laden Sie erst zur Laufzeit.
+    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Monorepo oder direkt neben dieser Datei),
+    sonst aus dem Internet (CDN). So läuft die Datei online und nach Befüllen von libs/ auch offline.
+  -->
   <style>
     :root {
-      --bg: #f1f5f9;
-      --surface: #ffffff;
-      --ink: #0f172a;
-      --muted: #475569;
-      --primary: #0f766e;
-      --accent: #1e293b;
-      --warn: #b45309;
-      --ok: #15803d;
-      --border: #e2e8f0;
+      --bg: #f1f5f9; --surface: #ffffff; --ink: #0f172a; --muted: #475569;
+      --primary: #0f766e; --accent: #1e293b; --warn: #b45309; --danger: #b91c1c;
+      --ok: #15803d; --border: #e2e8f0;
     }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.5;
-    }
-    header {
-      background: var(--accent);
-      color: #f8fafc;
-      padding: 1.25rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+    body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+    header { background: var(--accent); color: #f8fafc; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     header h1 { margin: 0; font-size: 1.35rem; }
     header p { margin: 0.2rem 0 0; font-size: 0.88rem; color: #cbd5e1; }
-    .badge {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.22);
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.82rem;
-    }
-    nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    nav button {
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      padding: 0.9rem 1.2rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-    }
-    nav button.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-    main {
-      max-width: 1240px;
-      margin: 1.5rem auto;
-      padding: 0 1.5rem 3rem;
-    }
+    .badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.82rem; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    nav button { background: none; border: none; border-bottom: 3px solid transparent; padding: 0.85rem 1.05rem; font-size: 0.93rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    nav button.active { color: var(--primary); border-bottom-color: var(--primary); }
+    nav button .neu { font-size: 0.68rem; background: #ccfbf1; color: #115e59; border-radius: 999px; padding: 0.05rem 0.4rem; margin-left: 0.3rem; vertical-align: middle; }
+    main { max-width: 1280px; margin: 1.5rem auto; padding: 0 1.5rem 3rem; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .kpi {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.15rem 1.25rem;
-    }
-    .kpi .label { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .kpi .value { font-size: 1.65rem; font-weight: 700; margin: 0.35rem 0; }
-    .kpi .sub { font-size: 0.85rem; color: var(--ok); }
-    .kpi .sub.warn { color: var(--warn); }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.25rem;
-    }
-    .card h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-    th, td { text-align: left; padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.15rem 1.25rem; }
+    .kpi .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi .value { font-size: 1.65rem; font-weight: 700; margin: 0.3rem 0; }
+    .kpi .sub { font-size: 0.85rem; }
+    .ok-txt { color: var(--ok); } .warn-txt { color: var(--warn); } .danger-txt { color: var(--danger); font-weight: 600; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+    .card h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.55rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
     th { color: var(--muted); font-weight: 600; background: #f8fafc; }
     .num { text-align: right; font-variant-numeric: tabular-nums; }
-    .pill {
-      display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
-      font-size: 0.78rem; font-weight: 600;
-    }
+    .pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
     .pill.ok { background: #dcfce7; color: #166534; }
     .pill.warn { background: #fef3c7; color: #92400e; }
-    footer {
-      text-align: center; font-size: 0.82rem; color: var(--muted);
-      padding: 1.5rem; border-top: 1px solid var(--border);
-    }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .hinweis { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 0.8rem 1rem; margin: 0 0 1rem; font-size: 0.9rem; color: #1e3a8a; }
+    .hinweis.gelb { background: #fffbeb; border-color: #fde68a; border-left-color: #d97706; color: #78350f; }
+    .hinweis code { background: rgba(255,255,255,0.7); padding: 0 0.25rem; border-radius: 4px; }
+    .klein { font-size: 0.82rem; color: var(--muted); }
+    select, input, button.btn, textarea { font-family: inherit; }
+    select, input[type="text"], input[type="password"], button.btn { padding: 0.45rem 0.75rem; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); font-size: 0.88rem; }
+    button.btn { cursor: pointer; }
+    button.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    button.btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); font-weight: 600; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; align-items: center; }
+    footer { text-align: center; font-size: 0.82rem; color: var(--muted); padding: 1.5rem; border-top: 1px solid var(--border); }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <h1>KI-Cockpit — Werkbau Nord GmbH</h1>
-      <p>Stufe 2: Statisches Management-Dashboard &amp; Prozess-Wegweiser (100 % lokal im Browser)</p>
+      <h1>KI-Cockpit – Werkbau Nord GmbH &amp; LID</h1>
+      <p>Stufe 2: Statisches Dashboard und Prozess-Wegweiser (Kapitel 3)</p>
     </div>
-    <span class="badge">Stand: Februar 2026 (Q1 Plan/Ist)</span>
+    <span class="badge">Stufe 2 von 5</span>
   </header>
 
   <nav role="tablist">
-    <button class="active" data-tab="kmu">KMU-Controlling (Werkbau Nord)</button>
-    <button data-tab="behoerde">Behörde: Prozess &amp; Wegweiser (LID)</button>
-    <button data-tab="architektur">IT-Architektur (C4-Kontext)</button>
+    <button class="active" data-tab="kmu">KMU-Controlling</button>
+    <button data-tab="behoerde">Behörde: Prozess &amp; Wegweiser</button>
+    <button data-tab="architektur">IT-Architektur</button>
   </nav>
 
   <main>
-    <!-- TAB 1: KMU-CONTROLLING -->
+    <div id="libHinweis" class="hinweis gelb" style="display:none"></div>
+
+    <!-- ===== REITER: KMU-CONTROLLING (seit Stufe 2, statische Übersicht Februar 2026) ===== -->
     <section id="tab-kmu" class="tab-panel active">
       <div class="kpi-grid">
-        <div class="kpi">
-          <div class="label">Monats-Plan (Gesamt)</div>
-          <div class="value">570.000 €</div>
-          <div class="sub">4 aktive Kostenstellen (KS-100 bis KS-400)</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Ist-Kosten Februar 2026</div>
-          <div class="value">574.200 €</div>
-          <div class="sub warn">+4.200 € (+0,7 % über Plan)</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Fixkosten-Anteil (Plan)</div>
-          <div class="value">342.000 €</div>
-          <div class="sub">60,0 % fixe Strukturkosten</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Variable Kosten (Plan)</div>
-          <div class="value">228.000 €</div>
-          <div class="sub">40,0 % auftragsabhängig</div>
-        </div>
+        <div class="kpi"><div class="label">Monats-Plan (gesamt)</div><div class="value">570.000 €</div><div class="sub ok-txt">4 Kostenstellen (KS-100 bis KS-400)</div></div>
+        <div class="kpi"><div class="label">Ist-Kosten Februar 2026</div><div class="value">574.200 €</div><div class="sub warn-txt">+4.200 € (+0,7 % über Plan)</div></div>
+        <div class="kpi"><div class="label">Fixkosten (Plan)</div><div class="value">342.000 €</div><div class="sub ok-txt">60,0 % fixe Strukturkosten</div></div>
+        <div class="kpi"><div class="label">Variable Kosten (Plan)</div><div class="value">228.000 €</div><div class="sub ok-txt">40,0 % auftragsabhängig</div></div>
       </div>
-
       <div class="grid-2">
-        <div class="card">
-          <h2>Kostenstellen-Verteilung (Plan vs. Ist Feb. 2026)</h2>
-          <canvas id="chartKostenstellen" height="220"></canvas>
-        </div>
-        <div class="card">
-          <h2>Kostenverlauf Q1 (Januar &amp; Februar 2026 vs. Plan)</h2>
-          <canvas id="chartVerlauf" height="220"></canvas>
-        </div>
+        <div class="card"><h2>Kostenstellen: Plan vs. Ist Februar 2026</h2><canvas id="chartKostenstellen" height="220"></canvas></div>
+        <div class="card"><h2>Kostenverlauf Q1 (Januar und Februar 2026 vs. Plan)</h2><canvas id="chartVerlauf" height="220"></canvas></div>
       </div>
-
       <div class="card">
         <h2>Detailübersicht der vier Kostenstellen (Februar 2026)</h2>
         <table>
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Kostenstelle</th>
-              <th>Typ</th>
-              <th class="num">Plan (€)</th>
-              <th class="num">Ist Feb. (€)</th>
-              <th class="num">Abweichung</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Code</th><th>Kostenstelle</th><th>Typ</th><th class="num">Plan (€)</th><th class="num">Ist Feb. (€)</th><th class="num">Abweichung</th><th>Status</th></tr></thead>
           <tbody>
-            <tr>
-              <td><strong>KS-100</strong></td>
-              <td>Produktion &amp; Montage</td>
-              <td>Fix + Variabel</td>
-              <td class="num">345.000 €</td>
-              <td class="num">349.800 €</td>
-              <td class="num">+4.800 €</td>
-              <td><span class="pill warn">Beobachten</span></td>
-            </tr>
-            <tr>
-              <td><strong>KS-200</strong></td>
-              <td>Vertrieb &amp; Projekte</td>
-              <td>Gemischt</td>
-              <td class="num">92.000 €</td>
-              <td class="num">90.900 €</td>
-              <td class="num">-1.100 €</td>
-              <td><span class="pill ok">Im Plan</span></td>
-            </tr>
-            <tr>
-              <td><strong>KS-300</strong></td>
-              <td>IT &amp; Infrastruktur</td>
-              <td>Fix</td>
-              <td class="num">48.000 €</td>
-              <td class="num">48.500 €</td>
-              <td class="num">+500 €</td>
-              <td><span class="pill ok">Im Plan</span></td>
-            </tr>
-            <tr>
-              <td><strong>KS-400</strong></td>
-              <td>Verwaltung &amp; Zentrale</td>
-              <td>Fix</td>
-              <td class="num">85.000 €</td>
-              <td class="num">85.000 €</td>
-              <td class="num">0 €</td>
-              <td><span class="pill ok">Im Plan</span></td>
-            </tr>
+            <tr><td><strong>KS-100</strong></td><td>Produktion &amp; Montage</td><td>Fix + Variabel</td><td class="num">345.000 €</td><td class="num">349.800 €</td><td class="num">+4.800 €</td><td><span class="pill warn">Beobachten</span></td></tr>
+            <tr><td><strong>KS-200</strong></td><td>Vertrieb &amp; Projekte</td><td>Gemischt</td><td class="num">92.000 €</td><td class="num">90.900 €</td><td class="num">-1.100 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+            <tr><td><strong>KS-300</strong></td><td>IT &amp; Infrastruktur</td><td>Fix</td><td class="num">48.000 €</td><td class="num">48.500 €</td><td class="num">+500 €</td><td><span class="pill ok">Im Plan</span></td></tr>
+            <tr><td><strong>KS-400</strong></td><td>Verwaltung &amp; Zentrale</td><td>Fix</td><td class="num">85.000 €</td><td class="num">85.000 €</td><td class="num">0 €</td><td><span class="pill ok">Im Plan</span></td></tr>
           </tbody>
         </table>
+        <p class="klein">Fiktive Beispielwerte, fest im Quelltext hinterlegt (Stufe 2). Ab Stufe 3 laden Sie Monatswerte zur Laufzeit über die Dropzone.</p>
       </div>
     </section>
 
-    <!-- TAB 2: BEHOERDE PROZESSSEITE -->
+
+    <!-- ===== REITER: BEHÖRDE – PROZESS & WEGWEISER (seit Stufe 2) ===== -->
     <section id="tab-behoerde" class="tab-panel">
       <div class="card">
-        <h2>LID — Prozesswegweiser: IT-Beschaffungsantrag (&gt; 5.000 EUR netto)</h2>
-        <p>Direkt im selben Cockpit eingebettet: Der verbindliche Ablauf aus Stufe 1 — jederzeit aktuell statt veralteter Word-Dienstvorschriften.</p>
+        <h2>LID – Prozesswegweiser: IT-Beschaffungsantrag</h2>
+        <p>Der Ablauf aus Stufe 1, eingebettet als Mermaid-Diagramm. Die Wertgrenze von 5.000 € ist eine fiktive Hausregel; maßgeblich sind die Vorgaben Ihres Landes bzw. des Bundes.</p>
         <div class="mermaid">
 flowchart TD
     A(["Start: Bedarf im Fachreferat erkannt"]) --> B["Beschaffungsantrag & Leistungsbeschreibung erfassen"]
-    B --> C{"Wert ueber 5.000 EUR netto?"}
-    C -- "Nein (Direktauftrag)" --> D["Referat 21: Mittelverfuegbarkeit pruefen"]
-    C -- "Ja (Vergabeverfahren)" --> E["Referat 32: IT-Sicherheit & Architektur pruefen"]
+    B --> C{"Wert über 5.000 EUR netto?"}
+    C -- "Nein (Direktauftrag)" --> D["Referat 21: Mittelverfügbarkeit prüfen"]
+    C -- "Ja (Vergabeverfahren)" --> E["Referat 32: IT-Sicherheit & Architektur prüfen"]
     E --> F{"IT-Freigabe erteilt?"}
     F -- "Nein (Nachbesserung)" --> B
-    F -- "Ja" --> G["Referat 21: Vergaberecht & Haushaltsmittel pruefen"]
+    F -- "Ja" --> G["Referat 21: Vergaberecht & Haushaltsmittel prüfen"]
     D --> H["Abteilungsleitung: Zeichnung & Freigabe"]
     G --> H
-    H --> I(["Bestellung ausloesen & Akte archivieren"])
+    H --> I(["Bestellung auslösen & Akte archivieren"])
         </div>
       </div>
-
       <div class="card">
-        <h2>Feste Ansprechpartner &amp; Zuständigkeiten im Prozess (Auszug LID)</h2>
+        <h2>Zuständige Funktionen im Prozess (Auszug LID, fiktiv)</h2>
         <table>
-          <thead>
-            <tr>
-              <th>Referat</th>
-              <th>Aufgabe im Ablauf</th>
-              <th>Ansprechpartner (Beispieldaten)</th>
-              <th>Standort</th>
-              <th>Durchlaufzeit (Ziel)</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Funktion</th><th>Aufgabe im Ablauf</th><th>Ansprechperson (dienstlich)</th><th>Standort</th><th>Durchlaufzeit (Ziel)</th></tr></thead>
           <tbody>
-            <tr>
-              <td><strong>Referat 32</strong></td>
-              <td>IT-Sicherheit, Architektur &amp; ISB-Prüfung</td>
-              <td>K. Lindner (IT-Architektur)</td>
-              <td>Zentrale Nord</td>
-              <td>max. 5 Werktage</td>
-            </tr>
-            <tr>
-              <td><strong>Referat 21</strong></td>
-              <td>Haushaltsmittel &amp; Vergaberecht</td>
-              <td>S. Hartmann (Vergabestelle)</td>
-              <td>Zentrale Nord</td>
-              <td>max. 7 Werktage</td>
-            </tr>
-            <tr>
-              <td><strong>Abteilungsleitung</strong></td>
-              <td>Schlusszeichnung &amp; Bestellfreigabe</td>
-              <td>Dr. M. Vogt (Abt. Zentrale Dienste)</td>
-              <td>Zentrale Nord</td>
-              <td>max. 3 Werktage</td>
-            </tr>
+            <tr><td><strong>Fachreferat IT-Architektur (Ref. 32)</strong></td><td>IT-Sicherheit, Architektur &amp; ISB-Prüfung</td><td>K. Lindner</td><td>Zentrale Nord</td><td>max. 5 Werktage</td></tr>
+            <tr><td><strong>Teamleitung Vergabestelle (Ref. 21)</strong></td><td>Haushaltsmittel &amp; Vergaberecht</td><td>S. Hartmann</td><td>Zentrale Nord</td><td>max. 7 Werktage</td></tr>
+            <tr><td><strong>Abteilungsleitung Zentrale Dienste</strong></td><td>Schlusszeichnung &amp; Bestellfreigabe</td><td>Dr. M. Vogt</td><td>Zentrale Nord</td><td>max. 3 Werktage</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- TAB 3: IT-ARCHITEKTUR -->
+    <!-- ===== REITER: IT-ARCHITEKTUR (seit Stufe 2) ===== -->
     <section id="tab-architektur" class="tab-panel">
       <div class="card">
         <h2>IT-Systemkontext: Werkbau Nord GmbH</h2>
-        <p>Übersicht aller Datenquellen, die in den Stufen 3 bis 5 an das lokale KI-Cockpit angebunden werden.</p>
+        <p>Datenquellen, die in den Stufen 3 bis 5 an das lokale Cockpit angebunden werden.</p>
         <div class="mermaid">
 flowchart LR
     ERP["ERP / Warenwirtschaft"] --> DATEV["DATEV Finanzbuchhaltung"]
     ZEIT["Zeiterfassung TimeTrack"] --> DATEV
     DATEV -->|"CSV / XLSX Export"| COCKPIT["Lokales KI-Cockpit (Browser)"]
-    NAS["Netzlaufwerk L: (PDF & Handbuecher)"] --> COCKPIT
-    COCKPIT <-->|"HTTP localhost (Stufe 5)"| OLLAMA["Lokale KI (Ollama)"]
-    GF["Geschaeftsfuehrung & Controlling"] --> COCKPIT
+    NAS["Netzlaufwerk L: (PDF & Handbücher)"] --> COCKPIT
+    COCKPIT <-->|"HTTP 127.0.0.1 (Stufe 5)"| OLLAMA["Lokale KI (Ollama)"]
+    GF["Geschäftsführung & Controlling"] --> COCKPIT
     style COCKPIT fill:#0f766e,color:#ffffff,stroke:#115e59,stroke-width:2px
         </div>
       </div>
     </section>
+
+
   </main>
 
   <footer>
-    Das KI-Cockpit — Begleit-Monorepo: github.com/On-Premise-AI-Cockpit/on-premise-ai-cockpit.github.io (Stufe 2: Statisches HTML)
+    Das KI-Cockpit – Begleit-Monorepo: on-premise-ai-cockpit.github.io · Stufe 2: stufe2-html-cockpit/cockpit.html · <span id="libStatus">Bibliotheken werden geladen …</span>
   </footer>
 
   <script>
-    mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+    // ================================================================
+    // BLOCK 1: Konfiguration und Bibliotheken laden
+    // Reihenfolge je Bibliothek: ../libs/ (Monorepo) -> ./libs/ (eigener Ordner) -> Internet (CDN)
+    // ================================================================
+    const NUR_LOKAL = false; // true = Betriebsfassung: niemals aus dem Internet nachladen
+    const IST_DATEI = location.protocol === "file:"; // per Doppelklick geöffnet?
+    const LIB_ORDNER = ["../libs/", "./libs/"];
+    const BIBLIOTHEKEN = [
+      { name: "Chart.js 4.4.3", datei: "chart.umd.min.js", pruefen: () => window.Chart, cdn: "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" },
+      { name: "Mermaid 10.9.8", datei: "mermaid.min.js", pruefen: () => window.mermaid, cdn: "https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js" },
+    ];
+    const libQuelle = {}; // Dateiname -> tatsächlich geladene Adresse
 
-    // Reiternavigation (Tab-Steuerung)
-    const buttons = document.querySelectorAll("nav button");
-    const panels = document.querySelectorAll(".tab-panel");
-
-    async function renderMermaidInPanel(panel) {
-      const blocks = panel.querySelectorAll(".mermaid:not([data-processed])");
-      if (blocks.length > 0) {
-        await mermaid.run({ nodes: blocks });
-      }
+    function ladeSkript(url) {
+      return new Promise((ok, fehler) => {
+        const s = document.createElement("script");
+        s.src = url;
+        s.onload = ok;
+        s.onerror = fehler;
+        document.head.appendChild(s);
+      });
     }
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        buttons.forEach((b) => b.classList.remove("active"));
-        panels.forEach((p) => p.classList.remove("active"));
+    async function ladeBibliothek(lib) {
+      const kandidaten = LIB_ORDNER.map((ordner) => ordner + lib.datei);
+      if (!NUR_LOKAL) kandidaten.push(lib.cdn);
+      for (const url of kandidaten) {
+        try {
+          await ladeSkript(url);
+          if (lib.pruefen()) { libQuelle[lib.datei] = url; return true; }
+        } catch (e) { /* nächste Quelle versuchen */ }
+      }
+      return false;
+    }
+
+    function verzeichnisVon(url) {
+      return url ? url.slice(0, url.lastIndexOf("/") + 1) : "";
+    }
+
+    // ================================================================
+    // BLOCK 2: Hilfsfunktionen (Texte immer per textContent einsetzen, nie per innerHTML)
+    // ================================================================
+    const fmt = (n) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
+
+    function el(tag, eigenschaften = {}, ...kinder) {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(eigenschaften)) {
+        if (k === "text") e.textContent = v;
+        else if (k === "className") e.className = v;
+        else e.setAttribute(k, v);
+      }
+      kinder.forEach((kind) => e.append(kind));
+      return e;
+    }
+
+    function zeigeHinweis(id, teile) {
+      // teile: Liste aus Texten und [code]-Einträgen, z. B. ["Starten Sie ", ["python -m http.server"], "."]
+      const box = document.getElementById(id);
+      if (!box) return;
+      box.replaceChildren(...teile.map((t) => Array.isArray(t) ? el("code", { text: t[0] }) : document.createTextNode(t)));
+      box.style.display = "block";
+    }
+
+    // ================================================================
+    // BLOCK 3: Reiter-Navigation
+    // ================================================================
+    const tabAktionen = {}; // Reiter-Name -> Funktion, die beim Öffnen läuft
+
+    document.querySelectorAll("nav button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
         btn.classList.add("active");
-        const target = document.getElementById("tab-" + btn.dataset.tab);
-        target.classList.add("active");
-        await renderMermaidInPanel(target);
+        const panel = document.getElementById("tab-" + btn.dataset.tab);
+        panel.classList.add("active");
+        renderMermaidInPanel(panel);
+        if (tabAktionen[btn.dataset.tab]) tabAktionen[btn.dataset.tab]();
       });
     });
 
-    // Chart 1: Balkendiagramm Plan vs. Ist nach Kostenstelle
-    new Chart(document.getElementById("chartKostenstellen"), {
-      type: "bar",
-      data: {
-        labels: ["KS-100 Produktion", "KS-200 Vertrieb", "KS-300 IT", "KS-400 Verwaltung"],
-        datasets: [
-          { label: "Plan (€)", data: [345000, 92000, 48000, 85000], backgroundColor: "#94a3b8" },
-          { label: "Ist Feb. (€)", data: [349800, 90900, 48500, 85000], backgroundColor: "#0f766e" }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: "bottom" } },
-        scales: { y: { beginAtZero: true } }
-      }
-    });
+    async function renderMermaidInPanel(panel) {
+      if (!window.mermaid) return;
+      const blocks = panel.querySelectorAll(".mermaid:not([data-processed])");
+      if (blocks.length > 0) await mermaid.run({ nodes: blocks });
+    }
 
-    // Chart 2: Linienverlauf Q1
-    new Chart(document.getElementById("chartVerlauf"), {
-      type: "line",
-      data: {
-        labels: ["Januar 2026", "Februar 2026", "März 2026 (offen)"],
-        datasets: [
-          { label: "Plan-Linie (€)", data: [570000, 570000, 570000], borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
-          { label: "Ist-Kosten (€)", data: [566400, 574200, null], borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.25 }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: "bottom" } },
-        scales: { y: { suggestedMin: 540000, suggestedMax: 600000 } }
+    // ================================================================
+    // BLOCK 4: Stufe 2 – statische Übersicht (fiktive Beispielwerte Februar 2026)
+    // ================================================================
+    function zeichneStatischeCharts() {
+      new Chart(document.getElementById("chartKostenstellen"), {
+        type: "bar",
+        data: {
+          labels: ["KS-100 Produktion", "KS-200 Vertrieb", "KS-300 IT", "KS-400 Verwaltung"],
+          datasets: [
+            { label: "Plan (€)", data: [345000, 92000, 48000, 85000], backgroundColor: "#94a3b8" },
+            { label: "Ist Feb. (€)", data: [349800, 90900, 48500, 85000], backgroundColor: "#0f766e" }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true } } }
+      });
+      new Chart(document.getElementById("chartVerlauf"), {
+        type: "line",
+        data: {
+          labels: ["Januar 2026", "Februar 2026", "März 2026 (offen)"],
+          datasets: [
+            { label: "Plan (€)", data: [570000, 570000, 570000], borderColor: "#64748b", borderDash: [6, 4], tension: 0 },
+            { label: "Ist (€)", data: [566400, 574200, null], borderColor: "#0f766e", backgroundColor: "rgba(15,118,110,0.12)", fill: true, tension: 0.25 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { suggestedMin: 540000, suggestedMax: 600000 } } }
+      });
+    }
+
+
+
+
+    // ================================================================
+    // START: erst Bibliotheken laden, dann die Reiter einrichten
+    // ================================================================
+    async function start() {
+      const ergebnisse = await Promise.all(BIBLIOTHEKEN.map(ladeBibliothek));
+      const fehlend = BIBLIOTHEKEN.filter((_, i) => !ergebnisse[i]).map((l) => l.name);
+      const lokal = Object.values(libQuelle).filter((u) => !u.startsWith("http")).length;
+      const online = Object.values(libQuelle).length - lokal;
+      document.getElementById("libStatus").textContent =
+        `Bibliotheken: ${lokal} lokal aus libs/, ${online} aus dem Internet` + (fehlend.length ? `, ${fehlend.length} fehlen` : "");
+      if (fehlend.length) {
+        zeigeHinweis("libHinweis", [`Nicht geladen: ${fehlend.join(", ")}. ` + (NUR_LOKAL
+          ? "Diese Betriebsfassung lädt nur aus dem Ordner libs/. Führen Sie einmal "
+          : "Weder im Ordner libs/ noch im Internet gefunden. Für den Offline-Betrieb führen Sie einmal "),
+          ["libs/libs_herunterladen.ps1"], " aus (siehe libs/README_LIBS.md). Die übrigen Funktionen arbeiten weiter."]);
       }
-    });
+      if (window.mermaid) {
+        mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict" });
+        renderMermaidInPanel(document.querySelector(".tab-panel.active"));
+      }
+      if (window.Chart) zeichneStatischeCharts();
+      // Direktaufruf eines Reiters über die Adresse, z. B. cockpit.html#datenbank
+      const ziel = document.querySelector(`nav button[data-tab="${location.hash.slice(1).replace(/[^a-z0-9-]/gi, "")}"]`);
+      if (ziel) ziel.click();
+    }
+    start();
   </script>
 </body>
 </html>

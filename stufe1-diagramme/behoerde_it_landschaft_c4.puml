@@ -2,7 +2,7 @@
 !include <C4/C4_Context>
 
 LAYOUT_WITH_LEGEND()
-title System-Context (C4) — Landesamt fuer Infrastruktur und Digitalisierung (LID)
+title System-Context (C4) – Landesamt fuer Infrastruktur und Digitalisierung (LID)
 
 Person(ref, "Fachreferent (12 Standorte)", "Reicht Beschaffungsantraege ein und pflegt Vorgaenge.")
 Person(ref21, "Referat 21 (Vergabe & Haushalt)", "Prueft Haushaltsmittel und steuert Vergaben.")

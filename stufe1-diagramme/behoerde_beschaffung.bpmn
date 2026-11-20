@@ -7,7 +7,7 @@
                   id="Definitions_LID_Beschaffung"
                   targetNamespace="http://lid.example.de/bpmn">
   <bpmn:collaboration id="Collab_LID">
-    <bpmn:participant id="Participant_LID" name="LID — IT-Beschaffungsantrag (&gt; 5.000 EUR)" processRef="Process_LID_Beschaffung" />
+    <bpmn:participant id="Participant_LID" name="LID – IT-Beschaffungsantrag (&gt; 5.000 EUR)" processRef="Process_LID_Beschaffung" />
   </bpmn:collaboration>
   <bpmn:process id="Process_LID_Beschaffung" isExecutable="false">
     <bpmn:laneSet id="LaneSet_1">

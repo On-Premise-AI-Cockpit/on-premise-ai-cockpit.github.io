@@ -3,3 +3,9 @@ Thumbs.db
 desktop.ini
 *.log
 __pycache__/
+# Bibliotheken werden per libs/libs_herunterladen.ps1 geladen und nicht eingecheckt
+libs/*
+!libs/README_LIBS.md
+!libs/libs_herunterladen.ps1
+# llama-server-Schluessel nie einchecken
+schluessel.txt
