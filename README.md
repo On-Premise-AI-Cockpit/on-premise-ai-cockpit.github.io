@@ -6,7 +6,7 @@ Begleit-Repository zum Buch **„Das KI-Cockpit – Prozesse, Zahlen und Abhäng
 - A4-Spickzettel zum Ausdrucken: [KI-Cockpit_Spickzettel_A4.pdf](KI-Cockpit_Spickzettel_A4.pdf)
 
 ## Worum es geht
-Große IT-Projekte dauern oft Jahre. Viele Alltagsprobleme lassen sich dagegen mit kleinen Werkzeugen lösen, die eine Fachabteilung selbst baut – nachvollziehbar und mit IT, Datenschutz und Personal- bzw. Betriebsrat abgestimmt statt als Schatten-IT. Dieses Repository enthält die Vorlagen, fiktiven Beispieldaten und Freigabe-Unterlagen zum Buch.
+Große IT-Projekte dauern oft Jahre. Viele Alltagsprobleme lassen sich dagegen mit kleinen Werkzeugen lösen, die eine Fachabteilung selbst baut – nachvollziehbar und mit IT, Datenschutz und Personal- bzw. Betriebsrat abgestimmt statt als Schatten-IT. Genauso eignen sich alle Vorlagen für Kleinunternehmer, Vereine und Privatpersonen auf dem eigenen Rechner (dort ohne IT-Freigabe direkt startklar). Dieses Repository enthält die Vorlagen, fiktiven Beispieldaten und Freigabe-Unterlagen zum Buch.
 
 ## Herunterladen und loslegen
 1. Oben rechts **`Code` → `Download ZIP`** wählen und den Ordner entpacken (lokal oder auf einem Netzlaufwerk). Ist GitHub in Ihrem Netz gesperrt, laden Sie das ZIP an einem freigegebenen Internet-Arbeitsplatz herunter oder bitten Ihre IT darum.
