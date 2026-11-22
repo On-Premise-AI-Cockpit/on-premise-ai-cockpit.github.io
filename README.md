@@ -1,8 +1,9 @@
-# Das KI-Cockpit – Begleit-Monorepo
+# Das KI-Cockpit – Begleit-Repository
 
 Begleit-Repository zum Buch **„Das KI-Cockpit – Prozesse, Zahlen und Abhängigkeiten im Blick: Souveräne Dashboards bauen mit lokaler KI — ohne Vorkenntnisse und Lizenzkosten“** von Michael Estel.
 
 - Live-Startseite mit Demos und allen Prompts aus dem Buch: **https://on-premise-ai-cockpit.github.io**
+- Buch auf Amazon: **https://www.amazon.de/dp/B0HSKD8WL7** · Amazon-Autorenprofil: **https://www.amazon.de/Michael-Estel/e/B0GZCMLV13**
 - A4-Spickzettel zum Ausdrucken: [KI-Cockpit_Spickzettel_A4.pdf](KI-Cockpit_Spickzettel_A4.pdf)
 
 ## Worum es geht
