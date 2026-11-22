@@ -4,8 +4,8 @@
 > **Dieser Ordner enthält im Repository bewusst nur diese Anleitung und das Download-Skript.** Die Bibliotheken selbst stehen unter eigenen Lizenzen; deshalb liefern wir die Binärdateien nicht mit. Führen Sie **einmal** `libs_herunterladen.ps1` an einem Rechner mit Internetzugang aus. Erst danach laufen das ZIP-Paket bzw. Ihr Betriebsordner ohne Internet. In abgeschotteten Netzen bitten Sie Ihre IT, die Dateien aus der Tabelle unten bereitzustellen.
 
 ## So laden die Cockpits ihre Bibliotheken
-- **Lernstände im Monorepo** (`stufe2-…` bis `stufe5-…/cockpit.html`, `stufe3-dropzone/prozess_editor.html`): zuerst `../libs/` (dieser Ordner, eine Ebene höher), dann `./libs/` (Ordner direkt neben der Datei), zuletzt das Internet (CDN). Ohne gefüllten Ordner laufen sie also online wie im Buch beschrieben, mit gefülltem Ordner auch offline.
-- **Betriebsfassung** (`betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html`): zuerst `./libs/` wie im Ordnerbaum aus Abschnitt 8.1, dann `../libs/` (Monorepo) – **nie** aus dem Internet. Fehlt eine Datei, erscheint ein Hinweis statt eines Fehlers.
+- **Lernstände im Repository** (`stufe2-…` bis `stufe5-…/cockpit.html`, `stufe3-dropzone/prozess_editor.html`): zuerst `../libs/` (dieser Ordner, eine Ebene höher), dann `./libs/` (Ordner direkt neben der Datei), zuletzt das Internet (CDN). Ohne gefüllten Ordner laufen sie also online wie im Buch beschrieben, mit gefülltem Ordner auch offline.
+- **Betriebsfassung** (`betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html`): zuerst `./libs/` wie im Ordnerbaum aus Abschnitt 8.1, dann `../libs/` (Repository) – **nie** aus dem Internet. Fehlt eine Datei, erscheint ein Hinweis statt eines Fehlers.
 - Im Buch steht `./libs/`, weil `libs/` dort direkt neben Ihrer Cockpit-Datei liegt. Im Monorepo liegen die Stufen-Dateien eine Ebene tiefer, deshalb `../libs/`. Die Vorlagen probieren beide Pfade, Sie müssen nichts umschreiben.
 - Die Fußzeile jedes Cockpits zeigt, woher die Bibliotheken kamen („… lokal aus libs/, … aus dem Internet“). Das hilft beim Offline-Nachweis.
 

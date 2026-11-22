@@ -9,7 +9,7 @@
 3. Kennzahlen, Balken und Ampeln werden im Browser neu berechnet. Die Datei wird nicht hochgeladen und verlässt Ihren Rechner nicht.
 
 ## Datenbank, Wissensgraph und KI-Assistent (ab Stufe 4 bzw. 5)
-Diese Reiter brauchen einen lokalen Mini-Server und – für den KI-Assistenten – die freigegebene Ollama-Installation. Per Doppelklick zeigen sie deshalb einen Hinweis; die übrigen Reiter funktionieren weiter. Starten Sie stattdessen `start_cockpit_sicher.bat` (Python und Ollama müssen von der IT installiert sein). Im Begleit-Monorepo öffnet sie `stufe5-smart-cockpit/cockpit.html`; in Ihrem Betriebsordner passen die Pflege-Verantwortlichen Ordner und Dateinamen in den Zeilen `cd /d …` und `start http://…` an. Zum Feierabend schließen Sie beide Konsolenfenster (Zündschlüssel-Regel).
+Diese Reiter brauchen einen lokalen Mini-Server und – für den KI-Assistenten – die freigegebene Ollama-Installation. Per Doppelklick zeigen sie deshalb einen Hinweis; die übrigen Reiter funktionieren weiter. Starten Sie stattdessen `start_cockpit_sicher.bat` (Python und Ollama müssen von der IT installiert sein). Im Begleit-Repository öffnet sie `stufe5-smart-cockpit/cockpit.html`; in Ihrem Betriebsordner passen die Pflege-Verantwortlichen Ordner und Dateinamen in den Zeilen `cd /d …` und `start http://…` an. Zum Feierabend schließen Sie beide Konsolenfenster (Zündschlüssel-Regel).
 
 ## Wichtige Spielregeln
 - Speichern Sie Exporte nicht im Programmordner, sondern in Ihrem normalen Fachordner.

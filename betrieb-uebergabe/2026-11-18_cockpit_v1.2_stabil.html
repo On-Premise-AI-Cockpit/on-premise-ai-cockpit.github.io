@@ -6,9 +6,9 @@
   <title>KI-Cockpit v1.2 (stabil, 2026-11-18) – Werkbau Nord GmbH & LID</title>
   <!--
     Das KI-Cockpit – Betriebsfassung 2026-11-18 v1.2 (stabil) = freigegebener Stand nach Stufe 5.
-    Begleit-Monorepo zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
+    Begleit-Repository zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
     Alle mitgelieferten Beispieldaten sind fiktiv. Ihre echten Daten laden Sie erst zur Laufzeit.
-    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Monorepo oder direkt neben dieser Datei),
+    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Repository oder direkt neben dieser Datei),
     NIE aus dem Internet (Betriebsfassung). Vor der ersten Nutzung libs/libs_herunterladen.ps1 einmal ausführen.
   -->
   <style>
@@ -362,14 +362,14 @@ Gremium: Architektur-Board | Standort: Zentrale Nord (Hannover) | Zustaendig (Fu
   </main>
 
   <footer>
-    Das KI-Cockpit – Begleit-Monorepo: on-premise-ai-cockpit.github.io · Betriebsfassung betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html · <span id="libStatus">Bibliotheken werden geladen …</span>
+    Das KI-Cockpit – Begleit-Repository: on-premise-ai-cockpit.github.io · Betriebsfassung betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html · <span id="libStatus">Bibliotheken werden geladen …</span>
   </footer>
   <div class="toast" id="toast"></div>
 
   <script>
     // ================================================================
     // BLOCK 1: Konfiguration und Bibliotheken laden
-    // Reihenfolge je Bibliothek: ./libs/ (Betriebsordner wie in Abschnitt 8.1) -> ../libs/ (Monorepo), nie Internet
+    // Reihenfolge je Bibliothek: ./libs/ (Betriebsordner wie in Abschnitt 8.1) -> ../libs/ (Repository), nie Internet
     // ================================================================
     const NUR_LOKAL = true; // true = Betriebsfassung: niemals aus dem Internet nachladen
     const IST_DATEI = location.protocol === "file:"; // per Doppelklick geöffnet?

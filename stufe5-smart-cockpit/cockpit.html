@@ -6,9 +6,9 @@
   <title>KI-Cockpit (Stufe 5) – Werkbau Nord GmbH & LID</title>
   <!--
     Das KI-Cockpit – kumulativer Stand nach Stufe 5. Jede Stufe ergänzt Reiter, vorhandene Reiter bleiben unverändert.
-    Begleit-Monorepo zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
+    Begleit-Repository zum Buch „Das KI-Cockpit“ (Michael Estel), Lizenz: MIT.
     Alle mitgelieferten Beispieldaten sind fiktiv. Ihre echten Daten laden Sie erst zur Laufzeit.
-    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Monorepo oder direkt neben dieser Datei),
+    Bibliotheken: zuerst aus dem Ordner libs/ (eine Ebene höher wie im Repository oder direkt neben dieser Datei),
     sonst aus dem Internet (CDN). So läuft die Datei online und nach Befüllen von libs/ auch offline.
   -->
   <style>
@@ -362,14 +362,14 @@ Gremium: Architektur-Board | Standort: Zentrale Nord (Hannover) | Zustaendig (Fu
   </main>
 
   <footer>
-    Das KI-Cockpit – Begleit-Monorepo: on-premise-ai-cockpit.github.io · Stufe 5: stufe5-smart-cockpit/cockpit.html · <span id="libStatus">Bibliotheken werden geladen …</span>
+    Das KI-Cockpit – Begleit-Repository: on-premise-ai-cockpit.github.io · Stufe 5: stufe5-smart-cockpit/cockpit.html · <span id="libStatus">Bibliotheken werden geladen …</span>
   </footer>
   <div class="toast" id="toast"></div>
 
   <script>
     // ================================================================
     // BLOCK 1: Konfiguration und Bibliotheken laden
-    // Reihenfolge je Bibliothek: ../libs/ (Monorepo) -> ./libs/ (eigener Ordner) -> Internet (CDN)
+    // Reihenfolge je Bibliothek: ../libs/ (Repository) -> ./libs/ (eigener Ordner) -> Internet (CDN)
     // ================================================================
     const NUR_LOKAL = false; // true = Betriebsfassung: niemals aus dem Internet nachladen
     const IST_DATEI = location.protocol === "file:"; // per Doppelklick geöffnet?
