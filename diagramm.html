@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagramm-Ansicht – Das KI-Cockpit</title>
+  <style>
+    :root { --bg:#f8fafc; --surface:#ffffff; --ink:#0f172a; --muted:#475569; --primary:#0f766e; --accent:#1e293b; --border:#e2e8f0; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:"Segoe UI",system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+    .topbar { background:var(--accent); color:#f8fafc; padding:0.9rem 1.25rem; border-bottom:1px solid #334155; }
+    .topbar-inner { max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; }
+    .back-link { color:#5eead4; text-decoration:none; font-weight:600; font-size:0.92rem; }
+    .back-link:hover { text-decoration:underline; }
+    .actions { display:flex; flex-wrap:wrap; gap:0.5rem; }
+    .btn { display:inline-block; background:var(--primary); color:#fff; border:none; border-radius:7px; padding:0.48rem 0.9rem; font-size:0.86rem; font-weight:600; cursor:pointer; text-decoration:none; font-family:inherit; }
+    .btn.sec { background:#334155; color:#f1f5f9; }
+    .btn:hover { opacity:0.92; }
+    .doc-tabs { max-width:1100px; margin:1.25rem auto 0; padding:0 1.25rem; display:flex; flex-wrap:wrap; gap:0.45rem; }
+    .doc-tab { display:inline-block; padding:0.42rem 0.85rem; border-radius:999px; font-size:0.84rem; font-weight:600; text-decoration:none; color:var(--muted); background:var(--surface); border:1px solid var(--border); }
+    .doc-tab.active { background:#f0fdfa; color:var(--primary); border-color:#99f6e4; }
+    .doc-tab:hover { border-color:var(--primary); }
+    main { max-width:1100px; margin:1rem auto 3rem; padding:0 1.25rem; }
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.5rem 1.75rem; box-shadow:0 2px 10px rgba(15,23,42,0.04); margin-bottom:1.25rem; }
+    .panel-head { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:0.5rem; margin-bottom:0.85rem; border-bottom:1px solid var(--border); padding-bottom:0.65rem; }
+    .panel-head h1 { margin:0; font-size:1.45rem; line-height:1.25; }
+    .badge { display:inline-block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--primary); background:#f0fdfa; border:1px solid #99f6e4; padding:0.18rem 0.55rem; border-radius:999px; }
+    .desc { margin:0 0 1rem; font-size:0.93rem; color:var(--muted); }
+    .stage { background:#ffffff; border:1px solid var(--border); border-radius:10px; padding:1rem; min-height:280px; overflow:auto; display:flex; justify-content:center; align-items:center; }
+    .stage.bpmn-stage { display:block; height:520px; padding:0; position:relative; }
+    #bpmn-canvas { width:100%; height:100%; }
+    .stage svg { max-width:100%; height:auto; }
+    .c4-legend { display:flex; flex-wrap:wrap; gap:0.9rem; margin-top:0.85rem; font-size:0.82rem; color:var(--muted); }
+    .c4-legend span { display:inline-flex; align-items:center; gap:0.4rem; }
+    .swatch { width:14px; height:14px; border-radius:3px; display:inline-block; }
+    .code-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.65rem; }
+    .code-head h2 { margin:0; font-size:1.05rem; }
+    pre { margin:0; background:#0f172a; color:#f8fafc; border-radius:8px; padding:1rem 1.15rem; overflow:auto; max-height:380px; font-family:Consolas,ui-monospace,monospace; font-size:0.83rem; line-height:1.5; }
+    .hint { color:var(--muted); font-size:0.9rem; }
+    .source-note { margin-top:0.75rem; font-size:0.8rem; color:var(--muted); }
+    footer { text-align:center; font-size:0.84rem; color:var(--muted); padding:1.5rem; border-top:1px solid var(--border); }
+    footer a { color:var(--primary); text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+    @media (max-width: 640px) { .panel { padding:1.1rem; } .stage.bpmn-stage { height:400px; } }
+    @media print {
+      .topbar, .doc-tabs, .code-panel, footer { display:none !important; }
+      body { background:#fff; }
+      main { max-width:none; margin:0; padding:0; }
+      .panel { border:none; box-shadow:none; padding:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back-link" href="index.html">&larr; Zurück zur Übersicht (Das KI-Cockpit)</a>
+      <div class="actions">
+        <a id="editor-link" class="btn" href="stufe3-dropzone/prozess_editor.html" style="display:none;">Im BPMN-Editor öffnen &rarr;</a>
+        <button class="btn" type="button" onclick="window.print()">Drucken / Als PDF speichern</button>
+        <a id="raw-link" class="btn sec" href="#" download>Originaldatei herunterladen</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="doc-tabs" aria-label="Stufe-1-Diagramme">
+    <a class="doc-tab" data-doc="stufe1-diagramme/kmu_kostenstruktur_fluss.mmd" href="diagramm.html?datei=stufe1-diagramme/kmu_kostenstruktur_fluss.mmd">KMU-Fluss (.mmd)</a>
+    <a class="doc-tab" data-doc="stufe1-diagramme/kmu_kostenstellen_torte.mmd" href="diagramm.html?datei=stufe1-diagramme/kmu_kostenstellen_torte.mmd">KMU-Torte (.mmd)</a>
+    <a class="doc-tab" data-doc="stufe1-diagramme/behoerde_beschaffung.bpmn" href="diagramm.html?datei=stufe1-diagramme/behoerde_beschaffung.bpmn">LID-Prozess (.bpmn)</a>
+    <a class="doc-tab" data-doc="stufe1-diagramme/kmu_it_landschaft_c4.puml" href="diagramm.html?datei=stufe1-diagramme/kmu_it_landschaft_c4.puml">C4 KMU (.puml)</a>
+    <a class="doc-tab" data-doc="stufe1-diagramme/behoerde_it_landschaft_c4.puml" href="diagramm.html?datei=stufe1-diagramme/behoerde_it_landschaft_c4.puml">C4 LID (.puml)</a>
+  </nav>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <h1 id="diag-title">Diagramm wird geladen …</h1>
+        <span id="diag-badge" class="badge">Stufe 1</span>
+      </div>
+      <p id="diag-desc" class="desc"></p>
+      <div id="stage" class="stage">
+        <p class="hint">Grafik wird gerendert …</p>
+      </div>
+      <div id="c4-legend" class="c4-legend" style="display:none;">
+        <span><i class="swatch" style="background:#08427b;"></i>Person / Rolle</span>
+        <span><i class="swatch" style="background:#0f766e;"></i>Eigenes System (Cockpit)</span>
+        <span><i class="swatch" style="background:#64748b;"></i>Externes System / Datenquelle</span>
+      </div>
+      <div id="source-note" class="source-note"></div>
+    </section>
+
+    <section class="panel code-panel">
+      <div class="code-head">
+        <h2>Quellcode (Diagramm als Text)</h2>
+        <button id="copy-btn" class="btn" type="button">Code kopieren</button>
+      </div>
+      <pre id="code-box">Wird geladen …</pre>
+    </section>
+  </main>
+
+  <footer>
+    Michael Estel – „Das KI-Cockpit“ (2026) &middot;
+    <a href="https://estel.email/" style="font-weight:600;">Übersicht, Bücher &amp; Kontakt (estel.email)</a> &middot;
+    <a href="https://estel.email/impressum.html">Impressum</a> &middot;
+    <a href="https://estel.email/datenschutz.html">Datenschutz</a>
+  </footer>
+
+  <script>
+    const DIAGRAMS = {
+      "stufe1-diagramme/kmu_kostenstruktur_fluss.mmd": {
+        title: "KMU-Kostenstruktur (Flussdiagramm)",
+        badge: "Mermaid · Stufe 1",
+        type: "mermaid",
+        desc: "Aufteilung der monatlichen Plankosten der Werkbau Nord GmbH (570.000 EUR) in Fixkosten (60 %) und variable Kosten (40 %) je Kostenstelle."
+      },
+      "stufe1-diagramme/kmu_kostenstellen_torte.mmd": {
+        title: "KMU-Kostenstellen (Tortendiagramm)",
+        badge: "Mermaid · Stufe 1",
+        type: "mermaid",
+        desc: "Verteilung der monatlichen Plankosten auf die vier Kostenstellen KS-100 bis KS-400."
+      },
+      "stufe1-diagramme/behoerde_beschaffung.bpmn": {
+        title: "Behörden-Prozess: IT-Beschaffung über 5.000 EUR",
+        badge: "BPMN 2.0 · Stufe 1",
+        type: "bpmn",
+        desc: "Ablauf mit vier Swimlanes (Fachreferat, Referat 21 Vergabe & Haushalt, Referat 32 IT-Betrieb & ISB, Leitung) als standardisiertes BPMN-2.0-XML. Zoomen und Verschieben direkt mit der Maus möglich."
+      },
+      "stufe1-diagramme/kmu_it_landschaft_c4.puml": {
+        title: "C4 System-Context – Werkbau Nord GmbH",
+        badge: "PlantUML C4 · Stufe 1",
+        type: "c4",
+        desc: "Überblick über Rollen, das lokale KI-Cockpit und alle angebundenen Vorsysteme (ERP, DATEV, Zeiterfassung, Netzlaufwerk, lokales Ollama). Die Grafik wird lokal im Browser aus dem PlantUML-Quelltext erzeugt."
+      },
+      "stufe1-diagramme/behoerde_it_landschaft_c4.puml": {
+        title: "C4 System-Context – Landesamt für Infrastruktur und Digitalisierung (LID)",
+        badge: "PlantUML C4 · Stufe 1",
+        type: "c4",
+        desc: "IT-Landschaft und Fachverfahren des fiktiven Landesamts (eAkte, eVergabe, HKR, Verzeichnisdienst) rund um das lokale Verwaltungs-Cockpit. Die Grafik wird lokal im Browser aus dem PlantUML-Quelltext erzeugt."
+      }
+    };
+
+    function loadScript(urls) {
+      return new Promise((resolve, reject) => {
+        let idx = 0;
+        function next() {
+          if (idx >= urls.length) { reject(new Error("Bibliothek konnte nicht geladen werden")); return; }
+          const url = urls[idx++];
+          const s = document.createElement("script");
+          s.src = url;
+          s.onload = () => resolve(url);
+          s.onerror = next;
+          document.head.appendChild(s);
+        }
+        next();
+      });
+    }
+
+    function pumlC4ToMermaid(puml) {
+      const lines = ["flowchart TB"];
+      const esc = (s) => s.replace(/"/g, "'");
+      const styles = [];
+
+      for (const raw of puml.split(/\r?\n/)) {
+        const line = raw.trim();
+        let m;
+        if ((m = line.match(/^Person\(\s*([A-Za-z0-9_]+)\s*,\s*"([^"]+)"\s*,\s*"([^"]*)"\s*\)/))) {
+          lines.push(`  ${m[1]}["<b>${esc(m[2])}</b><br/><small>[Person]<br/>${esc(m[3])}</small>"]`);
+          styles.push(`  style ${m[1]} fill:#08427b,stroke:#052e56,color:#ffffff,stroke-width:2px`);
+        } else if ((m = line.match(/^System\(\s*([A-Za-z0-9_]+)\s*,\s*"([^"]+)"\s*,\s*"([^"]*)"\s*\)/))) {
+          lines.push(`  ${m[1]}["<b>${esc(m[2])}</b><br/><small>[System]<br/>${esc(m[3])}</small>"]`);
+          styles.push(`  style ${m[1]} fill:#0f766e,stroke:#115e59,color:#ffffff,stroke-width:2.5px`);
+        } else if ((m = line.match(/^System_Ext\(\s*([A-Za-z0-9_]+)\s*,\s*"([^"]+)"\s*,\s*"([^"]*)"\s*\)/))) {
+          lines.push(`  ${m[1]}["<b>${esc(m[2])}</b><br/><small>[Externes System]<br/>${esc(m[3])}</small>"]`);
+          styles.push(`  style ${m[1]} fill:#64748b,stroke:#475569,color:#ffffff,stroke-width:1.5px`);
+        } else if ((m = line.match(/^Rel\(\s*([A-Za-z0-9_]+)\s*,\s*([A-Za-z0-9_]+)\s*,\s*"([^"]+)"(?:\s*,\s*"([^"]+)")?\s*\)/))) {
+          const lbl = m[4] ? `${esc(m[3])}<br/><small>(${esc(m[4])})</small>` : esc(m[3]);
+          lines.push(`  ${m[1]} -->|"${lbl}"| ${m[2]}`);
+        }
+      }
+      return lines.concat(styles).join("\n");
+    }
+
+    async function loadDiagram() {
+      const params = new URLSearchParams(window.location.search);
+      const req = params.get("datei") || "stufe1-diagramme/kmu_kostenstruktur_fluss.mmd";
+      const file = DIAGRAMS[req] ? req : "stufe1-diagramme/kmu_kostenstruktur_fluss.mmd";
+      const meta = DIAGRAMS[file];
+
+      document.title = meta.title + " – Das KI-Cockpit";
+      document.getElementById("diag-title").textContent = meta.title;
+      document.getElementById("diag-badge").textContent = meta.badge;
+      document.getElementById("diag-desc").textContent = meta.desc;
+      document.getElementById("raw-link").href = file;
+      if (meta.type === "bpmn") {
+        document.getElementById("editor-link").style.display = "inline-block";
+      }
+      document.querySelectorAll(".doc-tab").forEach((el) => {
+        el.classList.toggle("active", el.dataset.doc === file);
+      });
+
+      const stage = document.getElementById("stage");
+      const codeBox = document.getElementById("code-box");
+      const sourceNote = document.getElementById("source-note");
+
+      let text;
+      try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        text = await res.text();
+        codeBox.textContent = text;
+      } catch (err) {
+        stage.innerHTML = '<p class="hint">Datei konnte nicht geladen werden (bei lokalem Doppelklick blockieren Browser das Nachladen). Nutzen Sie den Download-Button oben.</p>';
+        codeBox.textContent = "Nicht geladen.";
+        return;
+      }
+
+      document.getElementById("copy-btn").addEventListener("click", async (e) => {
+        try {
+          await navigator.clipboard.writeText(text);
+          e.target.textContent = "Kopiert ✓";
+        } catch {
+          e.target.textContent = "Bitte markieren & Strg+C";
+        }
+        setTimeout(() => { e.target.textContent = "Code kopieren"; }, 1800);
+      });
+
+      if (meta.type === "mermaid" || meta.type === "c4") {
+        try {
+          const src = await loadScript([
+            "./libs/mermaid.min.js",
+            "https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js"
+          ]);
+          mermaid.initialize({ startOnLoad: false, theme: "default", securityLevel: "strict" });
+          const mmdCode = meta.type === "c4" ? pumlC4ToMermaid(text) : text;
+          const { svg } = await mermaid.render("diag-svg", mmdCode);
+          stage.innerHTML = svg;
+          if (meta.type === "c4") {
+            document.getElementById("c4-legend").style.display = "flex";
+          }
+          sourceNote.textContent = "Darstellung: Mermaid (" + (src.startsWith("./libs") ? "lokal aus libs/" : "online via CDN") + ").";
+        } catch (err) {
+          stage.innerHTML = '<p class="hint">Diagramm konnte nicht gerendert werden. Der vollständige Quelltext steht unten zum Kopieren bereit.</p>';
+        }
+      } else if (meta.type === "bpmn") {
+        stage.classList.add("bpmn-stage");
+        stage.innerHTML = '<div id="bpmn-canvas"></div>';
+        try {
+          const src = await loadScript([
+            "./libs/bpmn-modeler.development.js",
+            "https://cdn.jsdelivr.net/npm/bpmn-js@17.9.1/dist/bpmn-navigated-viewer.production.min.js"
+          ]);
+          const viewer = new BpmnJS({ container: "#bpmn-canvas" });
+          await viewer.importXML(text);
+          viewer.get("canvas").zoom("fit-viewport", "auto");
+          sourceNote.textContent = "Darstellung: bpmn-js (" + (src.startsWith("./libs") ? "lokal aus libs/" : "online via CDN") + ").";
+        } catch (err) {
+          stage.classList.remove("bpmn-stage");
+          stage.innerHTML = '<p class="hint">BPMN-Vorschau konnte nicht geladen werden. Öffnen Sie die Datei direkt im <a href="stufe3-dropzone/prozess_editor.html">Prozess-Editor</a>.</p>';
+        }
+      }
+    }
+
+    loadDiagram();
+  </script>
+</body>
+</html>
