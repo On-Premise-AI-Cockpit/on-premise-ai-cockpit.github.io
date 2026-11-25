@@ -29,8 +29,10 @@
     .card h2 { margin:0.2rem 0 0.5rem; font-size:1.12rem; }
     .card p { margin:0 0 0.6rem; font-size:0.9rem; color:var(--muted); }
     .card p.voraus { font-size:0.82rem; color:#334155; background:#f1f5f9; border-radius:6px; padding:0.4rem 0.6rem; }
-    .links a { display:inline-block; margin-right:0.75rem; margin-top:0.3rem; color:var(--primary); font-weight:600; text-decoration:none; font-size:0.88rem; }
+    .links a { display:inline-block; margin-right:0.75rem; margin-top:0.3rem; color:var(--primary); font-weight:500; text-decoration:none; font-size:0.86rem; }
     .links a:hover { text-decoration:underline; }
+    .links a.live-link { font-weight:800; font-size:0.91rem; color:#0b534d; background:#f0fdfa; border:1px solid #99f6e4; padding:0.22rem 0.6rem; border-radius:6px; margin-bottom:0.2rem; }
+    .links a.live-link:hover { background:#ccfbf1; text-decoration:none; }
     .section-title { margin:2.5rem 0 1rem; font-size:1.35rem; border-bottom:2px solid var(--border); padding-bottom:0.45rem; }
     .gov-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:0.95rem; }
     .gov-item { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--accent); border-radius:9px; padding:0.95rem 1.1rem; font-size:0.88rem; color:var(--muted); }
@@ -101,7 +103,7 @@
           <p class="voraus">Voraussetzung: Browser und Windows-Editor. Öffnen per Doppelklick.</p>
         </div>
         <div class="links">
-          <a href="stufe2-html-cockpit/cockpit.html">Live-Demo öffnen →</a>
+          <a class="live-link" href="stufe2-html-cockpit/cockpit.html">Live-Demo öffnen →</a>
         </div>
       </div>
 
@@ -113,8 +115,8 @@
           <p class="voraus">Voraussetzung: keine Installation. Öffnen per Doppelklick.</p>
         </div>
         <div class="links">
-          <a href="stufe3-dropzone/cockpit.html">Dropzone-Cockpit →</a>
-          <a href="stufe3-dropzone/prozess_editor.html">prozess_editor.html →</a>
+          <a class="live-link" href="stufe3-dropzone/cockpit.html">Dropzone-Cockpit →</a>
+          <a class="live-link" href="stufe3-dropzone/prozess_editor.html">prozess_editor.html →</a>
           <a href="daten/kmu_monatsabschluss_2026-03.csv">März-Export (.csv)</a>
           <a href="daten/kmu_monatsabschluss_2026-03.xlsx">März-Export (.xlsx)</a>
           <a href="daten/kmu_nur_maerz_2026.csv">nur März (.csv)</a>
@@ -129,7 +131,7 @@
           <p class="voraus">Voraussetzung: lokaler Mini-Server (<code>python -m http.server 8000 --bind 127.0.0.1</code>), weil Browser die Datenbank-Engine unter <code>file://</code> blockieren. Python stellt meist die IT bereit.</p>
         </div>
         <div class="links">
-          <a href="stufe4-datenbank-graph/cockpit.html">Stufe-4-Cockpit öffnen →</a>
+          <a class="live-link" href="stufe4-datenbank-graph/cockpit.html">Stufe-4-Cockpit öffnen →</a>
           <a href="daten/cockpit_stufe4.sqlite">Beispieldatenbank (.sqlite)</a>
           <a href="daten/behoerde_kontakte_500.csv">500 Kontakte (.csv)</a>
           <a href="daten/erzeuge_cockpit_stufe4.py">Erzeugungs-Skript (.py)</a>
@@ -144,7 +146,7 @@
           <p class="voraus">Voraussetzung: zusätzlich Ollama (Installation über IT-Freigabe), Start z. B. mit <code>betrieb-uebergabe/start_cockpit_sicher.bat</code>.</p>
         </div>
         <div class="links">
-          <a href="stufe5-smart-cockpit/cockpit.html#ki">Stufe-5-Cockpit öffnen (Demo) →</a>
+          <a class="live-link" href="stufe5-smart-cockpit/cockpit.html#ki">Stufe-5-Cockpit öffnen (Demo) →</a>
           <a href="daten/beispiel_rechnung_nordmontage.pdf">Beispielrechnung (.pdf)</a>
           <a href="daten/beispiel_handbuch_werkbau_nord.txt">Richtlinie (.txt)</a>
         </div>
@@ -162,7 +164,7 @@
           <a href="libs/libs_herunterladen.ps1">Download-Skript (.ps1)</a>
           <a href="betrieb-uebergabe/UEBERGABEPAKET_IT_PERSONALRAT.md">Übergabepaket</a>
           <a href="betrieb-uebergabe/LIESMICH_TEAM.md">Team-Anleitung</a>
-          <a href="betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html">Betriebsfassung v1.2</a>
+          <a class="live-link" href="betrieb-uebergabe/2026-11-18_cockpit_v1.2_stabil.html">Betriebsfassung v1.2 →</a>
           <a href="betrieb-uebergabe/start_cockpit_sicher.bat">Sicherer Start (.bat)</a>
           <a href="betrieb-uebergabe/start_llama_server_profil_a.bat">llama-server Profil A (.bat)</a>
           <a href="betrieb-uebergabe/Modelfile.controlling">Modelfile</a>
