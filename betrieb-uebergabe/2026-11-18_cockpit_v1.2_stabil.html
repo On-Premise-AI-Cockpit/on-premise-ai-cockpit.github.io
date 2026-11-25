@@ -86,7 +86,7 @@
       <h1>KI-Cockpit – Werkbau Nord GmbH &amp; LID</h1>
       <p>Betriebsfassung v1.2 (stabil) – freigegebener Stand nach Stufe 5, lädt Bibliotheken nur aus libs/</p>
     </div>
-    <span class="badge">v1.2 stabil · 2026-11-18</span>
+    <div style="display:flex;align-items:center;gap:0.55rem;flex-wrap:wrap;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:0.35rem;background:rgba(255,255,255,0.12);color:#f8fafc;border:1px solid rgba(255,255,255,0.28);padding:0.32rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:600;text-decoration:none;white-space:nowrap;">&larr; Zurück zur Übersicht</a><span class="badge">v1.2 stabil · 2026-11-18</span></div>
   </header>
 
   <nav role="tablist">
